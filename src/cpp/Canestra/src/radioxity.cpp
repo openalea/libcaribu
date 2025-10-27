@@ -727,7 +727,7 @@ int main(int argc,char **argv){
 
   //======>  erreur_syntaxe(): imprime les options du prog a l'ecran
   void erreur_syntaxe(char * prog){
-    Ferr <<"Syntax Error:  the options of "  << prog<<" are \n" ;
+    Ferr <<"The options of "  << prog<<" are \n" ;
     Ferr <<"  -M filename \t File describing the scene\n"	 
       "  -m shm_key\t Shared memory containing the scene\n"	
       "  -s Ns\t Append a soil to the scene (Ns is a treshold for the number of triangles)\n"
@@ -794,7 +794,7 @@ int main(int argc,char **argv){
 	bMemoriseMatrix=true;
 	break;//calc les FF
       case 'g' : geom=true;                     break;
-      case 'h' : erreur_syntaxe(argv[0]); return 1;
+      case 'h' : erreur_syntaxe(argv[0]); Ferr.close(); exit(0);
       case 'i' : nb_iter=atoi(option.optarg);    break;// nbre d'iterations
       case 'l' : lightname=option.optarg;        break;
       case 'm' : clef_shm=atoi(option.optarg);byseg=true; break;// by segmem clef 

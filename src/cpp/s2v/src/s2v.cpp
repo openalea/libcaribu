@@ -234,6 +234,13 @@ int s2v(int argc, char **argv){
   LPVOID	lpSharedSeg ;	// pointeur LPVOID sur seg. partag�
 #endif
 
+  // --- handle help option ---
+  if (argc > 1 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)) {
+    printf("Usage: %s [shm_id nz Dz file.8 file_1.opt ... file_n.opt]\n", argv[0]);
+    Ferr.close();
+    return 0;
+  }
+
   for(i=0;i<argc;i++)
     Ferr <<argv[i] << " " ;
   Ferr << '\n';

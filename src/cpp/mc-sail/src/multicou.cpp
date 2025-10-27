@@ -31,6 +31,13 @@ int main(int argc, char **argv){
   Mlayout *Tlayout;
   char riri,skyname[200];
 
+   // --- handle help option ---
+   if (argc > 1 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)) {
+       printf("Usage: mcsail sky.light\n");
+       Ferr.close();
+       return 0;
+   }
+
   if(argc==1){
     riri=1;
     strcpy(skyname,"incident");
