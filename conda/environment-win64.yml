@@ -1,0 +1,14 @@
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - setuptools
+  - setuptools-scm
+  - scikit-build-core
+  - cmake
+  - m2w64-toolchain
+variables:
+  CMAKE_GENERATOR: "MinGW Makefiles"
+  CXX: "g++"
+  CC: "gcc"
+  LDFLAGS: "-static -static-libgcc -static-libstdc++"

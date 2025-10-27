@@ -1,0 +1,10 @@
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - setuptools
+  - setuptools-scm
+  - scikit-build-core
+  - cmake
+  - c-compiler
+  - cxx-compiler
