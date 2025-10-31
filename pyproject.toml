@@ -35,6 +35,9 @@ authors = [
 description = "C extension of openalea.caribu model"
 license = "CECILL-C"
 dynamic = ["version"]
+dependencies = [
+  "numpy"
+]
 
 [project.optional-dependencies]
 test = [

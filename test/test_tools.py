@@ -1,8 +1,9 @@
-from openalea.libcaribu.tools import canestrad, mcsail, s2v, periodise
+from openalea.libcaribu.tools import (run_canestrad, run_mcsail,
+                                      run_s2v, run_periodise)
 import pytest
 
 
-tools = [mcsail, periodise, s2v, canestrad]
+tools = [run_mcsail, run_periodise, run_s2v, run_canestrad]
 
 
 @pytest.mark.parametrize("tool", tools)
