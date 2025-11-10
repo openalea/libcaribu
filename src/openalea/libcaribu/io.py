@@ -66,7 +66,7 @@ def can_triangle(triangle, label):
 
     # Format coordinates with high precision (use repr for exact float string)
     for pt in triangle:
-        s += " " + " ".join(f"{coord:.15g}" for coord in pt)
+        s += " " + " ".join(f"{coord:.6f}" for coord in pt)
 
     return s
 
