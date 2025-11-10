@@ -12,7 +12,7 @@ def count_valid(scene):
 
 @pytest.fixture
 def caribu_test_scene(tmp_path):
-    data_dir = Path(__file__).parent / "data"
+    data_dir = Path(__file__).resolve().parent / "data"
     for name in ["filterT.can", "zenith.light", "par.opt", "filter.8", "sensor.can"]:
         shutil.copy(data_dir / name, tmp_path)
     return tmp_path
