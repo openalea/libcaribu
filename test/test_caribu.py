@@ -29,7 +29,7 @@ def test_projection_non_toric_scene(caribu_test_scene):
     lc.run_canestrad(caribu_test_scene, args)
     resfile = caribu_test_scene / "Etri.vec0"
     assert resfile.exists()
-    res = lcio.read_res(resfile)
+    res = lcio.read_etri(resfile)
     assert len(res['index']) == 192
 
 

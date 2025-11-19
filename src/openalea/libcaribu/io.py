@@ -10,7 +10,10 @@ def is_iterable(obj):
     return isinstance(obj, Iterable) and not isinstance(obj, (str, bytes))
 
 
-def optical_properties(soil=0.2, stem=0.13, leaf=(0.06, 0.07)):
+def soil_leaf_stem_opticals(soil=0.2, leaf=(0.06, 0.07), stem=0.13):
+    """
+    A dict of optical properties respecting the following conventions: '0'=soil, '1' = leaf, '2' = stem
+    """
     return {0: (soil,), 1: leaf, 2: (stem,)}
 
 
@@ -75,7 +78,7 @@ def canestra_scene(triangles, plant_ids=1, optical_ids=1, opticals=None):
     """ format triangles and associated labels as caribu canopy string content
     """
     if opticals is None:
-        opticals = optical_properties()
+        opticals = soil_leaf_stem_opticals()
     opak = {k: 0 if len(v) == 1 else 1 for k, v in opticals.items()}
     if not is_iterable(plant_ids):
         plant_ids = [plant_ids]
@@ -114,7 +117,7 @@ def canestra_opt(opticals=None):
     """
 
     if opticals is None:
-        opticals = optical_properties()
+        opticals = soil_leaf_stem_opticals()
     soil = opticals.pop(0)
     n = len(opticals)
     o_string = 'n %s\n' % n
@@ -134,20 +137,21 @@ def canestra_opt(opticals=None):
     return o_string
 
 
-def read_res(path):
+def read_etri(path):
     data_array = np.loadtxt(path, skiprows=2, dtype=str)
     data_array = np.atleast_2d(data_array)  # ensures 2D shape even if one triangle
     # assuming columns: index label area Eabs Ei_sup Ei_inf
     idx = data_array[:, 0].astype(float)
     label = np.array([l.zfill(12) for l in data_array[:, 1]])
-    area, Eabs, Ei_sup, Ei_inf = data_array[:, 2:].astype(float).T
+    area, Eabs, Ei, Ei_sup, Ei_inf = data_array[:, 2:].astype(float).T
 
     data = {
-        'index': idx.tolist(),
-        'label': label.tolist(),
-        'area': area.tolist(),
-        'Eabs': Eabs.tolist(),
-        'Ei_sup': Ei_sup.tolist(),
-        'Ei_inf': Ei_inf.tolist(),
+        'index': idx,
+        'label': label,
+        'area': area,
+        'Ei': Ei,
+        'Eabs': Eabs,
+        'Ei_sup': Ei_sup,
+        'Ei_inf': Ei_inf,
     }
     return data

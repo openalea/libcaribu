@@ -471,7 +471,7 @@ int main(int argc,char **argv){
     }//if nbcell>0
     //Calcul et impression des Eabs et Einc
     if(bio){
-      reel *Ei,*Eabs,D,D0,D1,r0=0,r1=0,t0=0,t1=0,E0,E1,Esol,Ssol;
+      reel *Ei,*Eabs,D,D0,D1,r0=0,r1=0,t0=0,t1=0,E0,E1,Esol,Ssol,sEi;
       int ia,shmid2=0;
       FILE *fa=NULL,*fi=NULL,*ft=NULL,*ft0=NULL;
       double *Te=NULL,surf, nom; 
@@ -569,10 +569,10 @@ int main(int argc,char **argv){
 	    if(diff->rho()==0){
 	      Ferr <<"<!> Calcul de Einc d'un opaque corps noir impossible : \n"
 		" r0*r1 == t0*t1" << '\n' ;
-	      Ei[i]=Eabs[ia]=-1;
+	      Ei[i]=Eabs[ia]=sEi=-1;
 	    }
 	    else{
-	      Ei[i]=B[0]->ve[i]/diff->rho();
+	      Ei[i]=sEi=B[0]->ve[i]/diff->rho();
 	      Eabs[ia]=Ei[i]-B[0]->ve[i];
 	    }
 	    if(byfile){
@@ -580,7 +580,7 @@ int main(int argc,char **argv){
 	      fprintf(fa,"%g\n",Eabs[ia]*surf);
 	      fprintf(ft,"%.0f %f  %f  %f %f\n",nom, surf, Eabs[ia], Ei[i],-1.);
 	      //liste compatible pycaribu - MC09  
-	      fprintf(ft0,"%d %.0f %f  %f %f %f %f\n",Nt0,nom, surf, Eabs[ia], Ei[i], Ei[i],-1.);
+	      fprintf(ft0,"%d %.0f %f  %f %f %f %f\n",Nt0,nom, surf, Eabs[ia], sEi, Ei[i],-1.);
 	      Nt0++;
 	      scene.Ldiff0.suivant(); 
 	    } else{
@@ -609,8 +609,10 @@ int main(int argc,char **argv){
 	    
 	      Eabs[ia]=-1;
 	      Ei[i-1]=Ei[i]=-1;
-	      if(r0==t1)
-		Eabs[ia]=B[0]->ve[i-1]*(1/r0-1)-B[0]->ve[i];
+	      if(r0==t1){
+		    Eabs[ia]=B[0]->ve[i-1]*(1/r0-1)-B[0]->ve[i];
+		    sEi = Eabs[ia] / (1 - r0 - t0);
+		    }
 	    }
 	    else{
 	      D0= B[0]->ve[i-1]*r1 - B[0]->ve[i]*t1;
@@ -618,6 +620,7 @@ int main(int argc,char **argv){
 	      Ei[i-1]=D0/D;
 	      Ei[i]=D1/D;
 	      Eabs[ia]= Ei[i-1]+Ei[i] - (B[0]->ve[i-1]+B[0]->ve[i]);
+	      sEi = Ei[i-1] + Ei[i];
 	      /* debug
 		 Ferr  << r0<<"\t"  <<  t1<<"\t= "  <<  B[0]->ve[i-1]<<"\n" ;
 		 Ferr  << t0<<"\t"  <<  r1<<"\t= "  <<  B[0]->ve[i]<<"\n" ;
@@ -631,7 +634,7 @@ int main(int argc,char **argv){
 	      fprintf(fa,"%g\n",Eabs[ia]*surf);
 	      fprintf(ft,"%.0f %f  %f  %f %f\n",nom, surf, Eabs[ia], Ei[i-1], Ei[i]);
 	      //liste compatible pycaribu - MC09  
-	      fprintf(ft0,"%d %.0f %f  %f  %f %f %f\n",Nt0,nom, surf,  Eabs[ia], Ei[i-1] + Ei[i], Ei[i-1], Ei[i]);
+	      fprintf(ft0,"%d %.0f %f  %f  %f %f %f\n",Nt0,nom, surf,  Eabs[ia], sEi, Ei[i-1], Ei[i]);
 	      Nt0++;
 	      scene.Ldiff0.suivant();
 	    } else{
