@@ -25,6 +25,7 @@ develop-eggs/
 .installed.cfg
 lib/
 lib64/
+_cscene/
 
 # editors
 .idea/
