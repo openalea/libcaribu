@@ -122,7 +122,7 @@ inline char * endline(ifstream & fin){
   return pline;
 }//endline()
 
-long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,reel*bornemax,int sol,char *nsolem,Diffuseur **&TabDiff){
+long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,reel*bornemax,int sol,char *nsolem,bool docan,Diffuseur **&TabDiff){
   bool rejet=false;
   int i=0,j;
   long nbp=0;
@@ -514,22 +514,30 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
   if(verbose)   cout<<"Canopy [parse_can] nbre de primitives = "<<Ldiff.card()<<'\n' ;//endl;
  
   //mise en tableau
-  FILE* fcan;
-  fcan=fopen("scene.can","w");
+  FILE* fcan = nullptr;
+  if(docan) {
+  fcan=fopen("_scene.can","w");
+  }
   TabDiff= new Diffuseur *[radim];
   for(Ldiff.debut(),i=0;! Ldiff.finito();Ldiff.suivant()){
     diff=Ldiff.contenu();
     // Ecriture du .can (apres nettoyage de parse_can et ajout du sol)
+    if(docan){
     prim=&(diff->primi());
     fprintf(fcan,"p  1 %.0f %d \t",prim->name()*1000.,prim->nb_sommet());
     for(char iii=0;iii<prim->nb_sommet();iii++)
       fprintf(fcan," %lf %lf %lf  ",prim->sommets(iii)[0],prim->sommets(iii)[1],prim->sommets(iii)[2]);
     fprintf(fcan," \n");
+    }
     //Remplissage du tableau TabDiff
     TabDiff[i++]=diff;
     if(!diff->isopaque())
       TabDiff[i++]=diff;
   }// for Ldiff
+  if (docan && fcan)
+{
+    fclose(fcan);
+}
   return radim;
 }//parse_can()
 
@@ -924,7 +932,7 @@ long int Canopy::read_shm(
 
   //mise en tableau
   FILE* fcan;
-  fcan=fopen("scene.can","w");
+  fcan=fopen("_scene.can","w");
   TabDiff= new Diffuseur *[radim];
   for(Ldiff.debut(),i=0;! Ldiff.finito();Ldiff.suivant()){
     diff=Ldiff.contenu();

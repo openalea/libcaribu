@@ -48,7 +48,7 @@ class Canopy{
   
   Canopy() {Etot=Einit=0.0;}
   // cree la liste des diffuseurs de la scene
-  long int  parse_can(char *,char *,char *,reel *,reel*,int,char *,Diffuseur **&);
+  long int  parse_can(char *,char *,char *,reel *,reel*,int,char *,bool, Diffuseur **&);
   long int  read_shm(int,char *,char *,reel *,reel*,int,char *,Diffuseur **&);
   void cstruit_grille(double Renv) {mesh.construction(bmin,bmax,Renv,Ldiff);}
   void sail_pur(VEC **Cfar,double *Esource,char* envname);

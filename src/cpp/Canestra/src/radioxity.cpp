@@ -73,6 +73,7 @@ static  char *dirname, *matname;
 // Option capteur virtuel - MC0699
 static  bool solem; 
 static char * nsolem;
+static bool doartifact;
 
 ferrlog Ferr((char*)"canestra.log") ;
 #ifndef NOMAIN
@@ -97,7 +98,7 @@ int main(int argc,char **argv){
     clock.Start();
     if(byfile){
       scene.parse_can(maqname,optname,name8,bornemin, 
-                      bornemax,sol,nsolem,TabDiff);
+                      bornemax,sol,nsolem,doartifact,TabDiff);
       Ferr<<__FILE__<<" : byfile"<<'\n';
     }else{
       scene.read_shm(clef_shm,optname,name8,bornemin, 
@@ -198,7 +199,7 @@ int main(int argc,char **argv){
     clock.Stop();
     Ferr<<">>> Canestra[main] calcul du direct en "<<clock<<'\n' ; 
   
-    if(byfile){//ecriture du direct dans un fichier E0	
+    if(byfile && doartifact){//ecriture du direct dans un fichier E0
       fres=fopen("E0.dat","w");
       for(j=0;j<scene.radim;j++) {
 	//Ferr <<"B0("  << j<<") ="  << B0[0]->ve[j]<<" - B("  << j<<") ="  
@@ -446,7 +447,7 @@ int main(int argc,char **argv){
       fclose(fres);
     }// if fichiers .dat de debug B0 et Bf generes
     // Ecriture des radiosites totales => B.dat
-    if(byfile){
+    if(byfile && doartifact){
       fres=fopen("B.dat","w");
       Ferr <<"==> Impression des resultats radim="  << scene.radim<<", nbcell="  << scene.nbcell<<"\n" ;
       for(j=0;j<nbf;j++) {
@@ -477,11 +478,13 @@ int main(int argc,char **argv){
       double *Te=NULL,surf, nom; 
       int Nt; int Nt0=0;
       if(byfile) {//by file
-	fa=fopen("Eabs.vec","w");
-	fi=fopen("Einc.vec","w");
-	ft=fopen("Etri.vec","w");    
-	fprintf(ft,"# canestrad: can=%s F8=%s opt=%s light=%s : denv=%.2f direct=%d \n",maqname,name8,optname,lightname,denv,(int)ordre1 );
-	fprintf(ft,"# label1 Area Eabs(E/s/m2) Ei(sup) Ei(inf) (Ex=surfacic density of energy <nrj/s/m2>)\n");
+        if(doartifact) {
+	        fa=fopen("Eabs.vec","w");
+	        fi=fopen("Einc.vec","w");
+	        ft=fopen("Etri.vec","w");
+	        fprintf(ft,"# canestrad: can=%s F8=%s opt=%s light=%s : denv=%.2f direct=%d \n",maqname,name8,optname,lightname,denv,(int)ordre1 );
+	        fprintf(ft,"# label1 Area Eabs(E/s/m2) Ei(sup) Ei(inf) (Ex=surfacic density of energy <nrj/s/m2>)\n");
+	        }
 	// Version repreannt la liste initiale de triangle du .can pr PyCaribu
 	ft0=fopen("Etri.vec0","w");    
 	fprintf(ft0,"# canestrad: can=%s F8=%s opt=%s light=%s : denv=%.2f direct=%d \n",maqname,name8,optname,lightname,denv,(int)ordre1 );
@@ -542,7 +545,7 @@ int main(int argc,char **argv){
 	//Geston de la sortie Etrivec0 identique a liste de triangle en entree - MC09
 	while(scene.Ldiff0.contenu()>=0 ){
 	  if(scene.Ldiff0.finito()) break;
-	  fprintf(ft0,"%d %.0f 0 Nan NaN NaN NaN\n",Nt0,scene.Ldiff0.contenu());
+	  if(doartifact) fprintf(ft0,"%d %.0f 0 Nan NaN NaN NaN\n",Nt0,scene.Ldiff0.contenu());
 	  Nt0++;
 	  // printf("dbg 2, Nt0=%d, Ldiff0()=%d\n", Nt0, scene.Ldiff0.contenu());
 	  scene.Ldiff0.suivant();
@@ -576,9 +579,11 @@ int main(int argc,char **argv){
 	      Eabs[ia]=Ei[i]-B[0]->ve[i];
 	    }
 	    if(byfile){
+	      if(doartifact) {
 	      fprintf(fi,"%g\n",Ei[i]);
 	      fprintf(fa,"%g\n",Eabs[ia]*surf);
 	      fprintf(ft,"%.0f %f  %f  %f %f\n",nom, surf, Eabs[ia], Ei[i],-1.);
+	      }
 	      //liste compatible pycaribu - MC09  
 	      fprintf(ft0,"%d %.0f %f  %f %f %f %f\n",Nt0,nom, surf, Eabs[ia], sEi, Ei[i],-1.);
 	      Nt0++;
@@ -630,9 +635,11 @@ int main(int argc,char **argv){
 		 /recommenter */
 	    }
 	    if(byfile){
+	      if(doartifact){
 	      fprintf(fi,"%g\n%g\n",Ei[i-1], Ei[i]);
 	      fprintf(fa,"%g\n",Eabs[ia]*surf);
 	      fprintf(ft,"%.0f %f  %f  %f %f\n",nom, surf, Eabs[ia], Ei[i-1], Ei[i]);
+	      }
 	      //liste compatible pycaribu - MC09  
 	      fprintf(ft0,"%d %.0f %f  %f  %f %f %f\n",Nt0,nom, surf,  Eabs[ia], sEi, Ei[i-1], Ei[i]);
 	      Nt0++;
@@ -666,7 +673,7 @@ int main(int argc,char **argv){
 	  */
 	  Ei[i]=B[0]->ve[i]/diff->rho();
 	  Eabs[ia]=Ei[i]-B[0]->ve[i];
-	  if(byfile){
+	  if(byfile && doartifact){
 	    fprintf(fi,"%g\n", Ei[i]);
 	    fprintf(fa,"%g\n",Eabs[ia]*surf);
 	    fprintf(ft,"%.0f %f  %f  %f %f\n",nom, surf, Eabs[ia], Ei[i],-2.);
@@ -701,9 +708,11 @@ int main(int argc,char **argv){
       //Ferr << "Au max on atteint: Eabs["<<ia<<"]"<<'\n';
 
       if(byfile){
-	fclose(fi); 
+	if(doartifact) {
+	fclose(fi);
 	fclose(fa);
 	fclose(ft);
+	}
 	fclose(ft0);
       } else
 #ifndef WIN32
@@ -752,6 +761,7 @@ int main(int argc,char **argv){
       "  -T \t\t Estimate the maximum required memory\n"
       "  -v nb \t The level of verbose\n"
       "  -C filename \t File describing the virtual sensors\n"
+      "  -n \t\t do not produce intermediate artifacts (B.dat, ...)"
 #ifdef _HD   
       "  -f filename \t Simulate and store the matrix in filemane \n"
       "  -w filename\t Read the matrix file to simulate an other radiative case, without to compute form factors \n"
@@ -764,13 +774,13 @@ int main(int argc,char **argv){
   //======> options(): traite la ligne de commande argv - MC98
   int options(int argc,char **argv){
     int c;
-    GetOpt option(argc,argv,"AC:BFTg1hs:L:M:R:S:8:a:d:e:f:i:l:m:n:p:r:t:v:w:");
+    GetOpt option(argc,argv,"AC:BFTg1hs:L:M:R:S:8:a:d:e:f:i:l:m:np:r:t:v:w:");
   
     // Valeur par defaut des options
     NB=52; nb_iter=1000; nbsim=1;
     denv=0.30; seuil=1e-6; //-1 ie seuil_solver=MACHEPS
     ffseul=infty=geom=ordre1=ff_print=bio=byseg=byfile=radonly=memsize=solem=false;
-    bias=true;
+    bias=doartifact=true;
     lightname=maqname=envname=optname=name8=dirname=matname=nsolem=NULL;
     sol=0;
     scene.Timg=1536;
@@ -800,7 +810,8 @@ int main(int argc,char **argv){
       case 'h' : erreur_syntaxe(argv[0]); Ferr.close(); exit(0);
       case 'i' : nb_iter=atoi(option.optarg);    break;// nbre d'iterations
       case 'l' : lightname=option.optarg;        break;
-      case 'm' : clef_shm=atoi(option.optarg);byseg=true; break;// by segmem clef 
+      case 'm' : clef_shm=atoi(option.optarg);byseg=true; break;// by segmem clef
+      case 'n' : doartifact=false;               break;
       case 'p' : optname=option.optarg;          break;
       case 'r' : denv=atof(option.optarg);       break;// rayon de la sphere
       case 's' : sol=atoi(option.optarg);;       break;// ajoute un sol
