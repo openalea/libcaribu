@@ -14,7 +14,7 @@ def test_tool_help_runs(tool):
     assert result.returncode == 0
 
 
-def test_clean(tmp_path):
+def test_run_and_clean(tmp_path):
     data_dir = Path(__file__).parent / "data"
     infiles = ["filterT.can", "zenith.light", "par.opt", "filter.8", "filterT.sensor"]
     for name in infiles:
