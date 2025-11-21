@@ -227,7 +227,7 @@ def caribu(scene_path, bands=None, toric=False, direct_only=True, sphere_diamete
             else:
                 opticals = lcio.read_opt(scene_path / f'{band}.opt')
                 r, m = deepcopy(res[bands[0]])
-                alpha = [lcio.absorptance_from_label(label, opticals) for label in r['label']]
+                alpha = lcio.absorptance_from_labels(r['label'], opticals)
                 r['Eabs'] = alpha * r['Ei']
                 res[band] = r, m
         else:

@@ -2,14 +2,8 @@
 
 import numpy as np
 from itertools import cycle
-from collections.abc import Iterable
 from io import StringIO
 from pathlib import Path
-
-
-
-def is_iterable(obj):
-    return isinstance(obj, Iterable) and not isinstance(obj, (str, bytes))
 
 
 def set_opticals(soil=0.2, leaf=(0.06, 0.07), stem=None):
@@ -38,117 +32,78 @@ def set_opticals(soil=0.2, leaf=(0.06, 0.07), stem=None):
     return {'soil': soil, 'species': list(zip(cycle(stem), leaf))}
 
 
-def can_label(plant=1, opt=1, isleaf=1, elt=0):
-    """
-    Encode numeric fields into a fixed-length can-format barcode string.
+def encode_labels(opt, plant, leaf, elt):
+    opt = np.asarray(opt, dtype=np.int64)
+    plant = np.clip(np.asarray(plant, dtype=np.int64), 0, 99999)
+    leaf = np.clip(np.asarray(leaf, dtype=np.int64), 0, 999)
+    elt = np.clip(np.asarray(elt, dtype=np.int64), 0, 999)
 
-    The core part (plant, isleaf, elt) is always 12 characters.
-    The 'opt' prefix can extend the total length beyond 12.
+    labels = (
+            opt * 10_000_000_000
+            + plant * 1_000_000
+            + leaf * 1_000
+            + elt
+    )
 
-    Returns:
-        str: encoded barcode string.
-    """
-    # Start with a 12-character base (for plant, opak, elt)
-    label = ['0'] * 12
-
-    label[:-11] = list(str(opt))
-
-    fields = {
-        'plant': (2, 6, plant),
-        'isleaf': (7, 9, isleaf),
-        'elt': (10, 12, elt)
-    }
-
-    for name, (start, end, value) in fields.items():
-        value_str = str(value)
-        length = end - start + 1
-
-        # Truncate or pad to fit field width
-        if len(value_str) > length:
-            value_str = value_str[-length:]  # keep rightmost digits
-        else:
-            value_str = value_str.zfill(length)
-
-        # Place into the label (convert to 0-based index)
-        label[start - 1:end] = value_str
-
-    return ''.join(label)
+    return np.atleast_1d(labels).astype(str)
 
 
-def decode_label(label):
-    opt = int(''.join(label[:-11]))
-    plant = int(''.join(label[-11:-6]))
-    leaf = int(''.join(label[-6:-3]))
-    elt = int(''.join(label[-3:]))
+def decode_labels(labels):
+    labels = np.asarray(labels, dtype=np.int64)
+
+    elt = labels % 1000
+    leaf = (labels // 1_000) % 1000
+    plant = (labels // 1_000_000) % 100000
+    opt = labels // 1_000_000_00000
+
     return opt, plant, leaf, elt
 
 
-def po_from_label(label, opticals):
-    opt, _, leaf, _ = decode_label(label)
-    is_leaf = bool(leaf)
-    if opt == 0:
-        return opticals['soil']
-    elif is_leaf:
-        return opticals['species'][opt][1]
-    else:
-        return opticals['species'][opt][0]
+def absorptance_from_labels(labels, opticals):
+    opt, _, leaf, _ = decode_labels(labels)
+    is_leaf = leaf.astype(bool)
+    asoil = 1 - np.sum(opticals['soil'])
+    aleaf = np.array([1 - np.sum(po[:2]) for _, po in opticals['species']])
+    astem = np.array([1 - np.sum(po) for po, _ in opticals['species']])
+    idx = opt - 1  # shift to 0-based for species
+    return np.where(opt == 0,
+                    asoil,
+                    np.where(is_leaf,
+                             aleaf[idx],
+                             astem[idx]
+                             ))
 
 
-def absorptance_from_label(label, opticals):
-    po = po_from_label(label, opticals)
-    if len(po) < 4:
-        return 1 - sum(po)
-    else:
-        return 1 - sum(po[:2])
-
-def can_triangle(triangle, label):
-    """
-    Create a formatted line representing a labeled triangle.
-
-    triangle: iterable of 3 (x, y, z) tuples
-    label: a can label identifier (str)
-
-    Returns:
-        str: formatted line (safe for C++ reading)
-    """
-    # Always treat label as string
-    s = f"p 1 {label} 3"
-
-    # Format coordinates with high precision (use repr for exact float string)
-    for pt in triangle:
-        s += " " + " ".join(f"{coord:.6f}" for coord in pt)
-
-    return s
+def can_triangles_string(triangles, labels):
+    out = []
+    for tri, label in zip(np.asarray(triangles), cycle(labels.tolist())):
+        coords = " ".join(f"{c:.6f}" for c in tri.reshape(-1))
+        out.append(f"p 1 {label} 3 {coords}\n")
+    return "".join(out)
 
 
-def canestra_scene(triangles=None, plant=1, is_leaf=True, specie=1):
-    """ format triangles and associated labels as caribu canopy string content
+def canestra_scene(triangles=None, plant=1, specie=1, leaf=True, element=0):
+    """ format triangles and associated properties as caribu canopy string content
     """
     if triangles is None:
         triangles = [[(0, 0, 0), (np.sqrt(2), 0, 0), (0, np.sqrt(2), 0)]]
-    if not is_iterable(plant):
-        plant = [plant]
-    if not is_iterable(specie):
-        specie = [specie]
-    isleaf = np.atleast_1d(is_leaf).astype(int)
-    labels = [can_label(pid, optid, ileaf) for pid, optid, ileaf  in zip(plant, cycle(specie), cycle(isleaf))]
-    lines = [can_triangle(t, l) for t, l in zip(triangles, cycle(labels))]
-    return '\n'.join(lines) + '\n'
+    labels = encode_labels(specie, plant, leaf, element)
+    return can_triangles_string(triangles, labels)
 
 
 def canestra_sensor(triangles=None):
     if triangles is None:
         triangles = [[(0, 0, 0.01), (np.sqrt(2), 0, 0.01), (0, np.sqrt(2), 0.01)]]
-    lines = [f'#{len(triangles)}']
-    lines += [can_triangle(t, i) for i,t in enumerate(triangles)]
-    return '\n'.join(lines) + '\n'
+    header = f'#{len(triangles)}\n'
+    sensors = can_triangles_string(triangles, np.arange(len(triangles)))
+    return header + sensors
 
 
 def canestra_pattern(pattern_tuple=None):
     """ format pattern as caribu file string content
     """
     if pattern_tuple is None:
-        pattern_tuple = (0 , 0, np.sqrt(2), np.sqrt(2))
+        pattern_tuple = (0, 0, np.sqrt(2), np.sqrt(2))
     x1, y1, x2, y2 = pattern_tuple
     pattern_tuple = [(min(x1, x2), min(y1, y2)), (max(x1, x2), max(y1, y2))]
     pattern = '\n'.join([' '.join(map(str, pattern_tuple[0])),
@@ -209,6 +164,7 @@ def read_results(path):
     }
     return data
 
+
 def read_measures(path):
     data_array = np.loadtxt(path, dtype=float)
     data_array = np.atleast_2d(data_array)  # ensures 2D shape even if one triangle
@@ -221,6 +177,7 @@ def read_measures(path):
         'Ei': ei
     }
     return data
+
 
 def read_opt(source):
     """Reader for *.opt file format used by canestra.
@@ -257,3 +214,63 @@ def read_opt(source):
                 species.append((stem, leaf))
 
     return {'soil': soil_reflectance, 'species': species}
+
+
+def read_can(source):
+    if isinstance(source, Path) or source.endswith('.can'):
+        infile = Path(source)
+    else:
+        infile = StringIO(source)
+
+    can = np.loadtxt(infile, comments="#", ndmin=2, dtype=str)
+    labels = can[:, 2]
+    triangles = can[:, -9:].astype(float).reshape(-1, 3, 3)
+    return triangles, labels
+
+
+def read_sensors(source):
+    if isinstance(source, Path) or source.endswith('.sensor'):
+        infile = Path(source)
+    else:
+        infile = StringIO(source)
+
+    can = np.loadtxt(infile, comments="#", ndmin=2, dtype=str)
+    ids = can[:, 2].astype(int)
+    triangles = can[:, -9:].astype(float).reshape(-1, 3, 3)
+    return triangles, ids
+
+
+def read_light(source):
+    """Reader for *.light file format used by canestra
+
+    Args:
+        file_path: (str) a path to the file
+
+    Returns:
+        (list of tuples) a list of (Energy, (vx, vy, vz)) tuples defining light
+    """
+    if isinstance(source, Path) or source.endswith('.light'):
+        data = np.loadtxt(source)
+    else:
+        data = np.loadtxt(StringIO(source))
+
+    # Ensure 2D even if there's only one line
+    data = np.atleast_2d(data)
+
+    return [(row[0], tuple(row[1:4])) for row in data]
+
+
+def read_pattern(source):
+    """Reader for *.8 file format used by canestra
+
+    Args:
+        file_path: (str) a path to the file
+
+    Returns:
+        (tuple of floats) 2D Coordinates ( xmin, ymin, xmax, ymax) of the domain bounding the scene
+    """
+    if isinstance(source, Path) or source.endswith('.8'):
+        data = np.loadtxt(source)
+    else:
+        data = np.loadtxt(StringIO(source))
+    return tuple(data.reshape(-1))
