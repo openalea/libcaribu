@@ -3,7 +3,8 @@ from pathlib import Path
 
 
 class CommandFailed(Exception):
-    def __init__(self, cmd, returncode, stdout, stderr, log=''):
+    def __init__(self, wd, cmd, returncode, stdout, stderr, log=''):
+        self.wd = wd
         self.cmd = cmd
         self.returncode = returncode
         self.stdout = stdout
@@ -12,6 +13,7 @@ class CommandFailed(Exception):
 
     def __str__(self):
         msg = [f"Command failed: {' '.join(self.cmd)}",
+               f"working directory: {self.wd}",
                f"Exit code: {self.returncode}"]
 
         if self.stdout:
@@ -52,6 +54,7 @@ def _run_tool(tool_name, workdir='.', args=None, log=None, verbose=False):
 
     if result.returncode != 0:
         raise CommandFailed(
+            workdir,
             cmd,
             result.returncode,
             result.stdout,
@@ -82,7 +85,7 @@ def run_s2v(*args, **kwds): return _run_tool("s2v", log='s2v.log', *args, **kwds
 def run_canestrad(*args, **kwds): return _run_tool("canestrad", log='canestra.log', *args, **kwds)
 
 
-def clean_canestrad(workdir='.'): _clean_artifacts(workdir, ('_scene.can', 'B.dat', 'E0.dat', 'solem.dat', 'Einc.vec', 'Eabs.vec', 'Etri.vec', 'Etri.vec0'))
+def clean_canestrad(workdir='.'): _clean_artifacts(workdir, ('_scene.can', 'trinf.can','B.dat', 'E0.dat', 'solem.dat', 'Einc.vec', 'Eabs.vec', 'Etri.vec', 'Etri.vec0'))
 def clean_periodise(workdir='.'): _clean_artifacts(workdir, ('Bz.dat', 'motif.can'))
 def clean_mcsail(workdir='.'): _clean_artifacts(workdir, ('spectral', 'mlsail.env', 'Mcoef.dat', 'Mvec.dat', 'proflux.dat', 'profout'))
 def clean_s2v(workdir='.'): _clean_artifacts(workdir, ('*.spec', 'cropchar', 'leafarea', 'out.dang', 's2v.can', 's2v.area'))
