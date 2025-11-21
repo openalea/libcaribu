@@ -47,6 +47,8 @@ def _run_tool(tool_name, workdir='.', args=None, log=None, verbose=False):
     if verbose:
         print(result.stdout)
         print(result.stderr)
+        if log:
+            print(log)
 
     if result.returncode != 0:
         raise CommandFailed(
@@ -60,15 +62,18 @@ def _run_tool(tool_name, workdir='.', args=None, log=None, verbose=False):
     return result
 
 
-def _clean_dir(workdir='.', files=None):
+def _clean_artifacts(workdir='.', artifacts=None, verbose=False):
     workdir = Path(workdir).resolve()
     if not workdir.is_dir():
         raise NotADirectoryError(f"Invalid working directory: {workdir}")
-    if files is not None:
-        for file in files:
-            path = workdir / file
-            if path.exists():
-                path.unlink()
+    if artifacts is not None:
+        for artifact in artifacts:
+            matches = list(workdir.glob(artifact))
+            for path in matches:
+                if path.exists():
+                    if verbose:
+                        print(f'Clean artifact: {artifact} from dir {workdir}')
+                    path.unlink()
 
 
 def run_mcsail(*args, **kwds): return _run_tool("mcsail", log='mc-sail.log', *args, **kwds)
@@ -77,4 +82,14 @@ def run_s2v(*args, **kwds): return _run_tool("s2v", log='s2v.log', *args, **kwds
 def run_canestrad(*args, **kwds): return _run_tool("canestrad", log='canestra.log', *args, **kwds)
 
 
-def clean_canestrad(workdir='.'): _clean_dir(workdir, ('B.dat', 'E0.dat', 'canestra.log', 'Einc.vec', 'Eabs.vec', 'Etri.vec', 'Etri.vec0'))
+def clean_canestrad(workdir='.'): _clean_artifacts(workdir, ('_scene.can', 'B.dat', 'E0.dat', 'solem.dat', 'Einc.vec', 'Eabs.vec', 'Etri.vec', 'Etri.vec0'))
+def clean_periodise(workdir='.'): _clean_artifacts(workdir, ('Bz.dat', 'motif.can'))
+def clean_mcsail(workdir='.'): _clean_artifacts(workdir, ('spectral', 'mlsail.env', 'Mcoef.dat', 'Mvec.dat', 'proflux.dat', 'profout'))
+def clean_s2v(workdir='.'): _clean_artifacts(workdir, ('*.spec', 'cropchar', 'leafarea', 'out.dang', 's2v.can', 's2v.area'))
+
+
+def clean_all_artifacts(workdir='.'):
+    clean_canestrad(workdir)
+    clean_periodise(workdir)
+    clean_mcsail(workdir)
+    clean_s2v(workdir)

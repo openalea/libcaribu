@@ -2,7 +2,7 @@ import pytest
 import shutil
 import numpy as np
 from pathlib import Path
-import openalea.libcaribu.tools as lc
+import openalea.libcaribu.commands as lcmd
 import openalea.libcaribu.io as lcio
 
 def count_valid(scene):
@@ -26,10 +26,10 @@ def test_projection_non_toric_scene(caribu_test_scene):
             "-p", "par.opt",
             "-A",
             "-1"]
-    lc.run_canestrad(caribu_test_scene, args)
+    lcmd.run_canestrad(caribu_test_scene, args)
     resfile = caribu_test_scene / "Etri.vec0"
     assert resfile.exists()
-    res = lcio.read_etri(resfile)
+    res = lcio.read_results(resfile)
     assert len(res['index']) == 192
 
 
@@ -40,7 +40,7 @@ def test_sensor_non_toric_scene(caribu_test_scene):
             "-C", "sensor.can",
             "-A",
             "-1"]
-    lc.run_canestrad(caribu_test_scene, args)
+    lcmd.run_canestrad(caribu_test_scene, args)
     sensfile = caribu_test_scene / "solem.dat"
     assert sensfile.exists()
 
@@ -50,7 +50,7 @@ def test_projection_toric_scene(caribu_test_scene):
 
     args = ["-m", "filterT.can",
             "-8", "filter.8"]
-    lc.run_periodise(caribu_test_scene, args)
+    lcmd.run_periodise(caribu_test_scene, args)
     scene_8 = caribu_test_scene / "motif.can"
     assert scene_8.exists()
     assert count_valid(scene_8) == 192
@@ -61,7 +61,7 @@ def test_projection_toric_scene(caribu_test_scene):
             "-p", "par.opt",
             "-A",
             "-1"]
-    lc.run_canestrad(caribu_test_scene, args)
+    lcmd.run_canestrad(caribu_test_scene, args)
     res = caribu_test_scene / "Etri.vec0"
     assert res.exists()
     assert count_valid(res) == 192
@@ -73,7 +73,7 @@ def test_radiosity_non_toric_scene(caribu_test_scene):
             "-p", "par.opt",
             "-A",
             "-d", "-1"]
-    lc.run_canestrad(caribu_test_scene, args)
+    lcmd.run_canestrad(caribu_test_scene, args)
     res = caribu_test_scene / "Etri.vec0"
     assert res.exists()
     assert count_valid(res) == 192
@@ -83,7 +83,7 @@ def test_projection_sail_toric_scene(caribu_test_scene):
 
     args = ["-m", "filterT.can",
             "-8", "filter.8"]
-    lc.run_periodise(caribu_test_scene, args)
+    lcmd.run_periodise(caribu_test_scene, args)
     scene_8 = caribu_test_scene / "motif.can"
     assert scene_8.exists()
     assert count_valid(scene_8) == 192
@@ -93,7 +93,7 @@ def test_projection_sail_toric_scene(caribu_test_scene):
             "21",
             "filter.8",
             "par"]
-    lc.run_s2v(caribu_test_scene, args)
+    lcmd.run_s2v(caribu_test_scene, args)
     leafarea = caribu_test_scene / 'leafarea'
     assert leafarea.exists()
     spectral = caribu_test_scene / 'par.spec'
@@ -101,7 +101,7 @@ def test_projection_sail_toric_scene(caribu_test_scene):
 
     shutil.copy(spectral, caribu_test_scene / 'spectral')
     args = ["zenith.light"]
-    lc.run_mcsail(caribu_test_scene, args)
+    lcmd.run_mcsail(caribu_test_scene, args)
     mcsailenv = caribu_test_scene / 'mlsail.env'
     assert mcsailenv.exists()
 
@@ -112,7 +112,7 @@ def test_projection_sail_toric_scene(caribu_test_scene):
             "-A",
             "-d", "0",
             "-e", "mlsail.env"]
-    lc.run_canestrad(caribu_test_scene, args)
+    lcmd.run_canestrad(caribu_test_scene, args)
     res = caribu_test_scene / "Etri.vec0"
     assert res.exists()
     assert count_valid(res) == 192
@@ -122,7 +122,7 @@ def test_nested_radiosity_toric_scene(caribu_test_scene):
 
     args = ["-m", "filterT.can",
             "-8", "filter.8"]
-    lc.run_periodise(caribu_test_scene, args)
+    lcmd.run_periodise(caribu_test_scene, args)
     scene_8 = caribu_test_scene / "motif.can"
     assert scene_8.exists()
     assert count_valid(scene_8) == 192
@@ -132,7 +132,7 @@ def test_nested_radiosity_toric_scene(caribu_test_scene):
             "21",  # canopy height
             "filter.8",
             "par"]
-    lc.run_s2v(caribu_test_scene, args)
+    lcmd.run_s2v(caribu_test_scene, args)
     leafarea = caribu_test_scene / 'leafarea'
     assert leafarea.exists()
     spectral = caribu_test_scene / 'par.spec'
@@ -140,7 +140,7 @@ def test_nested_radiosity_toric_scene(caribu_test_scene):
 
     shutil.copy(spectral, caribu_test_scene / 'spectral')
     args = ["zenith.light"]
-    lc.run_mcsail(caribu_test_scene, args)
+    lcmd.run_mcsail(caribu_test_scene, args)
     mcsailenv = caribu_test_scene / 'mlsail.env'
     assert mcsailenv.exists()
 
@@ -151,7 +151,7 @@ def test_nested_radiosity_toric_scene(caribu_test_scene):
             "-A",
             "-d", "1",
             "-e", "mlsail.env"]
-    lc.run_canestrad(caribu_test_scene, args)
+    lcmd.run_canestrad(caribu_test_scene, args)
     res = caribu_test_scene / "Etri.vec0"
     assert res.exists()
     assert count_valid(res) == 192

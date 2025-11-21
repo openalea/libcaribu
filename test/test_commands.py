@@ -1,4 +1,4 @@
-from openalea.libcaribu.tools import (run_canestrad, run_mcsail,
+from openalea.libcaribu.commands import (run_canestrad, run_mcsail,
                                       run_s2v, run_periodise)
 import pytest
 
