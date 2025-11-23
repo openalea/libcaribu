@@ -25,14 +25,14 @@ def set_scene(scene_path, canopy=None, light=None, pattern=None, sensor=None, op
         if not isinstance(opts, list):
             opts = [opts]
         if bands is None:
-            bands = [opt[:-4] if opt.endswith('.opt') else f'band{i}' for i, opt in enumerate(opts)]
+            bands = [Path(opt).stem if str(opt).endswith('.opt') else f'band{i}' for i, opt in enumerate(opts)]
         if not isinstance(bands, list):
             bands = [bands]
         assert len(bands) == len(opts)
         for opt, band in zip(opts, bands):
             _set_as_file(opt, scene_path / f'{band}.opt')
     if pattern:
-        _set_as_file(pattern, scene_path / 'pattern.8')
+        _set_as_file(pattern, scene_path / 'scene.8')
     if sensor:
         _set_as_file(sensor, scene_path / 'scene.sensor')
     return scene_path
@@ -52,7 +52,7 @@ def periodise(scene_path, verbose=False):
     args = ["-m", "scene.can",
             "-8", "scene.8"]
     lcmd.clean_periodise(scene_path)
-    status = lcmd.run_periodise(scene_path, args, verbose=verbose)
+    status = lcmd.run_periodise(scene_path, args=args, verbose=verbose)
     return status
 
 
@@ -72,7 +72,17 @@ def s2v(scene_path, bands=None, layers=2, height=1, verbose=False):
     args += bands
 
     lcmd.clean_s2v(scene_path)
-    status = lcmd.run_s2v(scene_path, args, verbose=verbose)
+    status = lcmd.run_s2v(scene_path, args=args, verbose=verbose)
+    return status
+
+
+def mcsail(scene_path, band=None):
+    if band is None:
+        band = next(scene_path.glob("*.opt")).stem
+    lcmd.clean_mcsail(scene_path)
+    shutil.copy(scene_path / f"{band}.spec", scene_path / 'spectral')
+    args = ["scene.light"]
+    status = lcmd.run_mcsail(scene_path, args=args)
     return status
 
 
@@ -104,7 +114,7 @@ def raycasting(scene_path, band=None, more_args=None, verbose=False):
         args += more_args
 
     lcmd.clean_canestrad(scene_path)
-    lcmd.run_canestrad(scene_path, args, verbose=verbose)
+    lcmd.run_canestrad(scene_path, args=args, verbose=verbose)
     results, measures = get_outputs(scene_path)
     return results, measures
 
@@ -115,7 +125,7 @@ def toric_raycasting(scene_path, band=None, more_args=None, verbose=False):
         band = next(scene_path.glob("*.opt")).stem
 
     args = ["-M", "motif.can",
-            "-8", "pattern.8",
+            "-8", "scene.8",
             "-l", "scene.light",
             "-p", f"{band}.opt",
             "-A",
@@ -129,7 +139,7 @@ def toric_raycasting(scene_path, band=None, more_args=None, verbose=False):
         periodise(scene_path)
 
     lcmd.clean_canestrad(scene_path)
-    lcmd.run_canestrad(scene_path, args, verbose=verbose)
+    lcmd.run_canestrad(scene_path, args=args, verbose=verbose)
     results, measures = get_outputs(scene_path)
     return results, measures
 
@@ -150,25 +160,22 @@ def radiosity(scene_path, band=None, more_args=None, verbose=False):
         args += more_args
 
     lcmd.clean_canestrad(scene_path)
-    lcmd.run_canestrad(scene_path, args, verbose=verbose)
+    lcmd.run_canestrad(scene_path, args=args, verbose=verbose)
     results, measures = get_outputs(scene_path)
     return results, measures
 
 
-def mixed_radiosity(scene_path, band=None, sd=0, more_args=None, verbose=False):
+def mixed_radiosity(scene_path, band=None, sd=0, layers=2, height=1, more_args=None, verbose=False):
 
     if band is None:
         band = next(scene_path.glob("*.opt")).stem
 
     if not (scene_path / 'motif.can').exists():
-        periodise(scene_path, verbose=verbose)
-    if not (scene_path / f"{band}.spec").exists():
-        s2v(scene_path, bands=band, verbose=verbose)
+        periodise(scene_path)
+    if not(scene_path / f'{band}.spec').exists():
+        s2v(scene_path, bands=band, layers=layers, height=height)
 
-    shutil.copy(scene_path / f"{band}.spec", scene_path / 'spectral')
-    args = ["scene.light"]
-    lcmd.clean_mcsail(scene_path, verbose=verbose)
-    lcmd.run_mcsail(scene_path, args)
+    mcsail(scene_path, band=band)
 
     args = ["-M", "motif.can",
             "-8", "scene.8",
@@ -183,7 +190,7 @@ def mixed_radiosity(scene_path, band=None, sd=0, more_args=None, verbose=False):
         args += more_args
 
     lcmd.clean_canestrad(scene_path)
-    lcmd.run_canestrad(scene_path, args, verbose=verbose)
+    lcmd.run_canestrad(scene_path, args=args, verbose=verbose)
     results, measures = get_outputs(scene_path)
     return results, measures
 

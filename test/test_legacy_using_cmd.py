@@ -9,10 +9,6 @@ import openalea.libcaribu.commands as lcmd
 
 data_dir = Path(__file__).parent / "data"
 
-def count_valid(scene):
-    arr = np.loadtxt(scene, comments="#", ndmin=1, dtype=str)
-    return arr.shape[0]
-
 
 @pytest.fixture
 def caribu_test_scene(tmp_path): # regenerated at each test
