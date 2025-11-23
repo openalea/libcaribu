@@ -32,15 +32,15 @@ def set_opticals(soil=0.2, leaf=(0.06, 0.07), stem=None):
     return {'soil': soil, 'species': list(zip(cycle(stem), leaf))}
 
 
-def encode_labels(opt, plant, leaf, elt):
+def encode_labels(opt=1, plant=1, leaf=1, elt=0):
     opt = np.asarray(opt, dtype=np.int64)
     plant = np.clip(np.asarray(plant, dtype=np.int64), 0, 99999)
-    leaf = np.clip(np.asarray(leaf, dtype=np.int64), 0, 999)
+    leaf = np.clip(np.asarray(leaf, dtype=np.int64), 0, 99)
     elt = np.clip(np.asarray(elt, dtype=np.int64), 0, 999)
 
     labels = (
-            opt * 10_000_000_000
-            + plant * 1_000_000
+            opt * 100_000_000_000
+            + plant * 100_000
             + leaf * 1_000
             + elt
     )
@@ -52,9 +52,9 @@ def decode_labels(labels):
     labels = np.asarray(labels, dtype=np.int64)
 
     elt = labels % 1000
-    leaf = (labels // 1_000) % 1000
-    plant = (labels // 1_000_000) % 100000
-    opt = labels // 1_000_000_00000
+    plant = (labels // 100_000) % 100000
+    leaf = ((labels - plant * 100_000) // 1_000) % 1_000
+    opt = labels // 100_000_000_000
 
     return opt, plant, leaf, elt
 

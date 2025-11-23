@@ -38,7 +38,7 @@ def set_scene(scene_path, canopy=None, light=None, pattern=None, sensor=None, op
     return scene_path
 
 
-def default_scene(scene_path='./_cscene'):
+def set_default_scene(scene_path='./_cscene'):
     return set_scene(scene_path,
                      canopy=lcio.canestra_scene(),
                      light=lcio.canestra_light(),
