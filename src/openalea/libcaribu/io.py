@@ -74,7 +74,7 @@ def absorptance_from_labels(labels, opticals):
                              ))
 
 
-def can_triangles_string(triangles, labels):
+def can_string(triangles, labels):
     out = []
     for tri, label in zip(np.asarray(triangles), cycle(labels.tolist())):
         coords = " ".join(f"{c:.6f}" for c in tri.reshape(-1))
@@ -88,14 +88,14 @@ def canestra_scene(triangles=None, plant=1, specie=1, leaf=True, element=0):
     if triangles is None:
         triangles = [[(0, 0, 0), (np.sqrt(2), 0, 0), (0, np.sqrt(2), 0)]]
     labels = encode_labels(specie, plant, leaf, element)
-    return can_triangles_string(triangles, labels)
+    return can_string(triangles, labels)
 
 
 def canestra_sensor(triangles=None):
     if triangles is None:
         triangles = [[(0, 0, 0.01), (np.sqrt(2), 0, 0.01), (0, np.sqrt(2), 0.01)]]
     header = f'#{len(triangles)}\n'
-    sensors = can_triangles_string(triangles, np.arange(len(triangles)))
+    sensors = can_string(triangles, np.arange(len(triangles)))
     return header + sensors
 
 
@@ -115,7 +115,7 @@ def canestra_light(lights=None):
     """ format lights as caribu light file string content
     """
     if lights is None:
-        lights = [(100, (0, 0, -1))]
+        lights = [(1, (0, 0, -1))]
 
     def _as_string(light):
         e, p = light
@@ -211,6 +211,8 @@ def read_opt(source):
                 # extract indices 2,4,5,7,8
                 values = [float(fields[i]) for i in (2, 4, 5, 7, 8)]
                 stem, leaf = values[0], tuple(values[1:])
+                if leaf[2:] == leaf[:2]:
+                    leaf = leaf[:2]
                 species.append((stem, leaf))
 
     return {'soil': soil_reflectance, 'species': species}
@@ -247,7 +249,7 @@ def read_light(source):
         file_path: (str) a path to the file
 
     Returns:
-        (list of tuples) a list of (Energy, (vx, vy, vz)) tuples defining light
+        (list of tupl   es) a list of (Energy, (vx, vy, vz)) tuples defining light
     """
     if isinstance(source, Path) or source.endswith('.light'):
         data = np.loadtxt(source)
