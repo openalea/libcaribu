@@ -18,17 +18,18 @@ source:
 
 build:
   script_env:
-    # forge cmake generator and compilers for scikit-build without msvc on Windows
-    - CMAKE_GENERATOR=MinGW Makefiles # [win]
-    - CMAKE_C_COMPILER=%CC%                            # [win]
-    - CMAKE_CXX_COMPILER=%CXX%                         # [win]
     # Force static build on Windows to allow skipping run export of m2w64 stdlib
     - LDFLAGS=-static -static-libgcc -static-libstdc++   # [win]
   ignore_run_exports_from:
     # Avoid automatic run export of m2w64 stdlib on windows (that forces hard regression of msvc libs)
     - {{ compiler('c') }} # [win]
     - {{ compiler('cxx') }} # [win]
-  script:
+  script: 
+    # force cmake generator and compilers for scikit-build without msvc on Windows
+    - set SKBUILD_CMAKE_GENERATOR=MinGW Makefiles  # [win]
+    - set CMAKE_GENERATOR=MinGW Makefiles           # [win]
+    - echo CC=%CC%                                  # [win]
+    - echo CXX=%CXX%                                # [win]
     - {{PYTHON}} -m pip install --no-deps  --no-build-isolation . -vv
 
 requirements:
