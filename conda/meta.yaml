@@ -20,10 +20,8 @@ build:
   script_env:
     # forge cmake generator and compilers for scikit-build without msvc on Windows
     - CMAKE_GENERATOR=MinGW Makefiles # [win]
-    - CMAKE_C_COMPILER={{ compiler('c') }}            # [win]
-    - CMAKE_CXX_COMPILER={{ compiler('cxx') }}         # [win]
-    - CC={{ compiler('c') }}                           # [win]
-    - CXX={{ compiler('cxx') }}                         # [win]
+    - CMAKE_C_COMPILER=%CC%                            # [win]
+    - CMAKE_CXX_COMPILER=%CXX%                         # [win]
     # Force static build on Windows to allow skipping run export of m2w64 stdlib
     - LDFLAGS=-static -static-libgcc -static-libstdc++   # [win]
   ignore_run_exports_from:
