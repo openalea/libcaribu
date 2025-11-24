@@ -21,7 +21,7 @@ def set_scene(scene_path, canopy=None, pattern=None, lights=None, sensors=None, 
         if not isinstance(canopy, (str, Path)):
             try:
                 triangles, labels = canopy
-                canopy = lcio.can_triangle_string(triangles, labels)
+                canopy = lcio.can_string(triangles, labels)
             except (TypeError, ValueError):
                 canopy = lcio.canestra_scene(canopy)
         _set_as_file(canopy, scene_path / 'scene.can')
