@@ -14,16 +14,27 @@ def _set_as_file(source, dst):
         dst.write_text(source)
 
 
-def set_scene(scene_path, canopy=None, light=None, pattern=None, sensor=None, opts=None, bands=None):
+def set_scene(scene_path, canopy=None, pattern=None, lights=None, sensors=None, opts=None, bands=None):
     scene_path = Path(scene_path).resolve()
     scene_path.mkdir(exist_ok=True)
     if canopy:
+        if not isinstance(canopy, (str, Path)):
+            try:
+                triangles, labels = canopy
+                canopy = lcio.can_triangle_string(triangles, labels)
+            except (TypeError, ValueError):
+                canopy = lcio.canestra_scene(canopy)
         _set_as_file(canopy, scene_path / 'scene.can')
-    if light:
-        _set_as_file(light, scene_path / 'scene.light')
+    if lights:
+        if not isinstance(lights, (str, Path)):
+            lights = lcio.canestra_light(lights)
+        _set_as_file(lights, scene_path / 'scene.light')
     if opts:
         if not isinstance(opts, list):
             opts = [opts]
+        for i, opt in enumerate(opts):
+            if not isinstance(opt, (str, Path)):
+                opts[i] = lcio.canestra_opt(opt)
         if bands is None:
             bands = [Path(opt).stem if str(opt).endswith('.opt') else f'band{i}' for i, opt in enumerate(opts)]
         if not isinstance(bands, list):
@@ -32,20 +43,19 @@ def set_scene(scene_path, canopy=None, light=None, pattern=None, sensor=None, op
         for opt, band in zip(opts, bands):
             _set_as_file(opt, scene_path / f'{band}.opt')
     if pattern:
+        if not isinstance(pattern, (str, Path)):
+            pattern = lcio.canestra_pattern(pattern)
         _set_as_file(pattern, scene_path / 'scene.8')
-    if sensor:
-        _set_as_file(sensor, scene_path / 'scene.sensor')
+    if sensors:
+        if not isinstance(sensors, (str, Path)):
+            sensors = lcio.canestra_sensor(sensors)
+        _set_as_file(sensors, scene_path / 'scene.sensor')
     return scene_path
 
 
 def set_default_scene(scene_path='./_cscene'):
-    return set_scene(scene_path,
-                     canopy=lcio.canestra_scene(),
-                     light=lcio.canestra_light(),
-                     pattern=lcio.canestra_pattern(),
-                     sensor=lcio.canestra_sensor(),
-                     opts=lcio.canestra_opt()
-                     )
+    return set_scene(scene_path, canopy=lcio.canestra_scene(), pattern=lcio.canestra_pattern(),
+                     lights=lcio.canestra_light(), sensors=lcio.canestra_sensor(), opts=lcio.canestra_opt())
 
 
 def periodise(scene_path, verbose=False):

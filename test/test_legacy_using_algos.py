@@ -13,11 +13,11 @@ data_dir = Path(__file__).parent / "data"
 def caribu_test_scene(tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("caribu_test_scene")
     lcal.set_scene(tmp_path,
-              canopy=data_dir / "filterT.can",
-              light=data_dir / "zenith.light",
-              pattern=data_dir / "filter.8",
-              sensor=data_dir / "filterT.sensor",
-              opts=data_dir / "par.opt")
+                   canopy=data_dir / "filterT.can",
+                   pattern=data_dir / "filter.8",
+                   lights=data_dir / "zenith.light",
+                   sensors=data_dir / "filterT.sensor",
+                   opts=data_dir / "par.opt")
     return tmp_path
 
 
