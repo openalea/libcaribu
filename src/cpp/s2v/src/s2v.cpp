@@ -223,7 +223,7 @@ int s2v(int argc, char **argv){
   double *xlai = nullptr;
   double *surft = nullptr, *volume = nullptr;
   int Nt,it=0, clef;
-  bool gencan=true;
+  bool gencan=false;
   double id;
 
 #ifndef WIN32
