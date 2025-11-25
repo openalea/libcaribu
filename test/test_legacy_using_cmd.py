@@ -4,10 +4,10 @@ Test caribu legacy test suite, using only commands
 import pytest
 import shutil
 import numpy as np
-from pathlib import Path
+from importlib.resources import files
 import openalea.libcaribu.commands as lcmd
 
-data_dir = Path(__file__).parent / "data"
+data_dir = files('openalea.libcaribu.data')
 
 
 @pytest.fixture

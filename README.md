@@ -9,9 +9,10 @@
 
 ---
 
-## What is Caribu.cpp?
+## What is libcaribu?
 
-Caribu.cpp is a companion package of openalea.caribu dedicated to the compilation/installation of caribu c++ extension.
+libcaribu is a companion package of openalea.caribu dedicated to the compilation/installation of caribu c++ extension.
+It also provides a low level pythonic interface to these extensions (read/write input and output files, launch commands)
 
 ## Installation
 

@@ -21,8 +21,9 @@ def set_scene(scene_path, canopy=None, pattern=None, lights=None, sensors=None, 
         if not isinstance(canopy, (str, Path)):
             try:
                 triangles, labels = canopy
+                assert isinstance(labels[0], str)
                 canopy = lcio.can_string(triangles, labels)
-            except (TypeError, ValueError):
+            except (TypeError, ValueError, AssertionError):
                 canopy = lcio.canestra_scene(canopy)
         _set_as_file(canopy, scene_path / 'scene.can')
     if lights:
@@ -203,58 +204,3 @@ def mixed_radiosity(scene_path, band=None, sd=0, layers=2, height=1, more_args=N
     lcmd.run_canestrad(scene_path, args=args, verbose=verbose)
     results, measures = get_outputs(scene_path)
     return results, measures
-
-
-def caribu(scene_path, bands=None, toric=False, direct_only=True, sphere_diameter=-1, layers=2, height=1, with_sensors=False, no_artifact=True, verbose=False):
-
-    if bands is None:
-        bands = [opt.stem for opt in scene_path.glob("*.opt")]
-
-    if isinstance(bands, str):
-        bands = [bands]
-    else:
-        bands = list(bands)
-
-    if sphere_diameter >= 0:
-        toric = True
-        if not all([(scene_path / f'{band}.vec').exists() for band in bands]):
-            s2v(scene_path, bands=bands, layers=layers, height=height, verbose=verbose)
-
-    if toric and not (scene_path / 'motif.can').exists():
-        periodise(scene_path, verbose=verbose)
-
-    args = []
-    if with_sensors:
-        args += ['-C', 'scene.sensor']
-    if verbose:
-        args += ['-v', '2']
-    if no_artifact:
-        args += ['-n']
-
-    res = {}
-    for i, band in enumerate(bands):
-        more_args = []
-        more_args += args
-        if direct_only:
-            if i == 0:
-                if toric:
-                    res[band] = toric_raycasting(scene_path, band=band, more_args=more_args, verbose=verbose)
-                else:
-                    res[band] = raycasting(scene_path, band=band, more_args=more_args, verbose=verbose)
-            else:
-                opticals = lcio.read_opt(scene_path / f'{band}.opt')
-                r, m = deepcopy(res[bands[0]])
-                alpha = lcio.absorptance_from_labels(r['label'], opticals)
-                r['Eabs'] = alpha * r['Ei']
-                res[band] = r, m
-        else:
-            if i == 0:
-                FF_path = scene_path / 'FF'
-                FF_path.mkdir(exist_ok=True)
-                more_args += ['-f', FF_path]
-            else:
-                more_args += ['-w', FF_path]
-            if sphere_diameter < 0:
-                res[band] = radiosity(scene_path, band=band, more_args=more_args, verbose=verbose)
-            else:
-                res[band] = mixed_radiosity(band=band, sd=sphere_diameter, more_args=more_args, verbose=verbose)

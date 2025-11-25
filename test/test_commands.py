@@ -1,10 +1,11 @@
 import pytest
 import shutil
 from pathlib import Path
+from importlib.resources import files
 import openalea.libcaribu.commands as lcmd
 
 tools = [lcmd.run_mcsail, lcmd.run_periodise, lcmd.run_s2v, lcmd.run_canestrad]
-
+data_dir = files('openalea.libcaribu.data')
 
 @pytest.mark.parametrize("tool", tools)
 def test_tool_help_runs(tool):
@@ -15,7 +16,6 @@ def test_tool_help_runs(tool):
 
 
 def test_run_and_clean(tmp_path):
-    data_dir = Path(__file__).parent / "data"
     infiles = ["filterT.can", "zenith.light", "par.opt", "filter.8", "filterT.sensor"]
     for name in infiles:
         shutil.copy(data_dir / name, tmp_path)

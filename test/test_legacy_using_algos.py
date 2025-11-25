@@ -3,10 +3,10 @@ Test caribu legacy test suite, using libcaribu.algos
 """
 import pytest
 import numpy as np
-from pathlib import Path
+from importlib.resources import files
 import openalea.libcaribu.algos as lcal
 
-data_dir = Path(__file__).parent / "data"
+data_dir = files('openalea.libcaribu.data')
 
 
 @pytest.fixture(scope="module") # tmp_path is kept between tests

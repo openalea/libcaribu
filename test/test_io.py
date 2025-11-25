@@ -1,8 +1,7 @@
-import pytest
+from importlib.resources import files
 import openalea.libcaribu.io as lcio
-from pathlib import Path
 
-data_dir = Path(__file__).parent / "data"
+data_dir = files('openalea.libcaribu.data')
 
 def test_opticals():
     # from python
