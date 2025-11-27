@@ -45,7 +45,7 @@ def encode_labels(opt=1, plant=1, leaf=1, elt=0):
             + elt
     )
 
-    return np.atleast_1d(labels).astype(str)
+    return np.char.zfill(np.atleast_1d(labels).astype(str), 12)
 
 
 def decode_labels(labels):
@@ -145,7 +145,58 @@ def canestra_opt(opticals=None):
     return o_string
 
 
-def read_results(path):
+def triangulate_domain(domain, n_div=1):
+    xmin, ymin, xmax, ymax = domain
+
+    # grid points
+    xs = np.linspace(xmin, xmax, n_div + 1)
+    ys = np.linspace(ymin, ymax, n_div + 1)
+
+    # create grid
+    X, Y = np.meshgrid(xs, ys, indexing="ij")
+
+    # lower-left corner of each cell
+    x0 = X[:-1, :-1]
+    y0 = Y[:-1, :-1]
+
+    # other corners of each cell
+    x1 = X[1:, :-1]
+    y1 = Y[1:, :-1]
+
+    x2 = X[1:, 1:]
+    y2 = Y[1:, 1:]
+
+    x3 = X[:-1, 1:]
+    y3 = Y[:-1, 1:]
+
+    # stack triangles
+    tri1 = np.stack([
+        np.stack([x0, y0, np.zeros_like(x0)], axis=-1),
+        np.stack([x1, y1, np.zeros_like(x1)], axis=-1),
+        np.stack([x2, y2, np.zeros_like(x2)], axis=-1)
+    ], axis=-2)
+
+    tri2 = np.stack([
+        np.stack([x0, y0, np.zeros_like(x0)], axis=-1),
+        np.stack([x2, y2, np.zeros_like(x2)], axis=-1),
+        np.stack([x3, y3, np.zeros_like(x3)], axis=-1)
+    ], axis=-2)
+
+    triangles = np.concatenate([tri1.reshape(-1, 3, 3),
+                                tri2.reshape(-1, 3, 3)], axis=0)
+
+    return triangles
+
+
+def canestra_soil(domain=None, n_div=1):
+    if domain is None:
+        domain = (0, 0, np.sqrt(2), np.sqrt(2))
+    triangles = triangulate_domain(domain, n_div)
+    labels = encode_labels(0, 0, 0, range(len(triangles)))
+    return can_string(triangles, labels)
+
+
+def read_results(path, nsoil=0):
     data_array = np.loadtxt(path, skiprows=2, dtype=str)
     data_array = np.atleast_2d(data_array)  # ensures 2D shape even if one triangle
     # assuming columns: index label area Eabs Ei_sup Ei_inf
@@ -153,16 +204,34 @@ def read_results(path):
     label = np.array([l.zfill(12) for l in data_array[:, 1]])
     area, Eabs, Ei, Ei_sup, Ei_inf = data_array[:, 2:].astype(float).T
 
-    data = {
-        'index': idx,
-        'label': label,
-        'area': area,
-        'Ei': Ei,
-        'Eabs': Eabs,
-        'Ei_sup': Ei_sup,
-        'Ei_inf': Ei_inf,
-    }
-    return data
+    if nsoil == 0:
+        soil_data = None
+        data = {
+            'index': idx,
+            'label': label,
+            'area': area,
+            'Ei': Ei,
+            'Eabs': Eabs,
+            'Ei_sup': Ei_sup,
+            'Ei_inf': Ei_inf,
+        }
+    else:
+        data = {
+            'index': idx[:-nsoil],
+            'label': label[:-nsoil],
+            'area': area[:-nsoil],
+            'Ei': Ei[:-nsoil],
+            'Eabs': Eabs[:-nsoil],
+            'Ei_sup': Ei_sup[:-nsoil],
+            'Ei_inf': Ei_inf[:-nsoil],
+        }
+        soil_data = {
+            'index': idx[-nsoil:],
+            'label': label[-nsoil:],
+            'area': area[-nsoil:],
+            'Ei': Ei[-nsoil:],
+        }
+    return data, soil_data
 
 
 def read_measures(path):
@@ -240,6 +309,17 @@ def read_sensors(source):
     ids = can[:, 2].astype(int)
     triangles = can[:, -9:].astype(float).reshape(-1, 3, 3)
     return triangles, ids
+
+
+def read_soil(source):
+    if isinstance(source, Path) or source.endswith('.soil'):
+        infile = Path(source)
+    else:
+        infile = StringIO(source)
+    soil = np.loadtxt(infile, comments="#", ndmin=2, dtype=str)
+    labels = soil[:, 2]
+    triangles = soil[:, -9:].astype(float).reshape(-1, 3, 3)
+    return triangles, labels
 
 
 def read_light(source):

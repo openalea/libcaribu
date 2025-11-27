@@ -100,3 +100,11 @@ def test_sensors():
     assert sensors[0][1][2] == 20 and ids[0] == 1
 
 
+def test_soil():
+    domain = (0, 0, 1, 1)
+    soil_string = lcio.canestra_soil(domain, n_div=2)
+    assert len(soil_string.splitlines()) == 8  # n_div * n_div * 2
+    triangles, labels = lcio.read_can(soil_string)
+    assert labels[0] == "0" * 12
+    x,y,_ = triangles.reshape(-1, 3).T
+    assert (x.min(), y.min(), x.max(), y.max()) == domain

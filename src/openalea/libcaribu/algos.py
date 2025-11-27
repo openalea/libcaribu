@@ -1,10 +1,10 @@
 """Low level implementation of caribu algorithm"""
-
+import tempfile
 import shutil
 import openalea.libcaribu.io as lcio
 import openalea.libcaribu.commands as lcmd
 from pathlib import Path
-from copy import deepcopy
+
 
 
 def _set_as_file(source, dst):
@@ -14,9 +14,12 @@ def _set_as_file(source, dst):
         dst.write_text(source)
 
 
-def set_scene(scene_path, canopy=None, pattern=None, lights=None, sensors=None, opts=None, bands=None):
-    scene_path = Path(scene_path).resolve()
-    scene_path.mkdir(exist_ok=True)
+def set_scene(scene_path=None, canopy=None, pattern=None, lights=None, sensors=None, opts=None, bands=None, soil=None):
+    if scene_path is None:
+        scene_path = Path(tempfile.mkdtemp(prefix='libcaribu-'))
+    else:
+        scene_path = Path(scene_path).resolve()
+        scene_path.mkdir(exist_ok=True)
     if canopy:
         if not isinstance(canopy, (str, Path)):
             try:
@@ -51,12 +54,47 @@ def set_scene(scene_path, canopy=None, pattern=None, lights=None, sensors=None, 
         if not isinstance(sensors, (str, Path)):
             sensors = lcio.canestra_sensor(sensors)
         _set_as_file(sensors, scene_path / 'scene.sensor')
+    if soil:
+        if not isinstance(soil, (str, Path)):
+            try:
+                triangles, labels = soil
+                assert isinstance(labels[0], str)
+                soil = lcio.can_string(triangles, labels)
+            except (TypeError, ValueError, AssertionError):
+                domain = lcio.read_pattern(scene_path / 'scene.8')
+                soil = lcio.canestra_soil(domain, n_div=soil)
+        _set_as_file(soil, scene_path / 'scene.soil')
     return scene_path
 
 
-def set_default_scene(scene_path='./_cscene'):
-    return set_scene(scene_path, canopy=lcio.canestra_scene(), pattern=lcio.canestra_pattern(),
-                     lights=lcio.canestra_light(), sensors=lcio.canestra_sensor(), opts=lcio.canestra_opt())
+def clean_scene(scene_path):
+    lcmd.clean_all_artifacts(scene_path)
+
+
+def delete_scene(scene_path):
+    temp_dir = Path(tempfile.gettempdir())
+    if str(scene_path).startswith('libcaribu-') and temp_dir in scene_path.parents:
+        shutil.rmtree(scene_path)
+
+
+def check_scene_and_soil(scene_path, toric=False):
+    scan, labs = lcio.read_can(scene_path / 'scene.soil')
+    if not toric:
+        out_path = scene_path / "scene_and_soil.can"
+    else:
+        out_path = scene_path / "motif_and_soil.can"
+    if not out_path.exists():
+        with out_path.open("wb") as out:
+            for p in ("scene.can" if not toric else "motif.can", "scene.soil"):
+                with (scene_path / p).open("rb") as f:
+                    shutil.copyfileobj(f, out)
+    return len(labs)
+
+
+def get_default_scene():
+    return set_scene(canopy=lcio.canestra_scene(), pattern=lcio.canestra_pattern(),
+                     lights=lcio.canestra_light(), sensors=lcio.canestra_sensor(),
+                     opts=lcio.canestra_opt(), soil=1)
 
 
 def periodise(scene_path, verbose=False):
@@ -97,27 +135,33 @@ def mcsail(scene_path, band=None):
     return status
 
 
-def get_outputs(scene_path):
-    results = measures = None
+def get_outputs(scene_path, nsoil=0):
+    results = measures = soil = None
     etri = scene_path / "Etri.vec0"
     if etri.exists():
-        results = lcio.read_results(etri)
+        results, soil = lcio.read_results(etri, nsoil)
     solem = scene_path / "solem.dat"
     if solem.exists():
         measures = lcio.read_measures(solem)
-    return results, measures
+    return results, soil, measures
 
 
-def raycasting(scene_path, band=None, more_args=None, verbose=False):
+def raycasting(scene_path, band=None, soil=False, more_args=None, verbose=False):
 
     if band is None:
         band = next(scene_path.glob("*.opt")).stem
 
-    args = ["-M", "scene.can",
-            "-l", "scene.light",
+    args = ["-l", "scene.light",
             "-p", f"{band}.opt",
             "-A",
             "-1"]
+
+    if not soil:
+        nsoil = 0
+        args += ["-M", "scene.can"]
+    else:
+        nsoil = check_scene_and_soil(scene_path, toric=False)
+        args += ["-M", "scene_and_soil.can"]
 
     if more_args:
         if not isinstance(more_args, list):
@@ -126,21 +170,28 @@ def raycasting(scene_path, band=None, more_args=None, verbose=False):
 
     lcmd.clean_canestrad(scene_path)
     lcmd.run_canestrad(scene_path, args=args, verbose=verbose)
-    results, measures = get_outputs(scene_path)
-    return results, measures
+    results, soil, measures = get_outputs(scene_path, nsoil)
+    return results, soil, measures
 
 
-def toric_raycasting(scene_path, band=None, more_args=None, verbose=False):
+def toric_raycasting(scene_path, band=None, soil=False, more_args=None, verbose=False):
 
     if band is None:
         band = next(scene_path.glob("*.opt")).stem
 
-    args = ["-M", "motif.can",
-            "-8", "scene.8",
+    args = ["-8", "scene.8",
             "-l", "scene.light",
             "-p", f"{band}.opt",
             "-A",
             "-1"]
+
+    if not soil:
+        nsoil = 0
+        args += ["-M", "motif.can"]
+    else:
+        nsoil = check_scene_and_soil(scene_path, toric=True)
+        args += ["-M", "motif_and_soil.can"]
+
     if more_args:
         if not isinstance(more_args, list):
             more_args = [more_args]
@@ -151,20 +202,27 @@ def toric_raycasting(scene_path, band=None, more_args=None, verbose=False):
 
     lcmd.clean_canestrad(scene_path)
     lcmd.run_canestrad(scene_path, args=args, verbose=verbose)
-    results, measures = get_outputs(scene_path)
-    return results, measures
+    results, soil, measures = get_outputs(scene_path, nsoil)
+    return results, soil, measures
 
 
-def radiosity(scene_path, band=None, more_args=None, verbose=False):
+def radiosity(scene_path, band=None, soil=False, more_args=None, verbose=False):
 
     if band is None:
         band = next(scene_path.glob("*.opt")).stem
 
-    args = ["-M", "scene.can",
-            "-l", "scene.light",
+    args = ["-l", "scene.light",
             "-p", f"{band}.opt",
             "-A",
             "-d", "-1"]
+
+    if not soil:
+        nsoil = 0
+        args += ["-M", "scene.can"]
+    else:
+        nsoil = check_scene_and_soil(scene_path, toric=False)
+        args += ["-M", "scene_and_soil.can"]
+
     if more_args:
         if not isinstance(more_args, list):
             more_args = [more_args]
@@ -172,11 +230,11 @@ def radiosity(scene_path, band=None, more_args=None, verbose=False):
 
     lcmd.clean_canestrad(scene_path)
     lcmd.run_canestrad(scene_path, args=args, verbose=verbose)
-    results, measures = get_outputs(scene_path)
-    return results, measures
+    results, soil, measures = get_outputs(scene_path, nsoil)
+    return results, soil, measures
 
 
-def mixed_radiosity(scene_path, band=None, sd=0, layers=2, height=1, more_args=None, verbose=False):
+def mixed_radiosity(scene_path, band=None, soil=False, sd=0, layers=2, height=1, more_args=None, verbose=False):
 
     if band is None:
         band = next(scene_path.glob("*.opt")).stem
@@ -188,13 +246,20 @@ def mixed_radiosity(scene_path, band=None, sd=0, layers=2, height=1, more_args=N
 
     mcsail(scene_path, band=band)
 
-    args = ["-M", "motif.can",
-            "-8", "scene.8",
+    args = ["-8", "scene.8",
             "-l", "scene.light",
             "-p", f"{band}.opt",
             "-A",
             "-d", str(sd),
             "-e", "mlsail.env"]
+
+    if not soil:
+        nsoil = 0
+        args += ["-M", "motif.can"]
+    else:
+        nsoil = check_scene_and_soil(scene_path, toric=True)
+        args += ["-M", "motif_and_soil.can"]
+
     if more_args:
         if not isinstance(more_args, list):
             more_args = [more_args]
@@ -202,5 +267,5 @@ def mixed_radiosity(scene_path, band=None, sd=0, layers=2, height=1, more_args=N
 
     lcmd.clean_canestrad(scene_path)
     lcmd.run_canestrad(scene_path, args=args, verbose=verbose)
-    results, measures = get_outputs(scene_path)
-    return results, measures
+    results, soil, measures = get_outputs(scene_path, nsoil)
+    return results, soil, measures
