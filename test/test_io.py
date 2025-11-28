@@ -31,7 +31,7 @@ def test_opticals():
 
 def test_labels():
     labels = lcio.encode_labels(opt=1, plant=2, leaf=3, elt=4)
-    assert labels[0] == "100000203004"
+    assert labels[0] == "100002003004"
     opt, plant, leaf, elt = lcio.decode_labels(labels)
     assert opt[0] == 1 and plant[0] == 2 and leaf[0] == 3 and elt[0] == 4
 
