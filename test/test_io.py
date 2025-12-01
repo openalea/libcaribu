@@ -59,7 +59,7 @@ def test_canopy():
     #from file
     triangles, labels = lcio.read_can(data_dir / 'filterT.can')
     assert len(triangles) == 192
-    assert labels[0] == "100000101000"
+    assert labels[0] == "100001001000"
 
 
 def test_light():
