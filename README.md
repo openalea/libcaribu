@@ -1,6 +1,6 @@
 # openalea.libcaribu
 
-[![CI status](https://github.com/openalea/libcaribu/actions/workflows/openalea-ci.yml/badge.svg)](https://github.com/openalea/libcaribu/actions/workflows/openalea-ci.yml)  
+[![CI Status](https://github.com/openalea/libcaribu/actions/workflows/openalea_ci.yml/badge.svg)](https://github.com/openalea/libcaribu/actions/workflows/openalea_ci.yml?query=branch%3Amaster)
 [![Anaconda version](https://anaconda.org/openalea3/openalea.libcaribu/badges/version.svg)](https://anaconda.org/openalea3/openalea.libcaribu)
 [![Latest release date](https://anaconda.org/openalea3/openalea.libcaribu/badges/latest_release_date.svg)](https://anaconda.org/openalea3/openalea.libcaribu)
 [![Platforms](https://anaconda.org/openalea3/openalea.libcaribu/badges/platforms.svg)](https://anaconda.org/openalea3/openalea.libcaribu)
