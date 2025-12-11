@@ -1,4 +1,5 @@
 import subprocess
+import functools
 from pathlib import Path
 
 
@@ -79,15 +80,23 @@ def _clean_artifacts(workdir='.', artifacts=None, verbose=False):
                     path.unlink()
 
 
+@functools.wraps(_run_tool) # propagate signature
 def run_mcsail(*args, **kwds): return _run_tool("mcsail", log='mc-sail.log', *args, **kwds)
+@functools.wraps(_run_tool)
 def run_periodise(*args, **kwds): return _run_tool("periodise", *args, **kwds)
+@functools.wraps(_run_tool)
 def run_s2v(*args, **kwds): return _run_tool("s2v", log='s2v.log', *args, **kwds)
+@functools.wraps(_run_tool)
 def run_canestrad(*args, **kwds): return _run_tool("canestrad", log='canestra.log', *args, **kwds)
 
 
+@functools.wraps(_clean_artifacts)
 def clean_canestrad(workdir='.'): _clean_artifacts(workdir, ('_scene.can', 'trinf.can','B.dat', 'E0.dat', 'solem.dat', 'Einc.vec', 'Eabs.vec', 'Etri.vec', 'Etri.vec0'))
+@functools.wraps(_clean_artifacts)
 def clean_periodise(workdir='.'): _clean_artifacts(workdir, ('Bz.dat', 'motif.can'))
+@functools.wraps(_clean_artifacts)
 def clean_mcsail(workdir='.'): _clean_artifacts(workdir, ('spectral', 'mlsail.env', 'Mcoef.dat', 'Mvec.dat', 'proflux.dat', 'profout'))
+@functools.wraps(_clean_artifacts)
 def clean_s2v(workdir='.'): _clean_artifacts(workdir, ('*.spec', 'cropchar', 'leafarea', 'out.dang', 's2v.can', 's2v.area'))
 
 
