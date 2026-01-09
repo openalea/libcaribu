@@ -43,6 +43,44 @@ def _set_opaque(scene, lower=True, upper=True):
     return lcal.set_scene(scene)
 
 
+def _translate_upper(scene, dx, dy):
+    lower, upper = 0, 1
+    triangles, labels = lcio.read_can(scene / 'scene.can')
+    triangles = [
+        triangles[lower],
+        [(x + dx, y + dy, z) for x,y,z in triangles[upper]]
+    ]
+    return lcal.set_scene(scene, canopy=lcio.can_string(triangles, labels))
+
+def test_raycasting_full_occlusion(two_superposed_triangles_scene):
+    s = two_superposed_triangles_scene
+    lower, upper = 0, 1
+    res, _, _ = lcal.raycasting(s)
+
+    assert_almost_equal(res['area'][lower], 1, 3)
+    assert_almost_equal(res['Eabs'][lower], 0, 0)
+    assert_almost_equal(res['Ei'][lower], 0, 0)
+
+    assert_almost_equal(res['area'][upper], 1, 3)
+    assert_almost_equal(res['Eabs'][upper], 70, 0)
+    assert_almost_equal(res['Ei'][upper], 100, 0)
+
+
+def test_raycasting_relieved_occlusion(two_superposed_triangles_scene):
+    s = two_superposed_triangles_scene
+    s = _translate_upper(s, 10, 10)
+    lower, upper = 0, 1
+    res, _, _ = lcal.raycasting(s)
+
+    assert_almost_equal(res['area'][lower], 1, 3)
+    assert_almost_equal(res['Eabs'][lower], 70, 0)
+    assert_almost_equal(res['Ei'][lower], 100, 0)
+
+    assert_almost_equal(res['area'][upper], 1, 3)
+    assert_almost_equal(res['Eabs'][upper], 70, 0)
+    assert_almost_equal(res['Ei'][upper], 100, 0)
+
+
 def test_radiosity_translucent_flip(two_superposed_triangles_scene):
     s = two_superposed_triangles_scene
     lower, upper = 0, 1
