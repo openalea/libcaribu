@@ -17,6 +17,8 @@ def degenerated_scene_factory(tmp_path):
             triangles = [[(0, 0, 0), (1, 0, 0), (0.5, 0, 0)]]
         elif name == 'flat_triangle_too_small':
             triangles = [[(0, 0, 0), (1, 0, 0), (0, 1e-7, 0)]]
+        elif name == 'two_triangles_merged':
+            triangles = [unit_triangle] * 2
         elif name == 'two_triangles_one_flat':
             flat_triangle = [(10, 0, 0), (11, 0, 0), (11, 0, 0)]
             triangles = [unit_triangle, flat_triangle]
@@ -42,8 +44,6 @@ def degenerated_scene_factory(tmp_path):
 def _set_domain(scene, domain):
     pattern_string = lcio.canestra_pattern(domain)
     s = lcal.set_scene(scene, pattern=pattern_string)
-    # update periodic scene
-    lcal.periodise(s)
     return s
 
 
@@ -75,6 +75,20 @@ def test_raycasting_flat_triangle_too_small(degenerated_scene_factory):
     assert np.isnan(res['Eabs'][0])
     assert np.isnan(res['Ei_sup'][0])
     assert np.isnan(res['Ei_inf'][0])
+
+
+def test_two_triangles_merged(degenerated_scene_factory):
+    scene = degenerated_scene_factory('two_triangles_merged')
+
+    # raycasting
+    res, _, _ = lcal.raycasting(scene)
+    assert_almost_equal(res['Ei'][0], 100, 0)
+    assert_almost_equal(res['Ei'][1], 0, 0)
+
+    # radiosity
+    res, _, _ = lcal.radiosity(scene)
+    assert_almost_equal(res['Ei'][0], 100, 0)
+    assert_almost_equal(res['Ei'][1], 0, 0)
 
 
 def test_raycasting_two_triangles_one_flat(degenerated_scene_factory):

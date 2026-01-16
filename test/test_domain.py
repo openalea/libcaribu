@@ -18,8 +18,6 @@ def scene(tmp_path):
 def _set_domain(scene, domain):
     pattern_string = lcio.canestra_pattern(domain)
     s = lcal.set_scene(scene, pattern=pattern_string)
-    # update periodic scene
-    lcal.periodise(s)
     return s
 
 

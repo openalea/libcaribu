@@ -50,6 +50,9 @@ def set_scene(scene_path=None, canopy=None, pattern=None, lights=None, sensors=N
         if not isinstance(pattern, (str, Path)):
             pattern = lcio.canestra_pattern(pattern)
         _set_as_file(pattern, scene_path / 'scene.8')
+        # reset artifacts from periodise and s2v
+        lcmd.clean_periodise(scene_path)
+        lcmd.clean_s2v(scene_path)
     if sensors:
         if not isinstance(sensors, (str, Path)):
             sensors = lcio.canestra_sensor(sensors)
