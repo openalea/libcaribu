@@ -41,7 +41,7 @@ def set_scene(scene_path=None, canopy=None, pattern=None, lights=None, sensors=N
             if not isinstance(opt, (str, Path)):
                 opts[i] = lcio.canestra_opt(opt)
         if bands is None:
-            bands = [Path(opt).stem if str(opt).endswith('.opt') else f'band{i}' for i, opt in enumerate(opts)]
+            bands = [Path(opt).stem if str(opt).endswith('.opt') else f'band{i+1}' for i, opt in enumerate(opts)]
         if not isinstance(bands, list):
             bands = [bands]
         assert len(bands) == len(opts)
@@ -313,11 +313,13 @@ def caribu(scene_path, bands=None, direct_only=True, toric=False, d_radiosity=0,
 
     if not direct_only and d_radiosity >= 0:
         toric = True
+
+    if toric:
+        if not (scene_path / 'motif.can').exists():
+            periodise(scene_path, verbose=verbose)
         if not all([(scene_path / f'{band}.vec').exists() for band in bands]):
             s2v(scene_path, bands=bands, layers=layers, height=height, verbose=verbose)
 
-    if toric and not (scene_path / 'motif.can').exists():
-        periodise(scene_path, verbose=verbose)
 
     args = []
     if screen_size:
