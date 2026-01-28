@@ -4,7 +4,6 @@ using namespace std ;
 #include <ferrlog.h>
 #include <cstdio>
 #include <cstring>
-#include <filesystem>
 #include "diffuseur.h"
 extern "C" {
 #include "sparse.h"
@@ -90,13 +89,9 @@ void hdmat_init(char *dir,char *rootname){
   
   //
 
-  auto nz = std::filesystem::path(dir) / NZ_NAME / tempo;
-  auto dg = std::filesystem::path(dir) / DG_NAME / tempo;
-  auto bf = std::filesystem::path(dir) / BF_NAME / tempo;
-
-  strncpy(pcNzName, nz.string().c_str(), sizeof(pcNzName));
-  strncpy(pcDgName, dg.string().c_str(), sizeof(pcDgName));
-  strncpy(pcBfName, bf.string().c_str(), sizeof(pcBfName));
+  sprintf(pcDgName,"%s%s%s",dir, DG_NAME, tempo);
+  sprintf(pcNzName,"%s%s%s",dir, NZ_NAME, tempo);
+  sprintf(pcBfName,"%s%s%s",dir, BF_NAME, tempo);
   
   if(true || verbose) 
     Ferr <<"HDMatrices : NZ="  << pcNzName<<", DG="  << pcDgName
@@ -118,13 +113,9 @@ void hdmat_majname(char *dir, const char*suff){
   else
     strcpy(tempo,suff);
   
-  auto nz = std::filesystem::path(dir) / NZ_NAME / tempo;
-  auto dg = std::filesystem::path(dir) / DG_NAME / tempo;
-  auto bf = std::filesystem::path(dir) / BF_NAME / tempo;
-
-  strncpy(pcNzName, nz.string().c_str(), sizeof(pcNzName));
-  strncpy(pcDgName, dg.string().c_str(), sizeof(pcDgName));
-  strncpy(pcBfName, bf.string().c_str(), sizeof(pcBfName));
+  sprintf(pcDgName,"%s%s%s",dir, DG_NAME, tempo);
+  sprintf(pcNzName,"%s%s%s",dir, NZ_NAME, tempo);
+  sprintf(pcBfName,"%s%s%s",dir, BF_NAME, tempo);
 
   if(true || verbose) {
     Ferr <<"HDMatrices : NZ="  << pcNzName<<", DG="  << pcDgName
