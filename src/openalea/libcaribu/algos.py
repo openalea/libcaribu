@@ -352,9 +352,11 @@ def caribu(scene_path, bands=None, direct_only=True, toric=False, d_radiosity=0,
             if i == 0:
                 FF_path = scene_path / 'FF'
                 FF_path.mkdir(exist_ok=True)
-                more_args += ['-f', str(FF_path)]
+                more_args += ['-t', str(FF_path),
+                              '-f', 'scene.FF']
             else:
-                more_args += ['-w', str(FF_path)]
+                more_args += ['-t', str(FF_path),
+                              '-w', 'scene.FF']
             if d_radiosity < 0:
                 res[band] = radiosity(scene_path, band=band, soil=soil, more_args=more_args, verbose=verbose)
             else:
