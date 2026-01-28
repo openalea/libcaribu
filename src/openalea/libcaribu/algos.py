@@ -1,11 +1,17 @@
 """Low level implementation of caribu algorithm"""
 import tempfile
 import shutil
+import os
 from copy import deepcopy
 import openalea.libcaribu.io as lcio
 import openalea.libcaribu.commands as lcmd
 from pathlib import Path
 
+def _path_with_sep(p):
+    s = str(Path(p))
+    if not s.endswith(os.sep):
+        s += os.sep
+    return s
 
 
 def _set_as_file(source, dst):
@@ -332,7 +338,6 @@ def caribu(scene_path, bands=None, direct_only=True, toric=False, d_radiosity=0,
         args += ['-n']
 
     res = {}
-    FF_path = None
     for i, band in enumerate(bands):
         more_args = []
         more_args += args
@@ -350,13 +355,11 @@ def caribu(scene_path, bands=None, direct_only=True, toric=False, d_radiosity=0,
                 res[band] = r, s, m
         else:
             if i == 0:
-                FF_path = scene_path / 'FF'
-                FF_path.mkdir(exist_ok=True)
-                more_args += ['-t', str(FF_path),
-                              '-f', 'scene.FF']
+                more_args += ['-t', _path_with_sep(scene_path),
+                              '-f', f'savedFF']
             else:
-                more_args += ['-t', str(FF_path),
-                              '-w', 'scene.FF']
+                more_args += ['-t', _path_with_sep(scene_path),
+                              '-w', f'savedFF']
             if d_radiosity < 0:
                 res[band] = radiosity(scene_path, band=band, soil=soil, more_args=more_args, verbose=verbose)
             else:
@@ -364,7 +367,9 @@ def caribu(scene_path, bands=None, direct_only=True, toric=False, d_radiosity=0,
 
         if outdir:
             shutil.copy(scene_path / 'Etri.vec0', outdir / f'{band}.vec0')
-            if i == 0 and FF_path:
-                shutil.copy(FF_path / 'scene.FF', outdir)
+            if i == 0:
+                for file in scene_path.glob("*savedFF"):
+                    if file.is_file():
+                        shutil.copy2(file, outdir / file.name)
 
     return res
