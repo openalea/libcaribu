@@ -27,6 +27,7 @@ build:
   script: 
     # force cmake generator and compilers for scikit-build without msvc on Windows
     - set SKBUILD_CMAKE_GENERATOR=MinGW Makefiles  # [win]
+    - set CMAKE_GENERATOR=MinGW Makefiles         # [win]
     - set CMAKE_GENERATOR_PLATFORM=                # [win]
     - echo CC=%CC%                                  # [win]
     - echo CXX=%CXX%                                # [win]
