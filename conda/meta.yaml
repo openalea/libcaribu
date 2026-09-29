@@ -29,6 +29,7 @@ build:
     - set SKBUILD_CMAKE_GENERATOR=MinGW Makefiles  # [win]
     - set CMAKE_GENERATOR=MinGW Makefiles         # [win]
     - set CMAKE_GENERATOR_PLATFORM=                # [win]
+    - set CMAKE_GENERATOR_TOOLSET=                 # [win]
     - echo CC=%CC%                                  # [win]
     - echo CXX=%CXX%                                # [win]
     - {{PYTHON}} -m pip install --no-deps  --no-build-isolation . -vv
