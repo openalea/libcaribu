@@ -23,9 +23,13 @@ build:
     - {{ compiler('c') }} # [win]
     - {{ compiler('cxx') }} # [win]
   script: 
-    # force cmake generator and compilers for scikit-build without msvc on Windows
     - echo CC=%CC%                                  # [win]
     - echo CXX=%CXX%                                # [win]
+    - echo CMAKE_GENERATOR=%CMAKE_GENERATOR%  # [win]
+    - where cl                        # [win]
+    - where cmake                     # [win]
+    - where vswhere                   # [win]
+    - vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath # [win]
     - {{PYTHON}} -m pip install --no-deps  --no-build-isolation . -vv
 
 requirements:

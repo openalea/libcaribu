@@ -6,9 +6,8 @@ dependencies:
   - setuptools-scm
   - scikit-build-core
   - cmake
-  - m2w64-toolchain
+  - c-compiler
+  - cxx-compiler
+
 variables:
-  CMAKE_GENERATOR: "MinGW Makefiles"
-  CXX: "g++"
-  CC: "gcc"
   LDFLAGS: "-static -static-libgcc -static-libstdc++"
