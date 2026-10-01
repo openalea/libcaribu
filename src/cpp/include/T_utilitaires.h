@@ -2,7 +2,6 @@
 #define __T_UTILITAIRES_H__
 
 #include <iostream>
-using namespace std ;
 
 #include "ferrlog.h"
 

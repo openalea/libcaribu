@@ -8,7 +8,6 @@
 *************************************************************/
 
 #include <iostream> // introduire la notion de namespace
-using namespace std ;
 
 #include <ferrlog.h>
 #include <system.h>     // raytools::include::bibliotek
@@ -105,10 +104,10 @@ int main(int argc,char **argv){
                      bornemax,sol,nsolem,TabDiff); 
       Ferr<<__FILE__<<" : byshm"<<'\n';
     }
-    cout <<"\n Nombre de faces (2*L+S) = "<<scene.radim<<endl;cout.flush();
+    std::cout <<"\n Nombre de faces (2*L+S) = "<<scene.radim<<endl;std::cout.flush();
     if(true ||verbose) {
       for(j=0; j<3; j++)
-          //  cout<<" main() : Bornemin["<<j<<"] = "<<bornemin[j]
+          //  std::cout<<" main() : Bornemin["<<j<<"] = "<<bornemin[j]
           //  <<"  Bornemax["<<j<<"] = "<<bornemax[j]<<endl;
           Ferr<<" main() : Bornemin["<<j<<"] = "<<bornemin[j]
               <<"  Bornemax["<<j<<"] = "<<bornemax[j]<<'\n';
@@ -496,7 +495,7 @@ int main(int argc,char **argv){
 	DecodeClefIn(&Nt,&clef_shm,clef_shm); //In caribu
 	// TEST: Ne plante plus si ouvre 1 segment =!= de celui de caribu
 	//clef_shm+=1 ; 
-	cout <<"==> print_Eabs(): Nt="  << Nt<<", clef_shm="  << clef_shm<<"\n" ;
+	std::cout <<"==> print_Eabs(): Nt="  << Nt<<", clef_shm="  << clef_shm<<"\n" ;
 	Ferr <<"==> print_Eabs(): Nt="  << Nt<<", clef_shm="  << clef_shm<<"\n" ;
 #ifndef WIN32
 	// Mode Unix
@@ -656,7 +655,7 @@ int main(int argc,char **argv){
 	   
 	      if(verbose>2) {
 		Ferr <<"Te["  << ia<<"]="  << Te[ia]<<" Ei(sup)="<<Ei[i-1]<<", Ei(inf)="<<Ei[i]<<"\n" ;
-		cout <<"Te["  << ia<<"]="  << Te[ia]<<" Ei(sup)["<<ia+(Nt-1)<<"]="<<Ei[i-1]<<", Te(ia+2*(Nt-1)="<<Te[ia+2*(Nt-1)]<<", Ei(inf)["<<ia+2*(Nt-1)<<"]="<<Ei[i]<<", Nt="<<Nt<<"\n" ;
+		std::cout <<"Te["  << ia<<"]="  << Te[ia]<<" Ei(sup)["<<ia+(Nt-1)<<"]="<<Ei[i-1]<<", Te(ia+2*(Nt-1)="<<Te[ia+2*(Nt-1)]<<", Ei(inf)["<<ia+2*(Nt-1)<<"]="<<Ei[i]<<", Nt="<<Nt<<"\n" ;
 	      }
 	    }
 	    //MCMarch2006
@@ -733,8 +732,8 @@ int main(int argc,char **argv){
 
   //======>  beep(): fait bip !
   inline void beep(const char *msg="M'enfin ...",int nbeep=1){
-    cout<<(char) 7 <<msg<<endl;
-    for(int i=1;i<1;i++) cout<<(char) 7<<endl;
+    std::cout<<(char) 7 <<msg<<endl;
+    for(int i=1;i<1;i++) std::cout<<(char) 7<<endl;
   }//beep()
 
   //======>  erreur_syntaxe(): imprime les options du prog a l'ecran
@@ -840,20 +839,20 @@ int main(int argc,char **argv){
       return 1;
     }  
   
-    if(byfile) cout <<"\n Fichier maquette  :: "<<maqname;
-    if(byseg ) cout <<"\n SegMem  maquette  :: "<<clef_shm;
-    cout <<"\n Fichier optique   :: "<<optname;
-    cout <<"\n Fichier sources   :: "<<lightname; 
-    cout <<"\n Seuil convergence :: "<<seuil;
-    cout <<"\n Dist envt (rayon) :: "<<denv;
-    if(denv==0) cout <<" ==> <!> SAIL pur";
+    if(byfile) std::cout <<"\n Fichier maquette  :: "<<maqname;
+    if(byseg ) std::cout <<"\n SegMem  maquette  :: "<<clef_shm;
+    std::cout <<"\n Fichier optique   :: "<<optname;
+    std::cout <<"\n Fichier sources   :: "<<lightname; 
+    std::cout <<"\n Seuil convergence :: "<<seuil;
+    std::cout <<"\n Dist envt (rayon) :: "<<denv;
+    if(denv==0) std::cout <<" ==> <!> SAIL pur";
     if(denv<0){
-      cout <<" ==> <!> full-matrix Radiosity (not nested)";
+      std::cout <<" ==> <!> full-matrix Radiosity (not nested)";
       envname=NULL;
     }
-    cout<<endl;
+    std::cout<<endl;
     if(matname!=NULL) {
-      cout <<" Fichier matrice   :: "<<matname<<endl;
+      std::cout <<" Fichier matrice   :: "<<matname<<endl;
       Ferr <<" Fichier matrice   :: "<<matname<< '\n' ;
     }
     if(sol){
@@ -864,7 +863,7 @@ int main(int argc,char **argv){
       }
     }
     if(infty){
-      cout<<   " Avec Infini       :: oui\n";
+      std::cout<<   " Avec Infini       :: oui\n";
       if( denv<0){
 	Ferr << "<!> Fatal error "<<(char)7 <<'\n'
 	     <<"==> Canestra is called with 2 incompatible options:\n"
@@ -878,7 +877,7 @@ int main(int argc,char **argv){
     if(!bias)
       Ferr <<" Option test du biais(?) des triangles a-cheval sur la sphere ACTIVEE\n" ;
     if(envname==NULL && !ordre1){
-      cout<<" ! Attention :: environnement nul.\n";
+      std::cout<<" ! Attention :: environnement nul.\n";
       Ferr <<" ! Attention :: environnement is null."<<'\n';
       if( denv==0){
 	// stderr2cerr: Parse error here ?

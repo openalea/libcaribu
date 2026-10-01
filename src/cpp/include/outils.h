@@ -2,7 +2,7 @@
 #define OUTILS
 
 #include <iostream>
-using namespace std ;
+
 
 #include "ferrlog.h"
 
