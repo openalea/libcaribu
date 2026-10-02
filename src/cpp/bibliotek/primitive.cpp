@@ -606,7 +606,7 @@ double Polygone::distance2_point(Point &C) {
   t = ( cst_equ_plan - normale.prod_scalaire(O));
   if(verbeux>1) printf(" cst_eq_plan = %g -- t = %g\n",cst_equ_plan,t);
   I=C+ normale*t ;
-  if(verbeux>1) cout<<"Polygone[distance_point] inter I : "<<I[0]<<" "<<I[1]<<" "<<I[2]<<endl;
+  if(verbeux>1) std::cout<<"Polygone[distance_point] inter I : "<<I[0]<<" "<<I[1]<<" "<<I[2]<<std::endl;
   //Position du point I / au polygone ? 
   i=0;
   if (fabs(normale[1]) > fabs(normale[0])) i=1;

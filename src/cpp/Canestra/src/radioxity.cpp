@@ -732,8 +732,8 @@ int main(int argc,char **argv){
 
   //======>  beep(): fait bip !
   inline void beep(const char *msg="M'enfin ...",int nbeep=1){
-    std::cout<<(char) 7 <<msg<<endl;
-    for(int i=1;i<1;i++) std::cout<<(char) 7<<endl;
+    std::cout<<(char) 7 <<msg<<std::endl;
+    for(int i=1;i<1;i++) std::cout<<(char) 7<<std::endl;
   }//beep()
 
   //======>  erreur_syntaxe(): imprime les options du prog a l'ecran

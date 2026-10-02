@@ -230,7 +230,7 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
 			  break;
 		  case 's':
 			  if(ii==0) syntax_error(nopti);
-			  cout<<"p.o. sol lues\n";
+        std::cout<<"p.o. sol lues\n";
 			  //cerr<<"Canopy[parse_can]ficoptik : sol lu\n";
 			  tabopaque(nbopt) = lectop(fopti, opak);
 			  raus(tabopaque(nbopt)==NULL,"Canopy[parse_can] allocation tabopaque impossible!");
@@ -377,8 +377,8 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
   }while (fgeom);
   fgeom.close();
   if(rejet)
-    cout <<"Canopy[parse_can] *************  Segment(s) rejete(s) *******\n";
-  cout << "Canopy [parse_can] nbre de primitives = "<<nbp<<endl;
+    std::cout <<"Canopy[parse_can] *************  Segment(s) rejete(s) *******\n";
+    std::cout << "Canopy [parse_can] nbre de primitives = "<<nbp<<std::endl;
   
   if(name8==NULL)
   infty=false;
@@ -389,7 +389,7 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
     fdim>>bornemax[0]>>bornemax[1];
     fdim.close();
     for(i=0; i<3; i++)
-      cout<<"Infty: Bornemax["<<i<<"] = "<<bornemax[i]<<"  Bornemin["<<i<<"] = "<<bornemin[i]<<endl;
+      std::cout<<"Infty: Bornemax["<<i<<"] = "<<bornemax[i]<<"  Bornemin["<<i<<"] = "<<bornemin[i]<<std::endl;
   }//if !infty
   
  

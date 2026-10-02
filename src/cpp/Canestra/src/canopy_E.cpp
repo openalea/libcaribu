@@ -590,7 +590,7 @@ void Canopy::projplan(Vecteur &visee,bool infty, double* Bo) {
        w=-w;
        v=-v;
      }
-     if(verbose>1){cout<<"Base (u,v,w) :\n";u.show(); v.show(); w.show();}
+     if(verbose>1){std::cout<<"Base (u,v,w) :\n";u.show(); v.show(); w.show();}
     M[0][0]=u[0] ;
     M[1][0]=v[0]; ;
     M[0][1]=u[1] ;

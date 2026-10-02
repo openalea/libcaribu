@@ -370,8 +370,8 @@ Vecteur Polygone::azi(){
 Triangle::Triangle(Liste<Point>& liste_sommet,double name=0) : Polygone(liste_sommet,name)
 {
   if (nb_sommets != 3)
-    { cout << "ERREUR - nombre de sommets incoherent pour un triangle\n";
-      cout << "nombre de sommets=" << nb_sommets << "\n"; cout.flush();
+    { std::cout << "ERREUR - nombre de sommets incoherent pour un triangle\n";
+      std::cout << "nombre de sommets=" << nb_sommets << "\n"; cout.flush();
       exit(1);
     }
 //  calcul_normale_cst_equ(sommet[0],sommet [1],sommet[2]);

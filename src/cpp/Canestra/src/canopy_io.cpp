@@ -349,8 +349,8 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
   }while (fgeom);
   fgeom.close();
   //  if(rejet) cout <<"Canopy[parse_can] *************  Segment(s) rejete(s) *******\n";
-  if(verbose)  cout << "Canopy [parse_can] nbre de primitives  ss sol = "<<nbp<<'\n' ;//endl;
-  if(verbose>1)  cout << "Canopy [parse_can] surface max primitive      = "<<smax<<'\n' ;//endl;
+  if(verbose)  std::cout << "Canopy [parse_can] nbre de primitives  ss sol = "<<nbp<<'\n' ;//endl;
+  if(verbose>1)  std::cout << "Canopy [parse_can] surface max primitive      = "<<smax<<'\n' ;//endl;
   
   // sol
   if(sol!=0){
@@ -431,7 +431,7 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
       p[0]+=dx;
       p[1]=bornemin[1];
     }//for i
-    if(verbose>1) cout << "Canopy [parse_can] nbre de primitives  avec sol = "<<nbp<<'\n' ;//endl; 
+    if(verbose>1) std::cout << "Canopy [parse_can] nbre de primitives  avec sol = "<<nbp<<'\n' ;//endl; 
   }// if sol
   for(i=0;i<3;i++) {
     vmin[i]=bmin[i]=bornemin[i];
@@ -503,14 +503,14 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
       }
     }//for i	 
     fgeom.close();
-    if(verbose>1) cout<<"Canopy [parse_can] nbre de capteurs virtuels = "<<nbcell<<'\n' ;//endl;
+    if(verbose>1) std::cout<<"Canopy [parse_can] nbre de capteurs virtuels = "<<nbcell<<'\n' ;//endl;
   }// if capteur virtuel
   else {
     nbcell=0;
   }
   radim=Diffuseur::idx;
-  if(verbose>1) cout<<"Canopy [parse_can] nbre de faces visibles = "<<radim<<'\n' ;//endl;
-  if(verbose)   cout<<"Canopy [parse_can] nbre de primitives = "<<Ldiff.card()<<'\n' ;//endl;
+  if(verbose>1) std::cout<<"Canopy [parse_can] nbre de faces visibles = "<<radim<<'\n' ;//endl;
+  if(verbose)   std::cout<<"Canopy [parse_can] nbre de primitives = "<<Ldiff.card()<<'\n' ;//endl;
  
   //mise en tableau
   FILE* fcan = nullptr;
@@ -772,11 +772,11 @@ long int Canopy::read_shm(
    if(rejet){
      char Tmsg[100];
      snprintf(Tmsg,sizeof(Tmsg), ">>>  Canopy[read_shm] ****** %d  rejected triangles ****",Nrejet);
-     cout <<Tmsg<<"\n";
+     std::cout <<Tmsg<<"\n";
      Ferr <<Tmsg<<"\n";
    }
-  if(verbose)  cout << "Canopy [read_shm] nbre de primitives  ss sol = "<<nbp<<'\n' ;//endl;
-  if(verbose>1)  cout << "Canopy [read_shm] surface max primitive      = "<<smax<<'\n' ;//endl;
+  if(verbose)  std::cout << "Canopy [read_shm] nbre de primitives  ss sol = "<<nbp<<'\n' ;//endl;
+  if(verbose>1)  std::cout << "Canopy [read_shm] surface max primitive      = "<<smax<<'\n' ;//endl;
   // sol
   printf("**** sol=%d\n", sol);
   if(sol){
@@ -845,7 +845,7 @@ long int Canopy::read_shm(
       p[0]+=dx;
       p[1]=bornemin[1];
     }//for i
-    if(true||verbose) cout << "Canopy [read_shm] nbre de primitives  avec sol = "<<nbp<<'\n' ;//endl; 
+    if(true||verbose) std::cout << "Canopy [read_shm] nbre de primitives  avec sol = "<<nbp<<'\n' ;//endl; 
   }// if sol
   for(i=0;i<3;i++) {
     vmin[i]=bmin[i]=bornemin[i];
@@ -916,16 +916,16 @@ long int Canopy::read_shm(
       }
     }//for i	 
     fgeom.close();
-    if(verbose>1) cout<<"Canopy [read_shm] nbre de capteurs virtuels = "<<nbcell<<'\n' ;//endl;
+    if(verbose>1) std::cout<<"Canopy [read_shm] nbre de capteurs virtuels = "<<nbcell<<'\n' ;//endl;
   }// if capteur virtuel
   else {
     nbcell=0;
   }
 
   radim=Diffuseur::idx;
-  if(verbose>1) cout<<"nbre de faces visibles = "<<radim;
+  if(verbose>1) std::cout<<"nbre de faces visibles = "<<radim;
   if(verbose)  {
-    cout<<"\nCanopy [read_shm] nbre de primitives = "
+    std::cout<<"\nCanopy [read_shm] nbre de primitives = "
         <<Ldiff.card()<<'\n' ;//endl;
   }
 
@@ -1047,7 +1047,7 @@ void Canopy::xabs(char* nx3d,double *bornemin,double *bornemax,bool normee)
       fout<<i+2<<"  "<< nbcol-3<<"  "<<j <<"  "<<j+3<<'\n' ;//endl;  
 
       // Faces
-      cout<<"Canopy[xabs] Emin = "<<Emin<<" - Emax = "<<Emax<<'\n' ;//endl;
+      std::cout<<"Canopy[xabs] Emin = "<<Emin<<" - Emax = "<<Emax<<'\n' ;//endl;
       fout<<"# number of polygons used in object\n";
       fout<<nb_prim<<'\n' ;//endl;
       for(i=0,j=0,Ldiff.debut();!Ldiff.finito();Ldiff.suivant(),i++)
@@ -1149,7 +1149,7 @@ void Canopy::xrad(char* nvar,double *bornemin,double *bornemax,bool normee)
       fout<<i+2<<"  "<< nbcol-3<<"  "<<j <<"  "<<j+3<<'\n' ;//endl;  
 
       // Faces
-      cout<<"Canopy[xrad] Emin = "<<Emin<<" - Emax = "<<Emax<<'\n' ;//endl;
+      std::cout<<"Canopy[xrad] Emin = "<<Emin<<" - Emax = "<<Emax<<'\n' ;//endl;
       fout<<"# number of polygons used in object\n";
       fout<<nb_prim<<'\n' ;//endl;
       for(i=0,j=0,Ldiff.debut();!Ldiff.finito();Ldiff.suivant(),i++)

@@ -27,7 +27,7 @@ le fichier de proprietes optiques
 
 
 inline void beep(const char *msg="M'enfin ..."){
-  cout<<(char) 7 <<msg<<endl;
+std::cout<<(char) 7 <<msg<<std::endl;
 }
 
 int periodise(int argc,char **argv){
@@ -78,7 +78,7 @@ int periodise(int argc,char **argv){
     delta[2] = 0.;
   printf(" delta2 = %g\n", delta[2]);
   for (i = 0; i < 3; i++)
-  std::cout<<" [1]Bornemin["<<(int)i<<"] = "<<bmin[i]<<"  Bornemax["<<(int)i<<"] = "<<bmax[i]<<endl;
+  std::cout<<" [1]Bornemin["<<(int)i<<"] = "<<bmin[i]<<"  Bornemax["<<(int)i<<"] = "<<bmax[i]<<std::endl;
   for ( scene.liste_diff_scene.debut() ; !scene.liste_diff_scene.finito() ; scene.liste_diff_scene.suivant() ) {
     delta[0] = delta[1] = 0;
     pdiff = scene.liste_diff_scene.contenu();

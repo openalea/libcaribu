@@ -34,12 +34,12 @@ void Camera::init(char * ficname, char * imgname)
    fic>> res[0]>>res[1];
    fic>>buffer; 
    fic>>foc;
-  cout<<"parametres de vue OK\n"; 
-  cout<<"oeil "<<oeil[0]<<" "<<oeil[1]<<" "<<oeil[2]<<endl;
-  cout<<"vers "<<vers[0]<<" "<<vers[1]<<" "<<vers[2]<<endl;
-  cout<<"verti "<<verti[0]<<" "<<verti[1]<<" "<<verti[2]<<endl;
-  cout<<" angle "<<angle_vue<<" - resolution "<<res[0]<<" "<<res[1]<<endl;
-  cout <<"focal "<<foc<<endl;
+   std::cout<<"parametres de vue OK\n"; 
+   std::cout<<"oeil "<<oeil[0]<<" "<<oeil[1]<<" "<<oeil[2]<<std::endl;
+   std::cout<<"vers "<<vers[0]<<" "<<vers[1]<<" "<<vers[2]<<std::endl;
+   std::cout<<"verti "<<verti[0]<<" "<<verti[1]<<" "<<verti[2]<<std::endl;
+   std::cout<<" angle "<<angle_vue<<" - resolution "<<res[0]<<" "<<res[1]<<std::endl;
+   std::cout <<"focal "<<foc<<endl;
    fic.close();
 // fin de lecture du fichier .cam
    angle_vue*=M_PI/360.0;
@@ -54,7 +54,7 @@ void Camera::init(char * ficname, char * imgname)
    verti=vers.prod_vectoriel(verti);
    verti=verti.prod_vectoriel(vers);
    verti.normalise(); 
-   cout<<" up ortho "<<verti[0]<<" "<<verti[1]<<" "<<verti[2]<<endl;
+   std::cout<<" up ortho "<<verti[0]<<" "<<verti[1]<<" "<<verti[2]<<std::endl;
 
    E = P = oeil+ vers*foc; 
    foc=  foc*tan(angle_vue);
@@ -236,11 +236,11 @@ void Camera::colorie_triangle(Diffuseur * pdif,Point &a,Point &b,Point &c, Tabdy
    penteR/=K[1];
    vab/=K[1]; 
    K[1]=-sens/K[1];
-   cout<<" Camera[colorie_triangle] : "<<pdif->primi().name()<<endl;
-   cout<<"\t A : ";a.show();cout<<"\t B : "; b.show();cout<<"\t C : "; c.show();
-   cout<<"\t deby = "<<deby  <<" - finy = "<<finy<<" - yrel = "<<yrel<<endl;
-   cout<<"\t xL   = "<<xL    <<" - xR   = "<<xR<<" -zL="<<zL<<endl;
-   cout<<"\tpenteL= "<<penteL<<" -penteR= "<<penteR<<" - sens = "<<sens<<" - vab= "<<vab<<endl;
+   std::cout<<" Camera[colorie_triangle] : "<<pdif->primi().name()<<std::endl;
+   std::cout<<"\t A : ";a.show();cout<<"\t B : "; b.show();cout<<"\t C : "; c.show();
+   std::cout<<"\t deby = "<<deby  <<" - finy = "<<finy<<" - yrel = "<<yrel<<std::endl;
+   std::cout<<"\t xL   = "<<xL    <<" - xR   = "<<xR<<" -zL="<<zL<<std::endl;
+   std::cout<<"\tpenteL= "<<penteL<<" -penteR= "<<penteR<<" - sens = "<<sens<<" - vab= "<<vab<<std::endl;
 
 //	boucle sur les lignes 
    for(j=deby;j<=finy;j++)
@@ -286,7 +286,7 @@ void Camera::calc_visi(Liste <Diffuseur*>& Ldiff)
    Diffuseur *pdiff;
    int i,j,k,l;
    double distZ,pente;
-   Vecteur &w=prim->normal();cout<<" w=vers? ";w.show();
+   Vecteur &w=prim->normal();std::cout<<" w=vers? ";w.show();
    Vecteur SvE=E,EvI; // SvE : Scene vers Ecran, EvI : Ecran vers Image
    bool up,down,pastoutvu;
 
@@ -319,7 +319,7 @@ void Camera::calc_visi(Liste <Diffuseur*>& Ldiff)
 	 { P[i]=pdiff->primi()[i];
            P[i]-=SvE;
            P[i]=P[i].chgt_base(u,v,w);
-	   cout <<"Camera[calc_visi] P{Re} = ";P[i].show();
+           std::cout <<"Camera[calc_visi] P{Re} = ";P[i].show();
            if( (P[i][2]<0.0) || pastoutvu)  // Prim  PARTIELLEMENT pas vue
 	       if( P[i][2]<0.0) //
 		   {  pastoutvu=true; 
@@ -338,7 +338,7 @@ void Camera::calc_visi(Liste <Diffuseur*>& Ldiff)
                // distZ=Pp[i].dist2(P[i]);
                 Pp[i]-=EvI;
 	        Pp[i][2]=P[i][2];//distZ;
-	        cout <<"Camera[calc_visi] Pp{Rimage}["<<i<<"]  = ";Pp[i].show();
+          std::cout <<"Camera[calc_visi] Pp{Rimage}["<<i<<"]  = ";Pp[i].show();
               }//else P[i][2]<0.0) || pastoutvu)
         }// for points triangle
        if(!pastoutvu) 
@@ -386,9 +386,9 @@ void Camera::calc_visi(Liste <Diffuseur*>& Ldiff)
                    dir.normalise();
                    parag.change_origine(Pt1);
                    parag.change_direction(dir);
-                  cout <<"param k de l'intersection = "<< pprim->intersect(parag,&Pt1) <<endl;
+                   std::cout <<"param k de l'intersection = "<< pprim->intersect(parag,&Pt1) <<std::endl;
                    delete pprim;
-                   cout<<" D = ";Pt1.show();
+                   std::cout<<" D = ";Pt1.show();
                    D[2]=Pt1[2];
                     up=down= B[0] != D[0];
                     if(D[0]>B[0]) { l=i; i=j; j=3;}

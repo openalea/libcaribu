@@ -233,7 +233,7 @@ const Vecteur Vecteur::normalisation(){
 void Vecteur::normalise(){
   double norm=norme();
   if(norm<=0.0)
-  { cout<<"Vecteur [normalise] norme <=0\n";
+  { std::cout<<"Vecteur [normalise] norme <=0\n";
   exit(-1);
   }
   homo[0]/=norm;
@@ -308,7 +308,7 @@ Point Point::operator + (const Homogene &vect){
   Point res;
 
   if (vect.homo[3]==1){
-    cout << "ERREUR - Impossible d'additionner deux points"; cout.flush();
+    std::cout << "ERREUR - Impossible d'additionner deux points"; cout.flush();
     exit (1);
   }
   else{
@@ -325,7 +325,7 @@ Point Point::operator - (const Homogene &vect){
   Point res;
 
   if (vect.homo[3]==1)	{
-    cout << "ERREUR - Impossible de soustraire deux points"; cout.flush();
+    std::cout << "ERREUR - Impossible de soustraire deux points"; cout.flush();
     exit (1);
   }
   else	{

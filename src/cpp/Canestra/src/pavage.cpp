@@ -78,10 +78,10 @@ main() {
   Image pict(10,10,"pave.ppm");
   pict.raz(0);
 
-  cout<<" coord du point de depart x,y :\n ";
-  cin>>ori[0]>>ori[1];
-  cout<<"\n coord de la direction  : \n";
-  cin>>dir0[0]>>dir0[1];
+  std::cout<<" coord du point de depart x,y :\n ";
+  std::cin>>ori[0]>>ori[1];
+  std::cout<<"\n coord de la direction  : \n";
+  std::cin>>dir0[0]>>dir0[1];
   norm=sqrt(dir0[0]*dir0[0]+dir0[1]*dir0[1]);
   dir0[0]/=norm;
   dir0[1]/=norm;

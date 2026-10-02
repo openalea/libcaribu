@@ -27,11 +27,11 @@ void Tremove(char * buffer){
     switch(errno) {
       case EACCES:
         Ferr<<">>> bzh.cpp: Tremove()- File protected against writing !"<<'\n';
-        cout<<">>> bzh.cpp: Tremove()- File protected against writing !"<<'\n';
+        std::cout<<">>> bzh.cpp: Tremove()- File protected against writing !"<<'\n';
         break;
       case ENOENT:
         Ferr<<">>> bzh.cpp: Tremove()- File not found !"<<'\n';
-        cout<<">>> bzh.cpp: Tremove()- File not found !"<<'\n';
+        std::cout<<">>> bzh.cpp: Tremove()- File not found !"<<'\n';
         break;
       case EINVAL:
         Ferr<<">>> bzh.cpp: Tremove()- Unvalid char for a name !"<<'\n';
@@ -39,7 +39,7 @@ void Tremove(char * buffer){
 	break;
       default:
         Ferr<<">>> bzh.cpp: Tremove()- Undefined error !"<<'\n';
-        cout<<">>> bzh.cpp: Tremove()- Undefined error !"<<'\n';
+        std::cout<<">>> bzh.cpp: Tremove()- Undefined error !"<<'\n';
     }
   }
 }//Tremove()

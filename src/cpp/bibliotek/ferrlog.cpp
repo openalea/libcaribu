@@ -45,13 +45,13 @@ ferrlog::ferrlog(char *filename){
 ferrlog::~ferrlog()
 {
 #ifdef DEBUG_OBJ
-  *out << "Destruction du flux Ferr" << endl ;
-  clog << "Destruction du flux Ferr" << endl ;
+  *out << "Destruction du flux Ferr" << std::endl ;
+  std::clog << "Destruction du flux Ferr" << std::endl ;
 #endif
 
     if (out->good()) {
-      *out << "ferrlog stream close by ~ferrlog()" << endl ;
-      *out << "\t(may be abnormal)" << endl ;
+      *out << "ferrlog stream close by ~ferrlog()" << std::endl ;
+      *out << "\t(may be abnormal)" << std::endl ;
       out->flush() ;
       out->close() ;
     }
@@ -61,7 +61,7 @@ ferrlog::~ferrlog()
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::flush (void) 
 {
-  clog.flush() ;
+  std::clog.flush() ;
   if (out != NULL)
     out->flush() ;
   return *this ;
@@ -71,7 +71,7 @@ ferrlog & ferrlog::flush (void)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << (char *msg)
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -83,11 +83,11 @@ ferrlog & ferrlog::operator << (const char *msg)
 {
   if (msg != (char*) NULL) {
     if ( *msg == '\n' ) { // palliatif pour endl 
-      clog << std::endl ;
+      std::clog << std::endl ;
       if (out != NULL)
-          *out << endl ;
+          *out << std::endl ;
     } else {
-      clog << msg ;
+      std::clog << msg ;
       if (out != NULL)
           *out << msg ;
     }
@@ -100,11 +100,11 @@ ferrlog & ferrlog::operator << (const char *msg)
 ferrlog & ferrlog::operator << (char msg)
 {
   if ( msg == '\n' ) { // palliatif pour endl 
-    clog << std::endl ;
+    std::clog << std::endl ;
     if (out != NULL)
       *out << std::endl ;
   } else {
-    clog << msg ;
+    std::clog << msg ;
     if (out != NULL)
       *out << msg ;
   }
@@ -115,7 +115,7 @@ ferrlog & ferrlog::operator << (char msg)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << (int msg)
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -125,7 +125,7 @@ if (out != NULL)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << ( long int msg) 
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -135,7 +135,7 @@ if (out != NULL)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << ( unsigned int msg) 
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -145,7 +145,7 @@ if (out != NULL)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << (float msg)
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -155,7 +155,7 @@ if (out != NULL)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << (double msg)
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -165,7 +165,7 @@ if (out != NULL)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << (void * msg)
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -186,7 +186,7 @@ ferrlog & ferrlog::operator << ( ostream & other)
 
 ferrlog & ferrlog::operator << ( string msg) 
 {
-  clog << msg ;
+  std::clog << msg ;
   if (out != NULL) {
     *out << msg ;
   }

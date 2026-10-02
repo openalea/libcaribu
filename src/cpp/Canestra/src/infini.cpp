@@ -100,7 +100,7 @@ void infinitise(void ***Zprim, REELLE **Zbuf,
   int i,j;
   if(verbose>1){
     myclock.Start();
-    cout<<"* infinitise(): DEBUT\n";
+    std::cout<<"* infinitise(): DEBUT\n";
   }
   //init
   Zdat0.alloue(Tx,Ty);
