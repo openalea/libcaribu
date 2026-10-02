@@ -52,7 +52,7 @@ protected:
   //Alea rambo;
 public:
   DiffReel()
-  { cout<<"DiffReel [constructeur] Warning : no parameters!\n";}
+  { std::cout<<"DiffReel [constructeur] Warning : no parameters!\n";}
   DiffReel (Primitive *pprim,Actop *actop)
 // : prim(p),opti(actop)      {vis_max=0;vis_cur=0; }
   { //cout<<"DiffReel[cstructor]debut\n"; pprim->show();
@@ -88,7 +88,7 @@ public:
   double intersect(Param_Inter parag,Point *I)
   {return (prim->intersect(parag,I));}
   void show() {prim->show(); 
-  cout <<"curvis = "<< vis_cur<< " - maxvis = "<< vis_max<<endl;
+    std::cout <<"curvis = "<< vis_cur<< " - maxvis = "<< vis_max<<std::endl;
   }
   //void fini() {opti->fini();}
 };
@@ -190,7 +190,7 @@ protected:
 public:
   ~Diff8(){delete prim;}
   Diff8()
-  { cerr<<"Diff8 [constructeur] Warning : no parameters!\n";}
+  { std::cerr<<"Diff8 [constructeur] Warning : no parameters!\n";}
   Diff8 (Diffuseur * pdif,Vecteur & delta);
   Primitive& primi(){
     return *prim; }
@@ -237,7 +237,7 @@ public:
     return (prim->intersect(parag,I));}
   void show() {
     prim->show();
-    cout <<"curvis = "<< vis_cur<< " - maxvis = "<< vis_max<<endl;
+    std::cout <<"curvis = "<< vis_cur<< " - maxvis = "<< vis_max<<std::endl;
   }
   //void fini() {opti->fini();}
 };
@@ -264,7 +264,7 @@ public:
   double pene;//[nb] couches : penetration du direct
   //fonctions-membres
   DiffP()
-  { cout<<"DiffP [constructeur] Warning : no parameters!\n";}
+  { std::cout<<"DiffP [constructeur] Warning : no parameters!\n";}
   DiffP (Primitive *pprim);
   ~DiffP();
   Primitive& primi()
@@ -313,7 +313,7 @@ public:
   int No;
   //fonctions-membres
   DiffP2()
-  { cout<<"DiffP2 [constructeur] Warning : no parameters!\n";}
+  { std::cout<<"DiffP2 [constructeur] Warning : no parameters!\n";}
   DiffP2 (Primitive *pprim);
   DiffP2 (Primitive *pprim,int nbo);
   ~DiffP2();

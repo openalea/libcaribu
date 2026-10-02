@@ -6,7 +6,7 @@
 //    29 4 98 : mise en comm de copycons et op= superflus
 
 #include<iostream> //.h>
-using namespace std ;
+
 
 // flux d'erreur
 #include "ferrlog.h"

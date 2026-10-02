@@ -27,7 +27,7 @@ public:
   virtual bool isreal()=0;
   double intersect(Param_Inter parag,Point *I)
   {return (prim->intersect(parag,I));}
-  void  show(char *texte=(char *)"",ostream& out=cout) // montre!
+  void  show(char *texte=(char *)"",std::ostream& out=std::cout) // montre!
   { prim->show(texte,out);  }
   virtual  unsigned int num()=0;
   virtual  void togle_face()=0;
@@ -40,7 +40,7 @@ public:
   // amie
   friend int maxE(Diffuseur*,Diffuseur*); // utilise par QuickSort (TabDyn, ListeD)  
   // renvoie -1 si E1>E2, 0 si E1=E2, 1 si E1<E2 (Ei delta energie du difuseur i
-  friend ostream& operator << (ostream& out,Diffuseur & diff);
+  friend std::ostream& operator << (std::ostream& out,Diffuseur & diff);
   // cas du patch voir si on fait une hierachie double (class Patch)
   void select_patch(int p) {};
   int nb_patch() {return 1;}

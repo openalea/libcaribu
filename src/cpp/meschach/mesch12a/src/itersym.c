@@ -537,7 +537,7 @@ VEC  *iter_cg1(ITER *ip)
       
       nres = in_prod(r,rr);
       if (nres < 0.0) {
-	 warning(WARN_RES_LESS_0,"iter_cg");
+	 meschach_warning(WARN_RES_LESS_0,"iter_cg");
 	 break;
       }
       nres = sqrt(fabs(nres));

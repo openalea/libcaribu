@@ -669,7 +669,7 @@ extern  VEC	*iter_gmres(ITER *ip)
 	    
 	    r->ve[i+1] = nres = v_norm2(&v1);
 	    if (nres <= 0.0) {
-	       warning(WARN_RES_LESS_0,"iter_gmres");
+	       meschach_warning(WARN_RES_LESS_0,"iter_gmres");
 	       break;
 	    }
 	    sv_mlt(1.0/nres,&v1,&v1);
@@ -684,7 +684,7 @@ extern  VEC	*iter_gmres(ITER *ip)
 	    
 	    nres = in_prod(rr,rr) - in_prod(r,r);
 	    if (nres <= 0.0) {
-	       warning(WARN_RES_LESS_0,"iter_gmres");
+	       meschach_warning(WARN_RES_LESS_0,"iter_gmres");
 	       break;
 	    }
 	    r->ve[i+1] = sqrt(nres);

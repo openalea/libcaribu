@@ -21,7 +21,6 @@ Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #endif
 
 #include <iostream>
-using namespace std ;
 
 #if defined(_MSC_VER)
 /* MSVC provides _alloca via <malloc.h> */

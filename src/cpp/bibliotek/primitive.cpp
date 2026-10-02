@@ -65,11 +65,11 @@ Polygone::Polygone(char* line,double name,
 // constructeur par nom (char*)
 
 ///////////////////////////////// constructeur par nom (string)
-Polygone::Polygone(string ligne,double name,
+Polygone::Polygone(std::string ligne,double name,
 		   reel*mini,reel*maxi,
 		   bool valid){
   //Ferr <<__FILE__<<" : "<<__LINE__<<"\n" ;
-  istringstream isTmp (ligne);
+  std::istringstream isTmp (ligne);
 
   // Note: learn to empty a full istringstream in one command
 
@@ -290,10 +290,10 @@ Ferr <<"\tPolygone(reel **) => Norme de (POP1)^(POP2 Nulle \n" ;
   calcul_normale_cst_equ(sommet[0],sommet [1],sommet[2]);
 }//Polygone(reel **)
 
-void Polygone::show(const char* msg,ostream &out){
+void Polygone::show(const char* msg,std::ostream &out){
   out << msg<<"-Polygone :"; qui();
   for (int i=0; i<nb_sommets; i++){
-    out << "\t" <<sommet[i][0]<<" "<<sommet[i][1]<<" "<<sommet[i][2]<<endl;
+    out << "\t" <<sommet[i][0]<<" "<<sommet[i][1]<<" "<<sommet[i][2]<<std::endl;
   }
 }//show()
 
@@ -606,7 +606,7 @@ double Polygone::distance2_point(Point &C) {
   t = ( cst_equ_plan - normale.prod_scalaire(O));
   if(verbeux>1) printf(" cst_eq_plan = %g -- t = %g\n",cst_equ_plan,t);
   I=C+ normale*t ;
-  if(verbeux>1) cout<<"Polygone[distance_point] inter I : "<<I[0]<<" "<<I[1]<<" "<<I[2]<<endl;
+  if(verbeux>1) std::cout<<"Polygone[distance_point] inter I : "<<I[0]<<" "<<I[1]<<" "<<I[2]<<std::endl;
   //Position du point I / au polygone ? 
   i=0;
   if (fabs(normale[1]) > fabs(normale[0])) i=1;

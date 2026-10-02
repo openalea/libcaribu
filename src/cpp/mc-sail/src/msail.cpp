@@ -2,7 +2,6 @@
 #define _Msail
 
 #include <iostream> // d�finit des namespaces
-using namespace std ;
 
 #include "multicou.h"
 #include <cmath>

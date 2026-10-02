@@ -37,6 +37,7 @@
 #include	"machine.h"
 #include        "err.h"
 #include 	"meminfo.h"
+#include <stdlib.h>
 
 /* unsigned integer type */
 /*#ifndef _SYS_BSD_TYPES_H */
@@ -78,15 +79,6 @@ typedef struct	{
 	        } IVEC;
 
 
-#ifndef MALLOCDECL
-#ifndef ANSI_C
-extern	char	*malloc(), *calloc(), *realloc();
-#else
-extern	void	*malloc(size_t),
-		*calloc(size_t,size_t),
-		*realloc(void *,size_t);
-#endif
-#endif
 
 #ifndef ANSI_C
 extern void m_version();
