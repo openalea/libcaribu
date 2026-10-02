@@ -18,7 +18,6 @@ le fichier de proprietes optiques
 /*/
 
 #include <cstdio>
-using namespace std;
 
 
 #include "GetOpt.h"
@@ -43,8 +42,8 @@ int periodise(int argc,char **argv){
     case 'o' : outname=option.optarg;       break;// out.can
     case 'm' : maqname=option.optarg; ok++; break;// canopy.can
     case 'p' : optname=option.optarg;  break; // *.opt
-    case 'h' : cerr<<"usage : "<<argv[0]<<" [8<infty> o<out> m<in> p<opt>]\n"; return 0 ;
-    default  : cerr<<"usage : "<<argv[0]<<" [8<infty> o<out> m<in> p<opt>]\n"; return -1;
+    case 'h' : std::cerr<<"usage : "<<argv[0]<<" [8<infty> o<out> m<in> p<opt>]\n"; return 0 ;
+    default  : std::cerr<<"usage : "<<argv[0]<<" [8<infty> o<out> m<in> p<opt>]\n"; return -1;
     }// switch
 
   if(ok<2) {
@@ -79,7 +78,7 @@ int periodise(int argc,char **argv){
     delta[2] = 0.;
   printf(" delta2 = %g\n", delta[2]);
   for (i = 0; i < 3; i++)
-    cout<<" [1]Bornemin["<<(int)i<<"] = "<<bmin[i]<<"  Bornemax["<<(int)i<<"] = "<<bmax[i]<<endl;
+  std::cout<<" [1]Bornemin["<<(int)i<<"] = "<<bmin[i]<<"  Bornemax["<<(int)i<<"] = "<<bmax[i]<<endl;
   for ( scene.liste_diff_scene.debut() ; !scene.liste_diff_scene.finito() ; scene.liste_diff_scene.suivant() ) {
     delta[0] = delta[1] = 0;
     pdiff = scene.liste_diff_scene.contenu();

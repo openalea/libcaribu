@@ -1,5 +1,4 @@
 #include <cmath> 
-using namespace std;
 #include "diffuseur.h"
 
 //#define CO(A) A

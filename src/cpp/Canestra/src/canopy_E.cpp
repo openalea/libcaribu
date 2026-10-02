@@ -4,7 +4,6 @@
 *              Precalcul pour le solver                            *
 ********************************************************************/
 #include <iostream>	// pour utiliser namespace (compile mieux)
-using namespace std ;
 
 #include <cmath>
 #include <cstdio>
@@ -411,7 +410,7 @@ void Canopy::calc_FF_Bfar(SPMAT *FF,
     //Calcul des FF en fct des Buffers
     if(verbose>3){
       tps.Stop();
-      cout<<++nop<<" : proj ortho-sph de "<<nb_ff<<" T en "<<tps<<endl;
+      std::cout<<++nop<<" : proj ortho-sph de "<<nb_ff<<" T en "<<tps<<std::endl;
       //Bug MC2006: ++nop est fait deux fois!!
       //    Ferr <<++nop<<" : proj ortho-sph de "<<nb_ff<<" T en "<<tps<<'\n';
       Ferr <<nop<<" : proj ortho-sph de "<<nb_ff<<" T en "<<tps<<'\n';
@@ -437,10 +436,10 @@ void Canopy::calc_FF_Bfar(SPMAT *FF,
 #define NONZERO(A) if ((A<EPSILON)&&(A>-EPSILON)){A= A>0 ? EPSILON: -EPSILON;}
   double dummy = nb_rec ;
   NONZERO(dummy) ;
-  cout<<"\tmean(diff/patch)     = "<<nb_test/dummy<<"\n";
-  cout<<"\tmean(diff_proj/patch)= "<<nb_emi/dummy<<"\n";
-  cout<<"\tmean(box/patch)      = "<<cum_box/dummy<<"\n";
-  cout<<endl;
+  std::cout<<"\tmean(diff/patch)     = "<<nb_test/dummy<<"\n";
+  std::cout<<"\tmean(diff_proj/patch)= "<<nb_emi/dummy<<"\n";
+  std::cout<<"\tmean(box/patch)      = "<<cum_box/dummy<<"\n";
+  std::cout<<std::endl;
   // ,nb_test/(double)nb_rec,nb_emi/(double)nb_rec,cum_box/(double)nb_rec);
   if(infty && denv>=min(delta[0],delta[1]))
     Ferr <<"####>> Nb Erreurs dues a active_face et infini = "
@@ -1178,7 +1177,7 @@ void Canopy::data3d(int tx,int ty,Vecteur &visee,
     emax[i]=vmax[i];    
   }
   visee.normalise();
-  cout<<"Visee::";visee.show();
+  std::cout<<"Visee::";visee.show();
   if(visee[2]<=0){//visee par  dessus
     printf("=> Down: Visee par dessus...\n");
     ei[0]=0; ei[1]=1; ei[2]=2; ei[3]=3; 
@@ -1209,7 +1208,7 @@ void Canopy::data3d(int tx,int ty,Vecteur &visee,
     v[0]=1; v[1]=0; v[2]=0;
     w[0]=0; w[1]=-1; w[2]=0;
     if(ofset==-1) w[1]=1;
-    cout<<"Base (u,v,w) :\n";u.show(); v.show(); w.show();
+    std::cout<<"Base (u,v,w) :\n";u.show(); v.show(); w.show();
   }
   else { //cas  : visee non verticale
     double M[2][2],tmp,maxi[2]={-999999.9,-999999.9},mini[2]={999999.9,999999.9};
@@ -1249,7 +1248,7 @@ void Canopy::data3d(int tx,int ty,Vecteur &visee,
        v=-v;
      }
      //if(ofset==-1) w=-w;
-     cout<<"Base (u,v,w) :\n";u.show(); v.show(); w.show();
+     std::cout<<"Base (u,v,w) :\n";u.show(); v.show(); w.show();
 
     M[0][0]=u[0] ;
     M[1][0]=v[0]; 
@@ -1618,7 +1617,7 @@ void Canopy::calc_FF_Bfar(SPMAT *FF,VEC **Cfar,char * envname, double denv,int n
 	     P[i]=pdiff->primi()[i];
 	     P[i]-=SvE;
 	     P[i]=P[i].chgt_base(u,v,w);
-	     cout <<"Camera[calc_visi] P{Re} = ";P[i].show();
+       std::cout <<"Camera[calc_visi] P{Re} = ";P[i].show();
 	     if( (P[i][2]<0.0) || pastoutvu)  // Prim  PARTIELLEMENT pas vue
 	       if( P[i][2]<0.0){ //
 		 pastoutvu=true; 
@@ -1637,7 +1636,7 @@ void Canopy::calc_FF_Bfar(SPMAT *FF,VEC **Cfar,char * envname, double denv,int n
                // distZ=Pp[i].dist2(P[i]);
 	       Pp[i]-=EvI;
 	       Pp[i][2]=P[i][2];//distZ;
-	       cout <<"Camera[calc_visi] Pp{Rimage}["<<i<<"]  = ";Pp[i].show();
+         std::cout <<"Camera[calc_visi] Pp{Rimage}["<<i<<"]  = ";Pp[i].show();
 	     }//else P[i][2]<0.0) || pastoutvu)
 	   }// for points triangle
 	   if(!pastoutvu) {
@@ -1684,9 +1683,9 @@ void Canopy::calc_FF_Bfar(SPMAT *FF,VEC **Cfar,char * envname, double denv,int n
                    dir.normalise();
                    parag.change_origine(Pt1);
                    parag.change_direction(dir);
-		   cout <<"param k de l'intersection = "<< pprim->intersect(parag,&Pt1) <<endl;
+                   std::cout <<"param k de l'intersection = "<< pprim->intersect(parag,&Pt1) <<std::endl;
                    delete pprim;
-                   cout<<" D = ";Pt1.show();
+                   std::cout<<" D = ";Pt1.show();
                    D[2]=Pt1[2];
 		   up=down=(B[0]==D[0])?false: true;
 		   if(D[0]>B[0]) { l=i; i=j; j=3;}

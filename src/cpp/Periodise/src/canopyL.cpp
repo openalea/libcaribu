@@ -9,7 +9,6 @@
 
 #include <iostream>
 #include <fstream>
-using namespace std;
 #include <sstream>
 
 #include "canopyL.h"
@@ -81,7 +80,7 @@ Actop* lectop(ifstream &fopti, bool opac=false){
     break; 
   case 's':// specular (Fresnel's law + attenation(van der Bild)
     if(!opac){
-      cerr<<"speculaire pas prevu today pour non-opaques!\n";
+      std::cerr<<"speculaire pas prevu today pour non-opaques!\n";
       exit(-1);
     }
     fopti>>popt[0]; // indice de refraction n
@@ -129,7 +128,7 @@ Actop* lectop(ifstream &fopti, bool opac=false){
     actop = new Sol(popt[0],popt[1],popt[2],popt[3],popt[4],popt[5],popt[6],popt[7],popt[8]); 
     break;
   case 'n': //neural network's regression
-    cerr<<"@!$ description des prop. opt. par reseau de neurones pas implementee\n";
+    std::cerr<<"@!$ description des prop. opt. par reseau de neurones pas implementee\n";
     exit(-1);	 
     break;
   default  :
@@ -141,7 +140,7 @@ Actop* lectop(ifstream &fopti, bool opac=false){
 
 
 void syntax_error(char * nomfic){
-  cerr<<" Canopy_io.C: Syntax Error during parcing "<<nomfic<<"\n";
+  std::cerr<<" Canopy_io.C: Syntax Error during parcing "<<nomfic<<"\n";
   exit(-1); 
 }  
 

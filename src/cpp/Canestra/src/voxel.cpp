@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std ;
 
 #include "voxel.h"
 // reglage de la subdivision adaptative en run-time

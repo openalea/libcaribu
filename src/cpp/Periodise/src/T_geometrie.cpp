@@ -1,5 +1,4 @@
 #include <cstdio>
-using namespace std;
 
 #include "T_geometrie.h"
 

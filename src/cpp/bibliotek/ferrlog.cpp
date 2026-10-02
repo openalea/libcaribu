@@ -2,12 +2,11 @@
 #include <cstdlib>
 #include <iostream>
 
-using namespace std ;
 
 void ferrlog::open(char *filename)
 {
 #ifdef DEBUG_OBJ
-  clog << "Objet: re�u demande d'ouverture de "<<filename<<endl ;
+  std::clog << "Objet: re�u demande d'ouverture de "<<filename<<std::endl ;
 #endif
 
   // La destruction du fichier pr�c�dent n'est possible que si
@@ -16,7 +15,7 @@ void ferrlog::open(char *filename)
     out = new ofstream(filename, ios::out) ;
     if (!out->good())
       {
-        clog << "Pas pu ouvrir " << filename<< endl ;
+        std::clog << "Pas pu ouvrir " << filename<< std::endl ;
         out = (ofstream*) NULL ;
       } 
 
@@ -33,7 +32,7 @@ void ferrlog::open(char *filename)
 //X   }
     
 #ifdef DEBUG_OBJ
-  clog << "Le flux " <<  filename <<" est ouvert" << endl ;
+    std::clog << "Le flux " <<  filename <<" est ouvert" << std::endl ;
 #endif
   
 } ;
@@ -84,7 +83,7 @@ ferrlog & ferrlog::operator << (const char *msg)
 {
   if (msg != (char*) NULL) {
     if ( *msg == '\n' ) { // palliatif pour endl 
-      clog << endl ;
+      clog << std::endl ;
       if (out != NULL)
           *out << endl ;
     } else {
@@ -101,9 +100,9 @@ ferrlog & ferrlog::operator << (const char *msg)
 ferrlog & ferrlog::operator << (char msg)
 {
   if ( msg == '\n' ) { // palliatif pour endl 
-    clog << endl ;
+    clog << std::endl ;
     if (out != NULL)
-      *out << endl ;
+      *out << std::endl ;
   } else {
     clog << msg ;
     if (out != NULL)
@@ -196,7 +195,7 @@ ferrlog & ferrlog::operator << ( string msg)
 
 void ferrlog::close(void) {
     if (out->good()) {
-      *out << "ferrlog stream close() called." << endl ;
+      *out << "ferrlog stream close() called." << std::endl ;
       out->flush() ;
       out->close() ;
     }

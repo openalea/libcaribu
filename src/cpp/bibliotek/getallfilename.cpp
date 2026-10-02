@@ -6,7 +6,6 @@
 
 #include <cstdlib>
 
-using namespace std ;
 
 #include <system.h>
 
@@ -44,7 +43,7 @@ char *GetAllFileName(char *nom) {
     int iTest =0;
     iTest = system (ccCommande);
     if (iTest != 0) {
-      cerr <<__FILE__<< ": Pas pu executer "<<ccCommande<<endl ;
+      std::cerr <<__FILE__<< ": Pas pu executer "<<ccCommande<<std::endl ;
       exit (20);
     };
     ifstream fin (pcTmpName, ios::in);
@@ -57,8 +56,8 @@ char *GetAllFileName(char *nom) {
     if (( sTmpName[0] == '%' ) || ( sTmpName.size() == 0 )) {
       istringstream isIn (".");
       isIn >>sTmpName ;
-      clog << "No %TEMP% environmental found.\n";
-      clog << "From now on the temp dir is going to be .\\."<<endl ;
+      std::clog << "No %TEMP% environmental found.\n";
+      std::clog << "From now on the temp dir is going to be .\\."<<std::endl ;
     }
     fin.close();
     sprintf(ccCommande,"%s %s", RM, pcTmpName) ;

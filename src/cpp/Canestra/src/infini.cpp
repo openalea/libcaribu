@@ -5,7 +5,6 @@
  */
 
 #include <iostream> //
-using namespace std;
 
 #include <cmath>
 
@@ -157,7 +156,7 @@ void infinitise(void ***Zprim, REELLE **Zbuf,
   Zbuf0.free();
   if(verbose>1){
     myclock.Stop();
-    cout<<"\n::::>  Infinitisation en "<<myclock<<endl;
+    std::cout<<"\n::::>  Infinitisation en "<<myclock<<std::endl;
     fflush(stdout);
   }
 }//infinitise()

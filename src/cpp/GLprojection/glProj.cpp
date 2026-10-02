@@ -23,7 +23,6 @@
 // Todo: recuperer le depth buffer pour infinitise: 
 // tester sur d'autres macheine (cartes graphiques ) et OS
 
-using namespace std;
 // #include <GL/glut.h>
 //Sous MacOSX
 //#include <GLUT/glut.h>
@@ -42,7 +41,6 @@ using namespace std;
 
 #include <vector>
 
-using namespace std;
 
 
 // typedef void (*PFV)(void);

@@ -6,7 +6,6 @@
 ********************************************************************/
 
 #include <iostream>	// pour user namespace (compile mieux)
-using namespace std ;
 
 #ifdef WIN32
 #include <windows.h>	// le + pr�s possible de namespace

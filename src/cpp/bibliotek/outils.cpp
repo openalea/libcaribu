@@ -1,6 +1,5 @@
 
 #include <fstream>
-using namespace std ;
 
 #include <outils.h>
 #include <arbo.h>
