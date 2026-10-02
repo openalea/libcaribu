@@ -17,9 +17,23 @@ def single_triangle_scene(tmp_path):
 
 
 def _reverse_triangles(scene):
-    triangles, _ = lcio.read_can(scene / 'scene.can')
+    triangles, labels = lcio.read_can(scene / 'scene.can')
     triangles = [list(reversed(points)) for points in triangles]
-    return lcal.set_scene(scene, canopy=triangles)
+    return lcal.set_scene(scene, canopy=lcio.can_string(triangles, labels))
+
+
+def _set_translucent(scene, material):
+    opts = lcio.set_opticals(leaf=material)
+    triangles, _ = lcio.read_can(scene / 'scene.can')
+    lcal.set_scene(scene, lcio.canestra_scene(triangles, leaf=True))
+    return lcal.set_scene(scene, opts=opts)
+
+
+def _set_opaque(scene, material):
+    opts = lcio.set_opticals(stem=material)
+    triangles, _ = lcio.read_can(scene / 'scene.can')
+    lcal.set_scene(scene, lcio.canestra_scene(triangles, leaf=False))
+    return lcal.set_scene(scene, opts=opts)
 
 
 def test_raycasting_translucent_triangle(single_triangle_scene):
@@ -43,9 +57,7 @@ def test_raycasting_flipped_translucent_triangle(single_triangle_scene):
 
 
 def test_raycasting_opaque_triangle(single_triangle_scene):
-    scene = single_triangle_scene
-    triangles, _ = lcio.read_can(scene / 'scene.can')
-    s = lcal.set_scene(scene, lcio.canestra_scene(triangles, leaf=False))
+    s = _set_opaque(single_triangle_scene, 0.1)
     res, _, _ = lcal.raycasting(s)
     assert_almost_equal(res['area'][0], 1, 3)
     assert_almost_equal(res['Eabs'][0], 90, 0)
@@ -58,13 +70,12 @@ def test_raycasting_opaque_triangle(single_triangle_scene):
     assert_almost_equal(res['area'][0], 1, 3)
     assert_almost_equal(res['Eabs'][0], 90, 0)
     assert_almost_equal(res['Ei'][0], 100, 0)
-    assert_almost_equal(res['Ei_inf'][0], 100, 0)
-    assert_almost_equal(res['Ei_sup'][0], 0, 0)
+    assert_almost_equal(res['Ei_inf'][0], -1, 0)
+    assert_almost_equal(res['Ei_sup'][0], 100, 0)
 
 
 def test_reflectance_equals_transmittance(single_triangle_scene):
-    opts = lcio.set_opticals(leaf=(0.05, 0.05))
-    s = lcal.set_scene(single_triangle_scene, opts=opts)
+    s = _set_translucent(single_triangle_scene, (0.05, 0.05))
     res, _, _ = lcal.raycasting(s)
     assert_almost_equal(res['area'][0], 1, 3)
     assert_almost_equal(res['Eabs'][0], 90, 0)
@@ -75,8 +86,7 @@ def test_reflectance_equals_transmittance(single_triangle_scene):
 
 def test_product_equality(single_triangle_scene):
     # reflectance_product == transmittance_product
-    opts = lcio.set_opticals(leaf=(0.05, 0.01, 0.01, 0.05))
-    s = lcal.set_scene(single_triangle_scene, opts=opts)
+    s = _set_translucent(single_triangle_scene, (0.05, 0.01, 0.01, 0.05))
     res, _, _ = lcal.raycasting(s)
     assert_almost_equal(res['area'][0], 1, 3)
     assert_almost_equal(res['Eabs'][0], 94, 0)
@@ -84,3 +94,37 @@ def test_product_equality(single_triangle_scene):
     assert_almost_equal(res['Ei_sup'][0], -1, 0)
     assert_almost_equal(res['Ei_inf'][0], -1, 0)
 
+
+def test_special_translucent(single_triangle_scene):
+    # full reflectance, mirror
+    s = _set_translucent(single_triangle_scene, (1., 0.))
+    res, _, _ = lcal.raycasting(s)
+    assert_almost_equal(res['area'][0], 1, 3)
+    assert_almost_equal(res['Ei_sup'][0], 100, 0)
+    assert_almost_equal(res['Ei_inf'][0], 0, 3)
+    assert_almost_equal(res['Eabs'][0], 0, 3)
+
+    # semi reflectance
+    s = _set_translucent(single_triangle_scene, (0.5, 0.))
+    res, _, _ = lcal.raycasting(s)
+    assert_almost_equal(res['area'][0], 1, 3)
+    assert_almost_equal(res['Ei_sup'][0], 100, 0)
+    assert_almost_equal(res['Ei_inf'][0], 0, 3)
+    assert_almost_equal(res['Eabs'][0], 50, 0)
+
+
+def test_asymmetric_material(single_triangle_scene):
+    s = _set_translucent(single_triangle_scene, (0.1, 0., 0.2, 0.))
+    res, _, _ = lcal.raycasting(s)
+    assert_almost_equal(res['area'][0], 1, 3)
+    assert_almost_equal(res['Ei_sup'][0], 100, 0)
+    assert_almost_equal(res['Ei_inf'][0], 0, 0)
+    assert_almost_equal(res['Eabs'][0], 90, 0)
+
+    # flip
+    s = _reverse_triangles(s)
+    res, _, _ = lcal.raycasting(s)
+    assert_almost_equal(res['area'][0], 1, 3)
+    assert_almost_equal(res['Ei_sup'][0], 0, 0)
+    assert_almost_equal(res['Ei_inf'][0], 100, 0)
+    assert_almost_equal(res['Eabs'][0], 80, 0)
