@@ -10,7 +10,6 @@
 #ifndef _Chrono_h
 #define _Chrono_h
 #include <iostream>
-using namespace std;
 
 #include "ferrlog.h"
 
@@ -25,16 +24,16 @@ public:
   void Stop();
   double Seconds();
     
-  ostream& PrintOn(ostream &s) ;
+  std::ostream& PrintOn(std::ostream &s) ;
   ferrlog& PrintOn(ferrlog &s) ;
   char* Name() const { return (char*)"Chrono"; }
 private:
   ChronoData *data;
-  friend ostream & operator <<(ostream&,Chrono&); 
+  friend std::ostream & operator <<(std::ostream&,Chrono&); 
 // HA 01 2001
   friend ferrlog & operator <<(ferrlog&, Chrono& ) ;
 };
-ostream & operator <<(ostream& out ,Chrono& uhr);
+std::ostream & operator <<(std::ostream& out ,Chrono& uhr);
 // HA 01 2001
 ferrlog & operator <<(ferrlog&, Chrono& ) ;
 #endif

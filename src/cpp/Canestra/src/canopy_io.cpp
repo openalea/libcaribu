@@ -40,7 +40,7 @@ void  err_syntax(char*msg){
   exit(7);
   }
 
-void  err_syntax( string msg){
+void  err_syntax( std::string msg){
   Ferr <<" \n\n<!>dans canopy_io.C, pb Capteur virtuel =>" ;
   Ferr  << msg<<"" ;
   Ferr << '\n' ;
@@ -50,7 +50,7 @@ void  err_syntax( string msg){
 bool opak=true;
 
 //lectopt() : lit les proprietes optiques (fonction locale)
-Actop* lectop(ifstream &fopti, bool opac=false){
+Actop* lectop(std::ifstream &fopti, bool opac=false){
   double popt[4]={0.0,0.0,0.0,0.0};
   Actop *actop;
   char c;
@@ -96,10 +96,10 @@ inline void not_yet(char * type){
   Ferr<<"desole mais le type\""<<type<<"\" n'est pas encore implemente : Ligne ignoree... \n";
 }// not_yet()
 
-inline char * endline(ifstream & fin){
+inline char * endline(std::ifstream & fin){
   long int iKompteur=0;
   char car;
-  ostringstream ligne; // was ostrstream
+  std::ostringstream ligne; // was ostrstream
   do {
     fin.get(car);
     ligne.put(car);
@@ -107,7 +107,7 @@ inline char * endline(ifstream & fin){
   }while(car!='\n');
   
   // Apprends � utiliser les strings, Herve !!! // HA
-  istringstream isTmp (ligne.str()) ;  
+  std::istringstream isTmp (ligne.str()) ;  
   char *tmp1 = new char[LONG_LIGNE_CAN],
     *pline = new char[LONG_LIGNE_CAN] ;
   strcpy (pline,"");
@@ -126,7 +126,7 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
   int i=0,j;
   long nbp=0;
   Diffuseur* diff;
-  ifstream fopti(nopti,ios::in);
+  std::ifstream fopti(nopti,std::ios::in);
   char c, line[256];
   double popt[4];
   int nbopt=0,ii=0;
@@ -140,7 +140,7 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
     exit(9);
   }
   
-  ifstream fgeom(ngeom,ios::in);
+  std::ifstream fgeom(ngeom,std::ios::in);
   if (!fgeom){
     Ferr << "ERREUR - Impossible d'ouvrir :"<<ngeom<<'\n' ;//endl;;
     //Ferr->flush();
@@ -195,7 +195,7 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
   
   //cas infini
   if(name8!=nullptr) {
-    ifstream finf(name8,ios::in);
+    std::ifstream finf(name8,std::ios::in);
     finf>>bornemin[0]>>bornemin[1];
     finf>>bornemax[0]>>bornemax[1];
     finf.close();
@@ -371,7 +371,7 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
     for(i=0;i<nbs;i++) {
       for(j=0;j<nbs;j++) {
 	{//triangle du bas
-	  ostringstream ligne ;
+    std::ostringstream ligne ;
 	  ligne<<3<<" ";
 	  ligne<<p[0] <<" ";
 	  ligne<<p[1] <<" ";
@@ -383,7 +383,7 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
 	  ligne<< (p[1]+dy) <<" ";
 	  ligne<<bornemin[2] <<"  ";
 
-	  string sTmp = ligne.str() ;
+    std::string sTmp = ligne.str() ;
 
 	  //  ajout du sol 1 a la liste 
 	  diff=new DiffO(new Polygone(sTmp,0,min,max),tabopaque(0));
@@ -393,7 +393,7 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
 	 
 	}//bloc necessaire pour use de ligne!
 	{//triangle du haut
-	  ostringstream ligne;
+    std::ostringstream ligne;
 	  int iKompteur ;
 	  ligne<<3<<" ";
 	  ligne<< (p[0]+dx) <<" ";
@@ -407,9 +407,9 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
 	  ligne<<bornemin[2] <<"  ";
 	  // gerer des #define si istringstream passe pas avec Bcc32
 	  // memes remarques que dans le bloc precedent
-	  string sTmp = ligne.str() ;
+    std::string sTmp = ligne.str() ;
 	  // iKompteur = sTmp.size();
-	  istringstream isTmp (sTmp) ;
+    std::istringstream isTmp (sTmp) ;
  	  //pch = new char[ iKompteur +1 ] ;
 	  //isTmp >> pch ;
 	  //  ajout du sol 1 a la liste 
@@ -447,10 +447,10 @@ long int Canopy::parse_can(char *ngeom,char *nopti,char * name8,reel *bornemin,r
 
   //Ajout des capteurs virtuels
   if(nsolem!=nullptr){
-    ifstream fgeom(nsolem,ios::in);
+    std::ifstream fgeom(nsolem,std::ios::in);
     //if (!fgeom) 
     if (!fgeom.good()) {
-      ostringstream ErrMsg;;
+      std::ostringstream ErrMsg;;
       ErrMsg << "ERREUR ligne "<< __LINE__;
       ErrMsg <<" - Impossible d'ouvrir le fichier \""<<nsolem<<"\"." ;
 	err_syntax(ErrMsg.str());
@@ -554,7 +554,7 @@ long int Canopy::read_shm(
   bool rejet=false;
   int i=0,j,it,nbp=0,Nt;
   Diffuseur* diff;
-  ifstream fopti(nopti,ios::in);
+  std::ifstream fopti(nopti,std::ios::in);
   char c, line[256];
   int nbopt=0,ii=0;
   Tabdyn<Actop*,1> tabopaque;
@@ -656,7 +656,7 @@ long int Canopy::read_shm(
   
   //cas infini
   if(name8!=nullptr) {
-    ifstream finf(name8,ios::in);
+    std::ifstream finf(name8,std::ios::in);
     finf>>bornemin[0]>>bornemin[1];
     finf>>bornemax[0]>>bornemax[1];
     finf.close();
@@ -797,7 +797,7 @@ long int Canopy::read_shm(
     for(i=0;i<nbs;i++) {
       for(j=0;j<nbs;j++) {
 	{//triangle du bas
-	  ostringstream ligne;
+    std::ostringstream ligne;
 	  ligne<<3<<" ";
 	  ligne<< (p[0]) <<" ";
 	  ligne<< (p[1]) <<" ";
@@ -810,7 +810,7 @@ long int Canopy::read_shm(
 	  ligne<< bornemin[2] <<"  ";
 
 	  // pch=ligne.str();
-	  string sTmp = ligne.str() ;
+    std::string sTmp = ligne.str() ;
 	  //  ajout du sol 1 a la liste 
 	  diff=new DiffO(new Polygone(sTmp,0,min,max),tabopaque(0));
 	  assert (diff != 0);
@@ -819,7 +819,7 @@ long int Canopy::read_shm(
 
 	}//bloc necessaire pour use de ligne!
 	{//triangle du haut
-	  ostringstream ligne;
+    std::ostringstream ligne;
 	  ligne<<3<<" ";
 	  ligne<< (p[0]+dx) <<" ";
 	  ligne<< p[1] <<" ";
@@ -831,7 +831,7 @@ long int Canopy::read_shm(
 	  ligne<< (p[1]+dy) <<" ";
 	  ligne<<bornemin[2] <<"  ";
 
-	  string sTmp = ligne.str() ;
+    std::string sTmp = ligne.str() ;
 	  //  ajout du sol 1 a la liste 
 	  diff=new DiffO(new Polygone(sTmp,0,min,max),tabopaque(0));
 
@@ -861,12 +861,12 @@ long int Canopy::read_shm(
 
   //Ajout des capteirs virtuels
   if(nsolem!=nullptr){
-    ifstream fgeom(nsolem,ios::in);
+    std::ifstream fgeom(nsolem,std::ios::in);
     char T;
     int nbid; 
     double id;
     if (!fgeom) {
-      ostringstream ErrMsg;;
+      std::ostringstream ErrMsg;;
       ErrMsg <<" ERREUR ligne "<< __LINE__;
       ErrMsg <<" - Impossible d'ouvrir le fichier \""<<nsolem<<"\"." ;
       err_syntax(ErrMsg.str());
@@ -971,7 +971,7 @@ void Canopy::xabs(char* nx3d,double *bornemin,double *bornemax,bool normee)
    int nbcol=203;
    Point G;
    Diffuseur *pdiff; 
-   ofstream fout(nx3d,ios::out);
+   ofstream fout(nx3d,std::ios::out);
    if (!fout)
      { Ferr << "ERREUR - Impossible d'ouvrir :"<<nx3d<<'\n' ;//endl;
        exit(13);
@@ -1072,7 +1072,7 @@ void Canopy::xrad(char* nvar,double *bornemin,double *bornemax,bool normee)
    int nbcol=203;
    Point G;
    Diffuseur *pdiff; 
-   ofstream fout(nvar,ios::out);
+   ofstream fout(nvar,std::ios::out);
    if (!fout)
      { Ferr << "ERREUR - Impossible d'ouvrir :"<<nvar<<"\n";//endl
        exit(14);

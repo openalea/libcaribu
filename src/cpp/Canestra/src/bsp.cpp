@@ -22,7 +22,7 @@ void BSP::volume_englobant_scene(const reel *bornemin, const reel *bornemax,List
     position_min[i]=bornemin[i];
   }
   if (Ldiff_scene.est_vide() == VRAI){
-    std::cout << "ERREUR - Pas de diffuseur dans la scene\n"; cout.flush();
+    std::cout << "ERREUR - Pas de diffuseur dans la scene\n"; std::cout.flush();
     exit (2);
   }
   else{

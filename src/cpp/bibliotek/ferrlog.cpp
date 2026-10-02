@@ -12,11 +12,11 @@ void ferrlog::open(char *filename)
   // La destruction du fichier pr�c�dent n'est possible que si
   // aucun autre process ne l'utilise, l'ouverture est soumise
   // aux memes conditions et "resette" l'ancien ==> on le laisse.
-    out = new ofstream(filename, ios::out) ;
+    out = new std::ofstream(filename, std::ios::out) ;
     if (!out->good())
       {
         std::clog << "Pas pu ouvrir " << filename<< std::endl ;
-        out = (ofstream*) NULL ;
+        out = (std::ofstream*) NULL ;
       } 
 
 //X   char *pcTmpName=NULL;
@@ -184,7 +184,7 @@ ferrlog & ferrlog::operator << ( ostream & other)
 } ;
 */
 
-ferrlog & ferrlog::operator << ( string msg) 
+ferrlog & ferrlog::operator << ( std::string msg) 
 {
   std::clog << msg ;
   if (out != NULL) {

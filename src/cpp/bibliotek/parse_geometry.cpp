@@ -8,7 +8,6 @@
    */
 
 #include <iostream>
-using namespace std ;
 #include <ferrlog.h>
 
 #include <cstdio>

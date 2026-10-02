@@ -3,7 +3,6 @@
 
 //#include <strstream.h>
 #include <sstream>
-using namespace std;
 #include <assert.h>
 
 #include "T_geometrie.h"
@@ -40,7 +39,7 @@ public:
   virtual int tout_point_inf(reel&, char&) = 0;
   virtual int tout_point_sup(reel&, char&) = 0;
   virtual int nb_in(reel&,reel&, char&) = 0;
-  virtual void show(const char* msg="",ostream & out=cout)=0;
+  virtual void show(const char* msg="",std::ostream & out=std::cout)=0;
   virtual double intersect(Param_Inter& parag,Point *I) = 0;
   double surface (){return psurf;}
   virtual Point centre()=0;
@@ -86,7 +85,7 @@ public:
     calcul_normale_cst_equ(sommet[0],sommet [1],sommet[2]);
   }
   void calcul_normale_cst_equ(Point&, Point&, Point&);
-  void show(const char* msg="",ostream & out =cout);
+  void show(const char* msg="",std::ostream & out =std::cout);
   // { out <<"Polygone[show] "<<msg<<endl;}
   double intersect(Param_Inter& parag,Point* I);
   void  calc_surface();
@@ -112,11 +111,11 @@ Triangle (char*str,double nome,reel* mini=NULL,reel* maxi=NULL);
   double intersect(Param_Inter& parag,Point* I);
 #endif
 //    double intersect(Param_Inter& parag,Point *I); 
-        void show(const char* msg="",ostream &out=cout)
+        void show(const char* msg="",std::ostream &out=std::cout)
          { out << msg<<"-Triangle :"; qui();
-           out << "          " <<sommet[0][0]<<" "<<sommet[0][1]<<" "<<sommet[0][2]<<endl;
-           out << "          " <<sommet[1][0]<<" "<<sommet[1][1]<<" "<<sommet[1][2]<<endl;
-           out << "          " <<sommet[2][0]<<" "<<sommet[2][1]<<" "<<sommet[2][2]<<endl;
+           out << "          " <<sommet[0][0]<<" "<<sommet[0][1]<<" "<<sommet[0][2]<<std::endl;
+           out << "          " <<sommet[1][0]<<" "<<sommet[1][1]<<" "<<sommet[1][2]<<std::endl;
+           out << "          " <<sommet[2][0]<<" "<<sommet[2][1]<<" "<<sommet[2][2]<<std::endl;
 	 }
         void calc_surface ();      
 };

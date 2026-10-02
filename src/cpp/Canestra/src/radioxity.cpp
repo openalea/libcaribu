@@ -104,7 +104,7 @@ int main(int argc,char **argv){
                      bornemax,sol,nsolem,TabDiff); 
       Ferr<<__FILE__<<" : byshm"<<'\n';
     }
-    std::cout <<"\n Nombre de faces (2*L+S) = "<<scene.radim<<endl;std::cout.flush();
+    std::cout <<"\n Nombre de faces (2*L+S) = "<<scene.radim<<std::endl;std::cout.flush();
     if(true ||verbose) {
       for(j=0; j<3; j++)
           //  std::cout<<" main() : Bornemin["<<j<<"] = "<<bornemin[j]
@@ -163,7 +163,7 @@ int main(int argc,char **argv){
     Vecteur dir_source;
     double Esource,rho;
     //     calcul de l'eclairage direct (soleil, ciel)
-    ifstream flight(lightname,ios::in);
+    std::ifstream flight(lightname,std::ios::in);
     do {
       flight>>Esource;
       if(!flight) 
@@ -850,9 +850,9 @@ int main(int argc,char **argv){
       std::cout <<" ==> <!> full-matrix Radiosity (not nested)";
       envname=NULL;
     }
-    std::cout<<endl;
+    std::cout<<std::endl;
     if(matname!=NULL) {
-      std::cout <<" Fichier matrice   :: "<<matname<<endl;
+      std::cout <<" Fichier matrice   :: "<<matname<<std::endl;
       Ferr <<" Fichier matrice   :: "<<matname<< '\n' ;
     }
     if(sol){

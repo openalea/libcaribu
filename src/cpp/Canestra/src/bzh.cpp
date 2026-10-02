@@ -1,6 +1,5 @@
 /* varaible globale des nom de fichier generer par tempnam(dir, pref) */
 #include <iostream>
-using namespace std ;
 #include <ferrlog.h>
 #include <cstdio>
 #include <cstring>

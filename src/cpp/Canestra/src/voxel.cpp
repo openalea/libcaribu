@@ -63,7 +63,7 @@ Voxel::~Voxel(){
   }// if debug   
   Ferr <<"~Voxel: fin"<< '\n' ;
   if(verbose>2)  
-    cerr <<"~Voxel() FIN\n" ;
+    std::cerr <<"~Voxel() FIN\n" ;
 }// ~Voxel()
 
 BSP* Voxel::operator() (int i, int j, int k){

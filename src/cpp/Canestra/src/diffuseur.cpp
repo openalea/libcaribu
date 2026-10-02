@@ -10,7 +10,7 @@ inline Face face(double scal) {
 }
 
 //-*************** operator << ( Diffuseur) *****************
-ostream& operator << (ostream& out,Diffuseur & diff){
+std::ostream& operator << (std::ostream& out,Diffuseur & diff){
   /*  if(&diff)
         diff.show(out); 
   else  out << 0;*/

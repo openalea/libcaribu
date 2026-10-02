@@ -308,7 +308,7 @@ Point Point::operator + (const Homogene &vect){
   Point res;
 
   if (vect.homo[3]==1){
-    std::cout << "ERREUR - Impossible d'additionner deux points"; cout.flush();
+    std::cout << "ERREUR - Impossible d'additionner deux points"; std::cout.flush();
     exit (1);
   }
   else{
@@ -325,7 +325,7 @@ Point Point::operator - (const Homogene &vect){
   Point res;
 
   if (vect.homo[3]==1)	{
-    std::cout << "ERREUR - Impossible de soustraire deux points"; cout.flush();
+    std::cout << "ERREUR - Impossible de soustraire deux points"; std::cout.flush();
     exit (1);
   }
   else	{

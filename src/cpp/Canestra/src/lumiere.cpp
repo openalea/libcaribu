@@ -109,7 +109,7 @@ void SoleilSS :: init_grille2d()
 //	pt[2]=bornemax[2]-0.001;//-EPSILON;
 	pt[2]=bornemax[2]-(bornemax[2]-bornemin[2])/500.0;//-EPSILON;   
 	xi=-1;
-        cout<<"SoleilSS[init_2d] pt[2] ="<<pt[2]<<" - bmaxZ = "<<bornemax[2]<<endl;
+  std::cout<<"SoleilSS[init_2d] pt[2] ="<<pt[2]<<" - bmaxZ = "<<bornemax[2]<<std::endl;
 }
 
 void SoleilSS :: parcours_grille2d()

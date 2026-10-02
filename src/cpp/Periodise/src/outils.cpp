@@ -5,7 +5,7 @@
 //raus() : si cond vraie alors affiche msg et ciao
 void raus(bool cond, const char *msg)
  { if(cond)
-    { std::cerr<<msg<<endl;
+    { std::cerr<<msg<<std::endl;
       std::cerr.flush();
       exit(-1);
     }

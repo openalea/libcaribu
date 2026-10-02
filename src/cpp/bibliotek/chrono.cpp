@@ -116,7 +116,7 @@ double Chrono::Seconds(){
      return data->Seconds();
 }
   
-ostream& Chrono::PrintOn(ostream &s) {
+std::ostream& Chrono::PrintOn(std::ostream &s) {
     double tmp = data->Seconds();
     s << tmp << " cpu seconds (";
     s << int(tmp)/60 << "' " << int(tmp)%60 << "'') ";
@@ -130,7 +130,7 @@ ferrlog& Chrono::PrintOn(ferrlog &s) {
     return s;
 }
 
-ostream & operator <<(ostream& out ,Chrono& uhr) {
+std::ostream & operator <<(std::ostream& out ,Chrono& uhr) {
   return uhr.PrintOn(out);
 }
 

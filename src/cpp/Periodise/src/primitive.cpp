@@ -235,10 +235,10 @@ Polygone::Polygone(float(*T)[3],double name,reel*mini,reel*maxi){
   correct=true;
 }//Polygone(reel **)
 
-void Polygone::show(const char* msg,ostream &out)
+void Polygone::show(const char* msg,std::ostream &out)
 {   out << msg<<"-Polygone :"; qui();
 for (int i=0; i<nb_sommets; i++)
-	{ out << "\t" <<sommet[i][0]<<" "<<sommet[i][1]<<" "<<sommet[i][2]<<endl;
+	{ out << "\t" <<sommet[i][0]<<" "<<sommet[i][1]<<" "<<sommet[i][2]<<std::endl;
 
 	}
 }//show
@@ -300,7 +300,7 @@ int Polygone::nb_in(reel& amin,reel& amax, char& axe) {
   for (i=0; i<nb_sommets; i++) {
     if(sommet[i][axe]>amax) {
       if(nbp<0) {
-	cerr<<" (!) Pb Polygone::nb_in : primitive no. "<<nom<<" plus grande que les bornes \n";
+        std::cerr<<" (!) Pb Polygone::nb_in : primitive no. "<<nom<<" plus grande que les bornes \n";
 	info=true;
       }
       nbp++;
@@ -308,16 +308,16 @@ int Polygone::nb_in(reel& amin,reel& amax, char& axe) {
     else
       if(sommet[i][axe]<amin) {
 	if(nbp>0) {
-	  cerr<<" (!) Pb Polygone::nb_in : primitive No. "<<nom<<" plus grande que les bornes\n!";
+    std::cerr<<" (!) Pb Polygone::nb_in : primitive No. "<<nom<<" plus grande que les bornes\n!";
 	info=true;
 	}
 	nbp--;
       }
   }//for sommets
   if(info) {
-      cerr<<"--> Axe "<<axe<<" - bornes = ("<<amin<<", "<<amax<<")\n";
+    std::cerr<<"--> Axe "<<axe<<" - bornes = ("<<amin<<", "<<amax<<")\n";
       for (i=0; i<nb_sommets; i++) {
-	cerr<<"\tP["<<i<<"] = "<<sommet[i][axe]<<endl;
+        std::cerr<<"\tP["<<i<<"] = "<<sommet[i][axe]<<std::endl;
       }
   }
   return nbp;
@@ -333,7 +333,7 @@ void Polygone::calcul_normale_cst_equ(Point& p1, Point& p2, Point& p3){
   //v2.show();
   normale=v1.prod_vectoriel(v2);
   if(normale==v0){
-    cerr<<"Polygone::calcul_normale_cst_equ : normale nulle ->";
+    std::cerr<<"Polygone::calcul_normale_cst_equ : normale nulle ->";
     qui();
     exit(-1);
   }
@@ -371,7 +371,7 @@ Triangle::Triangle(Liste<Point>& liste_sommet,double name=0) : Polygone(liste_so
 {
   if (nb_sommets != 3)
     { std::cout << "ERREUR - nombre de sommets incoherent pour un triangle\n";
-      std::cout << "nombre de sommets=" << nb_sommets << "\n"; cout.flush();
+      std::cout << "nombre de sommets=" << nb_sommets << "\n"; std::cout.flush();
       exit(1);
     }
 //  calcul_normale_cst_equ(sommet[0],sommet [1],sommet[2]);
@@ -466,7 +466,7 @@ void Polygone::calc_surface(){
   switch(nb_sommets){
   case 1: //polygone de faussaire
   case 2:
-    cerr<<"Polygone[calc_surface] Irrtum nb_sommet = "<<nb_sommets<<endl;
+    std::cerr<<"Polygone[calc_surface] Irrtum nb_sommet = "<<nb_sommets<<std::endl;
     exit(-1);
     break;
   case 3: //triangle

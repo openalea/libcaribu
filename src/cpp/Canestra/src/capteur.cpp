@@ -14,7 +14,7 @@
 
 void Camera::init(char * ficname, char * imgname)
  { char buffer[80];
-   ifstream fic(ficname,ios::in);
+   std::ifstream fic(ficname,std::ios::in);
    raus(!fic,"Camera[init] Ouverture fichier impossible!");    
    Vecteur vers,verti;
    Point P; 
@@ -39,7 +39,7 @@ void Camera::init(char * ficname, char * imgname)
    std::cout<<"vers "<<vers[0]<<" "<<vers[1]<<" "<<vers[2]<<std::endl;
    std::cout<<"verti "<<verti[0]<<" "<<verti[1]<<" "<<verti[2]<<std::endl;
    std::cout<<" angle "<<angle_vue<<" - resolution "<<res[0]<<" "<<res[1]<<std::endl;
-   std::cout <<"focal "<<foc<<endl;
+   std::cout <<"focal "<<foc<<std::endl;
    fic.close();
 // fin de lecture du fichier .cam
    angle_vue*=M_PI/360.0;
