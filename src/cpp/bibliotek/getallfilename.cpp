@@ -46,7 +46,7 @@ char *GetAllFileName(char *nom) {
       std::cerr <<__FILE__<< ": Pas pu executer "<<ccCommande<<std::endl ;
       exit (20);
     };
-    std::ifstream fin (pcTmpName, ios::in);
+    std::ifstream fin (pcTmpName, std::ios::in);
     
     // est-ce que FLUX >> string reserve la memoire ?
     fin >> sTmpName ;
