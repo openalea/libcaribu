@@ -176,7 +176,7 @@ void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
     }
     TabDiff[is]->activ_num(is);
     for (j =0; j<=Nc; j++) {
-      fread(cl,sizeof(int),2,fic);
+      fread(cl,sizeof(float),2,fic);
       Cenv->ve[is]+=rho[0]*(cl[0]*Tenv(j,0)+cl[1]*Tenv(j,1));
       if(transp)
 	Cenv->ve[is+1]+=tau[0]*(cl[0]*Tenv(j,0)+cl[1]*Tenv(j,1));
@@ -184,7 +184,7 @@ void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
 
     if(transp) {
       for (j =0; j<=Nc; j++) {
-	fread(cl,sizeof(int),2,fic);
+	fread(cl,sizeof(float),2,fic);
 	Cenv->ve[is]+=tau[1]*(cl[0]*Tenv(j,0)+cl[1]*Tenv(j,1));
 	if(transp)
 	  Cenv->ve[is+1]+=rho[1]*(cl[0]*Tenv(j,0)+cl[1]*Tenv(j,1));
