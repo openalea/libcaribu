@@ -106,7 +106,7 @@ def test_mixed_radiosity_three_triangles_full_occlusion(three_superposed_triangl
     s = _set_opaque(s)
     s = _set_domain(s, domain)
     lower, middle, upper = 0, 1, 2
-    x_res = lcal.caribu(s, direct_only=False, d_radiosity=0.6, layers=3, height=1.2)
+    x_res = lcal.caribu(s, direct_only=False, d_radiosity=0.6, layers=3, height=1.2, verbose=True)
 
     for band in ("band1", "band2"):
         res, _, _ = x_res[band]
