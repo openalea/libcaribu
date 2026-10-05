@@ -136,7 +136,7 @@ extern  ITER *iter_resize(ITER *ip, int new_lenb, int new_lenx)
       old = ip->x->dim;
       ip->x = v_resize(ip->x,new_lenx);
       if ( ip->shared_x && old != new_lenx)
-	warning(WARN_SHARED_VEC,"iter_resize");
+	meschach_warning(WARN_SHARED_VEC,"iter_resize");
    }
    
    if (new_lenb <= 0) ip->b = VNULL;
@@ -144,7 +144,7 @@ extern  ITER *iter_resize(ITER *ip, int new_lenb, int new_lenx)
       old = ip->b->dim;
       ip->b = v_resize(ip->b,new_lenb);
       if ( ip->shared_b && old != new_lenb)
-	warning(WARN_SHARED_VEC,"iter_resize");
+	meschach_warning(WARN_SHARED_VEC,"iter_resize");
    }
       
    return ip;

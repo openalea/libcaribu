@@ -2,7 +2,7 @@
 #define OUTILS
 
 #include <iostream>
-using namespace std ;
+
 
 #include "ferrlog.h"
 
@@ -93,7 +93,7 @@ public:
   inline void    change_direction( Vecteur&);
   inline void    change_poids(const double&);
   void show(){
-    cout <<"paraminter : Origine";origine.show();cout<<"\ndirection ";direction.show();cout<<"\npoids = "<<poids<<" - ordre = "<<ordre<<endl;}
+    std::cout <<"paraminter : Origine";origine.show();std::cout<<"\ndirection ";direction.show();std::cout<<"\npoids = "<<poids<<" - ordre = "<<ordre<<std::endl;}
 };//Class Param_Intetr 
  
 // Alea : permet de tirer des nombres aleatoires

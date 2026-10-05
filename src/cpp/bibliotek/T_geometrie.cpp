@@ -2,7 +2,6 @@
 // OC 29 4 98 mise en comm de copycons et op= superflus
 
 #include <cstdio>
-using namespace std;
 
 #include <T_geometrie.h>
 

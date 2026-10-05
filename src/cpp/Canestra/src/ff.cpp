@@ -1,7 +1,6 @@
 //\ps -o comm,vsize | grep Radiox
 
 #include <iostream>
-using namespace std ;
 
 #include <cstdio>
 #include <cmath>

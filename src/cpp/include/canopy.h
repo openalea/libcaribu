@@ -8,14 +8,14 @@
 #define CANOPY
 
 #include <iostream>
-using namespace std ;
+
 
 #include <cstdlib> // pour exit
 
 #include<fstream> //.h>
 #include<iomanip> //.h>
 
-using namespace std ;
+
 
 #define  _shihan
 extern "C" {

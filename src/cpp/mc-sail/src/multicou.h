@@ -1,6 +1,6 @@
 #define _Multicou
 #include <iostream> //.h>
-using namespace std ;
+
 
 #include <fstream> //.h>
 #include <assert.h>
@@ -15,7 +15,7 @@ using namespace std ;
 //#endif
 #endif  
 
-// using namespace std ; // dans le .cpp ?
+//  // dans le .cpp ?
 
 #include <T_utilitaires.h>
 #define REEL double

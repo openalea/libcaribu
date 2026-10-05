@@ -2,7 +2,6 @@
 #define CANOPY
 
 #include <iostream>
-using namespace std;
 
 #include <cstdlib> // pour exit
 #include <fstream>

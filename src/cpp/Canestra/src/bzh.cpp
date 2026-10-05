@@ -1,6 +1,5 @@
 /* varaible globale des nom de fichier generer par tempnam(dir, pref) */
 #include <iostream>
-using namespace std ;
 #include <ferrlog.h>
 #include <cstdio>
 #include <cstring>
@@ -27,11 +26,11 @@ void Tremove(char * buffer){
     switch(errno) {
       case EACCES:
         Ferr<<">>> bzh.cpp: Tremove()- File protected against writing !"<<'\n';
-        cout<<">>> bzh.cpp: Tremove()- File protected against writing !"<<'\n';
+        std::cout<<">>> bzh.cpp: Tremove()- File protected against writing !"<<'\n';
         break;
       case ENOENT:
         Ferr<<">>> bzh.cpp: Tremove()- File not found !"<<'\n';
-        cout<<">>> bzh.cpp: Tremove()- File not found !"<<'\n';
+        std::cout<<">>> bzh.cpp: Tremove()- File not found !"<<'\n';
         break;
       case EINVAL:
         Ferr<<">>> bzh.cpp: Tremove()- Unvalid char for a name !"<<'\n';
@@ -39,7 +38,7 @@ void Tremove(char * buffer){
 	break;
       default:
         Ferr<<">>> bzh.cpp: Tremove()- Undefined error !"<<'\n';
-        cout<<">>> bzh.cpp: Tremove()- Undefined error !"<<'\n';
+        std::cout<<">>> bzh.cpp: Tremove()- Undefined error !"<<'\n';
     }
   }
 }//Tremove()
@@ -148,6 +147,7 @@ void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
   fclose(fic);
   
   fic=fopen(pcBfName,"rb");
+
   if(verbose>1)printf("\t-> Lecture de %s\n",pcBfName);
   fread(&Nc,sizeof(int),1,fic);
   if(verbose>1) 

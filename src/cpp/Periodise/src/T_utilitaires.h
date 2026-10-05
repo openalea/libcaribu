@@ -8,7 +8,6 @@
 #endif
 #include <iostream>
 //#include <stdio.h>
-using namespace std;
 
 // modif Liste -> liste chainee double - pr QuickSort - Mike 95 
 
@@ -52,7 +51,7 @@ public:
   //Vorsicht : implemente only for 1D - MC
   void  quicksort(int (*clef)(Type *x, Type *y))
     { if(D>1)
-      { cerr <<"Tabdyn[quicksort] implemente que pour les tableaux 1D\n";
+      { std::cerr <<"Tabdyn[quicksort] implemente que pour les tableaux 1D\n";
       exit(-1);
       }
     if(!trie)
@@ -72,7 +71,7 @@ template <class Type, unsigned int D>
 inline Tabdyn<Type,D>& Tabdyn<Type,D>::operator =(Tabdyn<Type,D>& rval){
   for(unsigned char i=0;i<D ;i++)
     if(max[i]!=rval.max[i]){
-      cerr<<"\n Tabdyn [operator =] erreur dimension "<<i<<endl;
+      std::cerr<<"\n Tabdyn [operator =] erreur dimension "<<i<<std::endl;
       exit(-1);
     }
   trie=false;
@@ -85,7 +84,7 @@ inline Tabdyn<Type,D>& Tabdyn<Type,D>::operator =(Tabdyn<Type,D>& rval){
 template <class Type, unsigned int D>   
 void Tabdyn<Type,D>::maj(Type val){
   if(tab==NULL) {
-    cerr<< "\nTabdyn [maj()]: Tableau dynamique pas alloue : acces impossible!\n";
+    std::cerr<< "\nTabdyn [maj()]: Tableau dynamique pas alloue : acces impossible!\n";
     exit(-1);
   }
   unsigned long i;
@@ -97,7 +96,7 @@ void Tabdyn<Type,D>::maj(Type val){
 template <class Type, unsigned int D>
 inline  int  Tabdyn<Type,D>::bonind(int  ind,unsigned  char indmax){
   if(ind<0 || ind>=max[indmax]){
-    cerr<<"\n Tabdyn[operator()]: indice no "<<ind<<" hors-borne!\n";
+    std::cerr<<"\n Tabdyn[operator()]: indice no "<<ind<<" hors-borne!\n";
     ind=(int)  (1/sin(0.0));
     exit(-1);
     return ind; // pour eviter les warning verbeux de SGI
@@ -108,7 +107,7 @@ inline  int  Tabdyn<Type,D>::bonind(int  ind,unsigned  char indmax){
 template <class Type, unsigned int D>
 inline   int  Tabdyn<Type,D>::bonmax(int ind)      {
   if(ind<=0) {
-    cerr<<"\n Tabdyn[bornmax()]: dimension de tableau negative ou nulle!\n";
+    std::cerr<<"\n Tabdyn[bornmax()]: dimension de tableau negative ou nulle!\n";
     exit(-1);
     return ind; // pour eviter les warning verbeux de SGI
   }
@@ -126,7 +125,7 @@ inline void  Tabdyn<Type,D>::lectarg ( int &first,va_list & ptarg ){
   }   
   tab=new Type[taille];
   if(tab==NULL) {
-    cerr<<"Plus de mem pour alloc dyn!\n";exit(-1);
+    std::cerr<<"Plus de mem pour alloc dyn!\n";exit(-1);
   }
   va_end(ptarg);
 }//lectarg()
@@ -144,7 +143,7 @@ Tabdyn<Type,D>::Tabdyn(int first,... ){
 template <class Type, unsigned int D>
 void Tabdyn<Type,D>::alloue( int  first,... ){
   if(tab!=NULL) {
-    cerr<< "\nTabdyn [alloue()]: Tableau dynamique deja alloue a la declaration!\n";
+    std::cerr<< "\nTabdyn [alloue()]: Tableau dynamique deja alloue a la declaration!\n";
     exit(-1);
   }
   va_list ptarg;
@@ -484,8 +483,8 @@ inline void Liste<Type>::detruire(){//fucke', revu MC9/10/96
     }
   }
   else{
-    cerr << "ERREUR - Impossible de detruire un element car liste vide\n";
-    cerr.flush();
+    std::cerr << "ERREUR - Impossible de detruire un element car liste vide\n";
+    std::cerr.flush();
     //exit (1);
   }
 }
@@ -506,15 +505,15 @@ inline void Liste<Type> :: detruire_droite()
 		}
 		else
 		{
-			cout << "ERREUR - Impossible de detruire un element car fin de liste\n";
-			cout.flush();
+      std::cout << "ERREUR - Impossible de detruire un element car fin de liste\n";
+      std::cout.flush();
 			exit (1);
 		}
 	}
 	else
 	{
-		cout << "ERREUR - Impossible de detruire un element car liste vide\n";
-		cout.flush();
+    std::cout << "ERREUR - Impossible de detruire un element car liste vide\n";
+    std::cout.flush();
 		exit (1);
 	}
 }
@@ -729,7 +728,7 @@ inline void ListeD<Type>::detruire(){
       }
     }
   else
-    cerr << "ListeD[detruire] Liste deja vide!\n";
+    std::cerr << "ListeD[detruire] Liste deja vide!\n";
 }// ListeD::detruire()
 
 template <class Type>
@@ -745,10 +744,10 @@ inline void ListeD<Type>::detruire_droite()
 	  nbe--;
 	}
       else
-	  cerr <<" ListeD[detruire_droite]  Impossible de detruire un element car fin de liste\n";
+	  std::cerr <<" ListeD[detruire_droite]  Impossible de detruire un element car fin de liste\n";
     }
   else
-      cerr << "ListeD[detruire_droite] Impossible de detruire un element car liste vide\n";
+      std::cerr << "ListeD[detruire_droite] Impossible de detruire un element car liste vide\n";
 }//ListeD::detruire_droite()
 
 template <class Type>

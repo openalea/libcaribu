@@ -21,7 +21,7 @@ int main(int argc, char **argv){
   int id,npo;
   int i,j;
   FILE *fpar, *fout, *fenv, *fpvf ;
-  ifstream fpar2;
+  std::ifstream fpar2;
   char line[200];
 
   //exchange data
@@ -52,19 +52,19 @@ int main(int argc, char **argv){
 
   //mise en place d'une back-door ;-)  pour calculer la BRDF du couvert ss hot spot par mcsail
   // debut MC09
-  ifstream fvisee;
-  ofstream fbrf;
+  std::ifstream fvisee;
+  std::ofstream fbrf;
   
   bool brdf=false;
   int N_visee=1;
   double theta_v, phi_v, BRF[200] ; // en degree
   
-  fvisee.open("VISEE",ios::in);
+  fvisee.open("VISEE",std::ios::in);
   if(fvisee.is_open()){
     brdf=true;
     fvisee>>N_visee;
-    cerr<< "<!> Presence d'un fichier VISEE => activation du mode canopy BRDF - MC09\n Nb de visees = "<<N_visee<<endl;
-    fbrf.open("sail_brf.dat", ios::out);
+    std::cerr<< "<!> Presence d'un fichier VISEE => activation du mode canopy BRDF - MC09\n Nb de visees = "<<N_visee<<std::endl;
+    fbrf.open("sail_brf.dat", std::ios::out);
   }
 
   for (int iv=0; iv<N_visee;iv++){//boucle pour la BRDF du couvert - MC09
@@ -100,7 +100,7 @@ int main(int argc, char **argv){
       Cprofout[i].refdif  =  Cprofout[i].refdir   = Cprofout[i].absc  = 0;
     }
     // => LEAFAREA
-    fpar2.open("leafarea",ios::in);  // Hope objets cope with errors
+    fpar2.open("leafarea",std::ios::in);  // Hope objets cope with errors
     sf=0;
     double x;
     printf("==> Nb couche N=%d\n",N);
@@ -117,7 +117,7 @@ int main(int argc, char **argv){
     fpar2.close();
     printf("LAI total = %f\n",sf);fflush(stdout);
     // => SPECTRAL
-    fpar2.open("spectral",ios::in);     
+    fpar2.open("spectral",std::ios::in);     
     fpar2>> npo >> ros;
     if(npo!=N-1){
       fprintf(stderr, "<!>\tNumber of optical properties layers <> N number of layers\n"
@@ -143,7 +143,7 @@ int main(int argc, char **argv){
     limit.RSdd=limit.RSsd=limit.RSdo=limit.RSso = ros;
 
     // Parametres du direct 
-    fpar2.open(skyname,ios::in);
+    fpar2.open(skyname,std::ios::in);
     if(!fpar2.is_open()){
       fprintf(stderr," File %s does'nt exist => %s aborted...%c\n",skyname,argv[0],7);
       return -1;
@@ -228,7 +228,7 @@ int main(int argc, char **argv){
       if(phi_v==0)
 	theta_v=-theta_v;
       printf("BRDF: tv=%.1lf, phi=%.1lf %.3lf\n", theta_v, phi_v,  Cprofout[N-1].refdir); //,  Cprofout[N-1].refdif);
-      fbrf<<theta_v << "\t"<< Cprofout[N-1].refdir << "\t" << Cprofout[N-1].refdif << endl;
+      fbrf<<theta_v << "\t"<< Cprofout[N-1].refdir << "\t" << Cprofout[N-1].refdif << std::endl;
     }// else if ! brdf
        
     delete [] Cprofout;

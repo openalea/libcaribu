@@ -16,8 +16,8 @@
 #include "chrono.h"
 
 inline void beep(const char *msg="M'enfin ...",int nbeep=1)
-{ cout<<(char) 7 <<msg<<endl;
-  for(int i=1;i<1;i++) cout<<(char) 7<<endl;
+{ std::cout<<(char) 7 <<msg<<std::endl;
+  for(int i=1;i<1;i++) std::cout<<(char) 7<<std::endl;
 }//beep()
 
 #define PAUSE(msg)  printf(msg);printf("- Taper la touche Any");getchar();
@@ -57,11 +57,11 @@ int main(int argc,char **argv){
     { maqname= new char[10]; strcpy(maqname,"test.can");}      
    if(optname==NULL) 
    { optname= new char[10]; strcpy(optname,"fir.opt");}
-   cout <<"\n Fichier maquette  :: "<<maqname;
-   cout <<"\n Fichier image ppm :: "<<imgname;
-   cout <<"\n Fichier sources   :: "<<lightname; 
+   std::cout <<"\n Fichier maquette  :: "<<maqname;
+   std::cout <<"\n Fichier image ppm :: "<<imgname;
+   std::cout <<"\n Fichier sources   :: "<<lightname; 
    if(sol)
-     cout<<   " Avec Sol          :: oui\n"; 
+     std::cout<<   " Avec Sol          :: oui\n"; 
 
    //Test d'acces au fichier
    FileOk(maqname);
@@ -82,15 +82,15 @@ int main(int argc,char **argv){
   //PAUSE("fin des declarations");
   
   //Chargement de la scene
-  cout<<"Avant Chrono.start\n";
+  std::cout<<"Avant Chrono.start\n";
   clock.Start();
-   cout<<"Apres  Chrono.start et avant parse_can() \n";
+  std::cout<<"Apres  Chrono.start et avant parse_can() \n";
   scene.parse_can(maqname,optname,name8,(reel *)bornemin, (reel *)bornemax,sol,nsolem,TabDiff);
-  cout <<"-> scene.radim = "<<scene.radim<<endl;
+  std::cout <<"-> scene.radim = "<<scene.radim<<std::endl;
   clock.Stop();
   //PAUSE("charge scene");
   for(j=0; j<3; j++)
-    cout<<" Bornemin["<<j<<"] = "<<bornemin[j]<<"  Bornemax["<<j<<"] = "<<bornemax[j]<<endl;
+    std::cout<<" Bornemin["<<j<<"] = "<<bornemin[j]<<"  Bornemax["<<j<<"] = "<<bornemax[j]<<std::endl;
 
   //    calcul de visibilite (purely geometric)
   Vecteur visee;

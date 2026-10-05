@@ -108,7 +108,6 @@
 
 #include <iostream>	//.h>
 #include <fstream>	//.h>
-using namespace std ;
 
 #include <cstdio>
 #include <cstdlib>
@@ -1110,12 +1109,12 @@ void synterr(char * fname,int l){
 
 // CF 2016 : add nbopt reader
 void lect_nopt(int *nopt,char *optname) {
-  ifstream fopti(optname,ios::in);
+  std::ifstream fopti(optname,std::ios::in);
   char c, line[256];
   int l=0;
   if (!fopti){
     Ferr << "<!> Error(lect_po)  unable to open "<<optname<<"\n";
-    cerr.flush();
+    std::cerr.flush();
     exit (-3);
   }
   // scan fichier '.opt'
@@ -1144,13 +1143,13 @@ void lect_nopt(int *nopt,char *optname) {
 
 
 void lect_po( Tabdyn<double,3> &Tpo,int po,char *optname){
-  ifstream fopti(optname,ios::in);
+  std::ifstream fopti(optname,std::ios::in);
   char c, line[256];
   double Rt,Rf,Tf;
   int l=0,esp=0;
   if (!fopti){
     Ferr << "<!> Error(lect_po)  unable to open "<<optname<<"\n";
-    cerr.flush();
+    std::cerr.flush();
     exit (-3);
   }
   // lecture des proprietes optiques (fichier '.opt')
