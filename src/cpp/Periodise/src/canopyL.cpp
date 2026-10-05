@@ -14,7 +14,6 @@
 #include "canopyL.h"
 #include <cmath>
 #include "outils.h"
-#include <unistd.h>
 // CANOPY
 
 /************************************************************
@@ -195,22 +194,21 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
     std::cerr << "Je quitte" <<std::endl; 
     std::cerr.flush();
     exit (1);
-  } else {
-    if(access(ngeom,R_OK )){
-      std::cerr << "ERREUR - Impossible d'ouvrir la maquette ";
-      std::cerr <<ngeom<<std::endl;
-      std::cerr << "Je quitte" <<std::endl; 
-      std::cerr.flush();
-      exit (1);
-    }
-  }
-  // Ok
+  } 
   fgeom.open(ngeom,std::ios::in);
+  if(!ngeom) {
+    std::cerr << "ERREUR - Impossible d'ouvrir la maquette ";
+    std::cerr <<ngeom<<std::endl;
+    std::cerr << "Je quitte" <<std::endl; 
+    std::cerr.flush();
+    exit (1);
+  }
+// Ok
 
   bool nopti_is_null = (nopti == NULL);
-  bool file_exists = fexists(nopti);
+  bool file_exists = !nopti_is_null && fexists(nopti);
 
-  if (!nopti_is_null && file_exists) {
+  if (file_exists) {
 	  // lecture des proprietes optiques (fichier '.opt')
 	  fopti.open(nopti,std::ios::in);
 	  do{

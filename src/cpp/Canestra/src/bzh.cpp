@@ -129,7 +129,7 @@ void hdmat_majname(char *dir, const char*suff){
 void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
   int	i,is,j, Nc,nbp;//i : indice prim, is indice face
   double rho[2],tau[2],po;
-  float cl[2];
+  int cl[2];
   FILE *fic;
   Tabdyn<double,2> Tenv;
   char transp;
