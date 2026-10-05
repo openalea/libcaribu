@@ -157,7 +157,7 @@ void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
 
   Ferr << "Bfar file opened successfully\n";
 
-  size_t n = fread(&Nc, sizeof(Nc), 1, fic);
+  size_t n = fread(&Nc, sizeof(int), 1, fic);
 
   if (n != 1) {
       Ferr << "ERROR: cannot read Nc from Bfar file\n";
@@ -167,7 +167,7 @@ void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
 
   Ferr << "Nc = " << Nc << '\n';
 
-  n = fread(&nbp, sizeof(nbp), 1, fic);
+  n = fread(&nbp, sizeof(int), 1, fic);
 
   if (n != 1) {
       Ferr << "ERROR: cannot read nbp from Bfar file\n";
