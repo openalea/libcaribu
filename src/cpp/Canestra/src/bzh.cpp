@@ -147,6 +147,37 @@ void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
   fclose(fic);
   
   fic=fopen(pcBfName,"rb");
+  //checks
+  if (!fic) {
+    Ferr << "ERROR: cannot open Bfar file: "
+         << pcBfName << '\n';
+    perror("fopen Bfar");
+    exit(4);
+  }
+
+  Ferr << "Bfar file opened successfully\n";
+
+  size_t n = fread(&Nc, sizeof(Nc), 1, fic);
+
+  if (n != 1) {
+      Ferr << "ERROR: cannot read Nc from Bfar file\n";
+      fclose(fic);
+      exit(4);
+  }
+
+  Ferr << "Nc = " << Nc << '\n';
+
+  n = fread(&nbp, sizeof(nbp), 1, fic);
+
+  if (n != 1) {
+      Ferr << "ERROR: cannot read nbp from Bfar file\n";
+      fclose(fic);
+      exit(4);
+  }
+
+  Ferr << "nb_prim = " << nbp << '\n';
+  // end checks
+
   if(verbose>1)printf("\t-> Lecture de %s\n",pcBfName);
   fread(&Nc,sizeof(int),1,fic);
   if(verbose>1) 
@@ -163,7 +194,13 @@ void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
   is=0;
   for (i=0; i<nbp;i++){
     //init des variables diffuseur
+    Ferr << "Entering primitive loop\n";
+    Ferr << "i=" << i << " is=" << is << '\n';
+    Ferr << "TabDiff=" << static_cast<void*>(TabDiff) << '\n';
+    Ferr << "TabDiff[is]="
+        << static_cast<void*>(TabDiff[is]) << '\n';
     transp=!TabDiff[is]->isopaque();
+    Ferr << "isopaque() returned, transp=" << (int)transp << '\n';
     TabDiff[is]->activ_num(is);
     rho[0]= TabDiff[is]->rho();
     if(transp) {// A verifier ordre de Tau
