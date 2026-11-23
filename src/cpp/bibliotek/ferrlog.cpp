@@ -2,22 +2,21 @@
 #include <cstdlib>
 #include <iostream>
 
-using namespace std ;
 
 void ferrlog::open(char *filename)
 {
 #ifdef DEBUG_OBJ
-  clog << "Objet: re�u demande d'ouverture de "<<filename<<endl ;
+  std::clog << "Objet: re�u demande d'ouverture de "<<filename<<std::endl ;
 #endif
 
   // La destruction du fichier pr�c�dent n'est possible que si
   // aucun autre process ne l'utilise, l'ouverture est soumise
   // aux memes conditions et "resette" l'ancien ==> on le laisse.
-    out = new ofstream(filename, ios::out) ;
+    out = new std::ofstream(filename, std::ios::out) ;
     if (!out->good())
       {
-        clog << "Pas pu ouvrir " << filename<< endl ;
-        out = (ofstream*) NULL ;
+        std::clog << "Pas pu ouvrir " << filename<< std::endl ;
+        out = (std::ofstream*) NULL ;
       } 
 
 //X   char *pcTmpName=NULL;
@@ -33,7 +32,7 @@ void ferrlog::open(char *filename)
 //X   }
     
 #ifdef DEBUG_OBJ
-  clog << "Le flux " <<  filename <<" est ouvert" << endl ;
+    std::clog << "Le flux " <<  filename <<" est ouvert" << std::endl ;
 #endif
   
 } ;
@@ -46,13 +45,13 @@ ferrlog::ferrlog(char *filename){
 ferrlog::~ferrlog()
 {
 #ifdef DEBUG_OBJ
-  *out << "Destruction du flux Ferr" << endl ;
-  clog << "Destruction du flux Ferr" << endl ;
+  *out << "Destruction du flux Ferr" << std::endl ;
+  std::clog << "Destruction du flux Ferr" << std::endl ;
 #endif
 
     if (out->good()) {
-      *out << "ferrlog stream close by ~ferrlog()" << endl ;
-      *out << "\t(may be abnormal)" << endl ;
+      *out << "ferrlog stream close by ~ferrlog()" << std::endl ;
+      *out << "\t(may be abnormal)" << std::endl ;
       out->flush() ;
       out->close() ;
     }
@@ -62,7 +61,7 @@ ferrlog::~ferrlog()
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::flush (void) 
 {
-  clog.flush() ;
+  std::clog.flush() ;
   if (out != NULL)
     out->flush() ;
   return *this ;
@@ -72,7 +71,7 @@ ferrlog & ferrlog::flush (void)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << (char *msg)
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -84,11 +83,11 @@ ferrlog & ferrlog::operator << (const char *msg)
 {
   if (msg != (char*) NULL) {
     if ( *msg == '\n' ) { // palliatif pour endl 
-      clog << endl ;
+      std::clog << std::endl ;
       if (out != NULL)
-          *out << endl ;
+          *out << std::endl ;
     } else {
-      clog << msg ;
+      std::clog << msg ;
       if (out != NULL)
           *out << msg ;
     }
@@ -101,11 +100,11 @@ ferrlog & ferrlog::operator << (const char *msg)
 ferrlog & ferrlog::operator << (char msg)
 {
   if ( msg == '\n' ) { // palliatif pour endl 
-    clog << endl ;
+    std::clog << std::endl ;
     if (out != NULL)
-      *out << endl ;
+      *out << std::endl ;
   } else {
-    clog << msg ;
+    std::clog << msg ;
     if (out != NULL)
       *out << msg ;
   }
@@ -116,7 +115,7 @@ ferrlog & ferrlog::operator << (char msg)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << (int msg)
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -126,7 +125,7 @@ if (out != NULL)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << ( long int msg) 
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -136,7 +135,7 @@ if (out != NULL)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << ( unsigned int msg) 
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -146,7 +145,7 @@ if (out != NULL)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << (float msg)
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -156,7 +155,7 @@ if (out != NULL)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << (double msg)
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -166,7 +165,7 @@ if (out != NULL)
 // //  //   //    //   //  //  // //
 ferrlog & ferrlog::operator << (void * msg)
 {
-  clog << msg ;
+  std::clog << msg ;
 if (out != NULL)
   *out << msg ;
   return *this ;
@@ -185,9 +184,9 @@ ferrlog & ferrlog::operator << ( ostream & other)
 } ;
 */
 
-ferrlog & ferrlog::operator << ( string msg) 
+ferrlog & ferrlog::operator << ( std::string msg) 
 {
-  clog << msg ;
+  std::clog << msg ;
   if (out != NULL) {
     *out << msg ;
   }
@@ -196,7 +195,7 @@ ferrlog & ferrlog::operator << ( string msg)
 
 void ferrlog::close(void) {
     if (out->good()) {
-      *out << "ferrlog stream close() called." << endl ;
+      *out << "ferrlog stream close() called." << std::endl ;
       out->flush() ;
       out->close() ;
     }

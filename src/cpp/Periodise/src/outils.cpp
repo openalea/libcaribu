@@ -1,13 +1,12 @@
 #include "outils.h"
 
 #include <iostream>
-using namespace std;
 #include "arbo.h"
 //raus() : si cond vraie alors affiche msg et ciao
 void raus(bool cond, const char *msg)
  { if(cond)
-    { cerr<<msg<<endl;
-      cerr.flush();
+    { std::cerr<<msg<<std::endl;
+      std::cerr.flush();
       exit(-1);
     }
  }//raus()

@@ -1,7 +1,6 @@
 #define _Mprof
 
 #include <iostream> // d�finit des namespaces
-using namespace std ;
 
 #include "multicou.h"
 

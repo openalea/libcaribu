@@ -10,7 +10,8 @@
 //#include   <_G_config.h>
 
 
-enum bool { FALSE = 0, false = 0, TRUE = 1, true = 1 };
+//enum bool { FALSE = 0, false = 0, TRUE = 1, true = 1 };
+// bool, true and false are built into C++.
 
 #endif
 #endif

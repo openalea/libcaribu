@@ -4,10 +4,15 @@
 #ifndef _Mmath
 #define _Mmath
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
+#ifndef M_PI
+#define M_PI 3.141592653589793238462643383279502884
+#endif
+
 // acos
-inline  double Macos(double x){
+static inline  double Macos(double x){
   if(fabs(x)>1.){
     if((fabs(x)-1e-5)>1.){
       fprintf(stderr,"\n ** Error: Macos(x) with 1<x=%.15f\n",x);
@@ -20,7 +25,7 @@ inline  double Macos(double x){
     return acos(x);
 }//Macos
 //asin 
-inline  double Masin(double x){
+static inline  double Masin(double x){
   if(fabs(x)>1.){
     if((fabs(x)-1e-5)>1.){
       fprintf(stderr,"\n ** Error: Msin(x) with 1<|x|=%.15f\n",x);

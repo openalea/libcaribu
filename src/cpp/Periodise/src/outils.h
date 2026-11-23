@@ -4,7 +4,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
-using namespace std;
 #ifndef _OSF_SOURCE
 /*
  *      Useful mathmatical constants:
@@ -30,9 +29,9 @@ char * itoa(int i);
 //raus() : si cond vraie alors affiche msg et ciao
 void raus(bool cond, const char *msg="Cause mysterieuse ...");
 inline void STOP(int i)
-{ cerr <<"$#***>  Break "<<i<<"\t\t Srike any key to continue...";
+{ std::cerr <<"$#***>  Break "<<i<<"\t\t Srike any key to continue...";
   getchar();
-  cerr<<endl;
+  std::cerr<<std::endl;
 }//STOP()
 //-******** T_MAX
 template <class Type>
@@ -73,7 +72,7 @@ public:
   inline void    change_direction( Vecteur&);
   inline void    change_poids(const double&);
   void show(){
-    cout <<"paraminter : Origine";origine.show();cout<<"\ndirection ";direction.show();cout<<"\npoids = "<<poids<<" - ordre = "<<ordre<<endl;}
+    std::cout <<"paraminter : Origine";origine.show();std::cout<<"\ndirection ";direction.show();std::cout<<"\npoids = "<<poids<<" - ordre = "<<ordre<<std::endl;}
 };//Class Param_Intetr 
  
 // Alea : permet de tirer des nombres aleatoires

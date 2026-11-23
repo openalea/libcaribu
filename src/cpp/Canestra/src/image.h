@@ -26,12 +26,12 @@ class Image {
       { btm.alloue(x,y);strcpy(filename,nom);bitmax=-9.9e10;}
 
     Image & operator =(Image &img)
-      { cout<<"Image[=]  DEBUT \n";cout.flush();
+      { std::cout<<"Image[=]  DEBUT \n";std::cout.flush();
         Image  *pim= new Image(img.btm.maxi()[0],img.btm.maxi()[1],img.filename);
 /*        strcpy(filename,img.filename); cout<<"Image[=] :"<<filename<<endl;
         btm.alloue(img.btm.maxi()[0],img.btm.maxi()[1]);
 */
-    cout<<"Image[=]  avant copie des variables de btm \n";cout.flush(); 
+        std::cout<<"Image[=]  avant copie des variables de btm \n";std::cout.flush(); 
        for(int i=0;i<pim->btm.maxi()[0];i++)
          for(int j=0;j<pim->btm.maxi()[1];j++)
           pim-> btm(i,j)=   img.btm(i,j);
@@ -77,7 +77,7 @@ class Image {
    // typage AH 02 2001 
     void charge(char *name=(char*)" ")
       { if(!strcmp(name," ")) name=filename;
-        cout<<"Image[charge] Pas encore implemente !\n";
+        std::cout<<"Image[charge] Pas encore implemente !\n";
       }
 
    // typage AH 02 2001 
@@ -87,12 +87,12 @@ class Image {
 	unsigned int pix ;
 	char *ccTmp = new char[1] ;
         if(!strcmp(name," ")) name=filename;
-        ofstream fic(name,ios::out);
+        std::ofstream fic(name,std::ios::out);
         raus(!fic,"Image[sauve] Ouverture fichier impossible!"); 
         //cout<<"Image[sauve] ficname = "<<name<<" - bitmax = "<<bitmax<<endl;  
         fic<<"P5\n";
-        fic<<"# MONTE CARLO - MC - 08/1994 \n#      BitMax = "<<bitmax<<endl;
-        fic<<btm.maxi()[0]<<" "<<btm.maxi()[1]<<endl;
+        fic<<"# MONTE CARLO - MC - 08/1994 \n#      BitMax = "<<bitmax<<std::endl;
+        fic<<btm.maxi()[0]<<" "<<btm.maxi()[1]<<std::endl;
         fic<<"255\n";
         int i,j;
         for(j=0;j<btm.maxi()[1];j++)
@@ -124,12 +124,12 @@ class RGB {
     void     init(int x,int y,char * nom=(char*)"out.ppm")
       { btm.alloue(x,y,3);strcpy(filename,nom);bitmax=-9.9e10;}
     RGB & operator =(RGB &img)
-      { cout<<"RGB[=]  DEBUT \n";cout.flush();
+      { std::cout<<"RGB[=]  DEBUT \n";std::cout.flush();
         RGB  *pim= new RGB(img.btm.maxi()[0],img.btm.maxi()[1],img.filename);
 /*        strcpy(filename,img.filename); cout<<"RGB[=] :"<<filename<<endl;
         btm.alloue(img.btm.maxi()[0],img.btm.maxi()[1]);
 */
-    cout<<"RGB[=]  avant copie des variables de btm \n";cout.flush(); 
+        std::cout<<"RGB[=]  avant copie des variables de btm \n";std::cout.flush(); 
        for(int i=0;i<pim->btm.maxi()[0];i++)
          for(int j=0;j<pim->btm.maxi()[1];j++)
 	   for(int k=0;k<3;k++)
@@ -183,7 +183,7 @@ class RGB {
    // typage AH 02 2001 
     void     charge(char *name=(char*)" ")
       { if(!strcmp(name," ")) name=filename;
-        cout<<"RGB[charge] Pas encore implemente !\n";
+        std::cout<<"RGB[charge] Pas encore implemente !\n";
       }
 
    // typage AH 02 2001 
@@ -194,12 +194,12 @@ class RGB {
 	char *ccTmp = new char[1] ;
 
         if(!strcmp(name," ")) name=filename;
-        ofstream fic(name,ios::out);
+        std::ofstream fic(name,std::ios::out);
         raus(!fic,"RGB[sauve] Ouverture fichier impossible!"); 
-        cout<<"RGB[sauve] ficname = "<<name<<" - bitmax = "<<bitmax<<endl;  
+        std::cout<<"RGB[sauve] ficname = "<<name<<" - bitmax = "<<bitmax<<std::endl;  
         fic<<"P6\n";
-        fic<<"# class RGB - MC - 1996 \n#      BitMax = "<<bitmax<<endl;
-        fic<<btm.maxi()[0]<<" "<<btm.maxi()[1]<<endl;
+        fic<<"# class RGB - MC - 1996 \n#      BitMax = "<<bitmax<<std::endl;
+        fic<<btm.maxi()[0]<<" "<<btm.maxi()[1]<<std::endl;
         fic<<"255\n";
         int i,j,k;
         for(j=0;j<btm.maxi()[1];j++)
@@ -220,7 +220,7 @@ class RGB {
 	      /**/
              }      
         fic.close();
-	cout<<"RGB[sauve] FIN\n";
+        std::cout<<"RGB[sauve] FIN\n";
 	delete[] ccTmp ;
       }//sauve
 

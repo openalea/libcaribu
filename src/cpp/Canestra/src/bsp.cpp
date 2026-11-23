@@ -22,7 +22,7 @@ void BSP::volume_englobant_scene(const reel *bornemin, const reel *bornemax,List
     position_min[i]=bornemin[i];
   }
   if (Ldiff_scene.est_vide() == VRAI){
-    cout << "ERREUR - Pas de diffuseur dans la scene\n"; cout.flush();
+    std::cout << "ERREUR - Pas de diffuseur dans la scene\n"; std::cout.flush();
     exit (2);
   }
   else{
@@ -89,7 +89,7 @@ void BSP::copie_boite(BSP* B1) const {
 
 void BSP::what_in() {
 
-  cout<<"[] BSP : "<<this;
+  std::cout<<"[] BSP : "<<this;
   if(nb_diffuseurs==0) printf("\t BSP vide\n");
   else
     for(Ldiff.debut();!Ldiff.finito();Ldiff.suivant()){

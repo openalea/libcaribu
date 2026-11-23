@@ -162,7 +162,7 @@ extern  int mem_stat_reg_list(void **var, int type, int list)
    if ( type < 0 || type >= mem_connect[list].ntypes || 
        mem_connect[list].free_funcs[type] == NULL )
    {
-      warning(WARN_WRONG_TYPE,"mem_stat_reg_list");
+      meschach_warning(WARN_WRONG_TYPE,"mem_stat_reg_list");
       return -1;
    }
    
@@ -234,7 +234,7 @@ extern  int mem_stat_free_list(int mark, int list)
    }
    
    if (mem_stat_mark_many <= 0) {
-      warning(WARN_NO_MARK,"mem_stat_free");
+      meschach_warning(WARN_NO_MARK,"mem_stat_free");
       return -1;
    }
 
@@ -249,7 +249,7 @@ extern  int mem_stat_free_list(int mark, int list)
 	     if ( free_fn != NULL )
 		 (*free_fn)(*mem_stat_var[j].var);
 	     else
-		 warning(WARN_WRONG_TYPE,"mem_stat_free");
+		 meschach_warning(WARN_WRONG_TYPE,"mem_stat_free");
 	    
 	    *(mem_stat_var[j].var) = NULL;
 	    mem_stat_var[j].var = NULL;

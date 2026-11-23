@@ -152,7 +152,7 @@ extern  SPROW	*sprow_xpd(SPROW *r, int n, int type)
        error(E_MEM,"sprow_xpd");
      else if ( mem_info_is_on()) {
 	if (type != TYPE_SPMAT && type != TYPE_SPROW)
-	  warning(WARN_WRONG_TYPE,"sprow_xpd");
+	  meschach_warning(WARN_WRONG_TYPE,"sprow_xpd");
 	mem_bytes(type,0,sizeof(SPROW));
 	if (type == TYPE_SPROW)
 	  mem_numvar(type,1);

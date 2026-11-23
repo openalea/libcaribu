@@ -6,7 +6,6 @@
 
 #include <cstdlib>
 
-using namespace std ;
 
 #include <system.h>
 
@@ -16,7 +15,7 @@ char *GetAllFileName(char *nom) {
   
   if(true){
     if (pcTmpName == NULL){
-      clog<<__FILE__<<" : "<<__LINE__<<" : Not enough memory"<<endl;
+      std::clog<<__FILE__<<" : "<<__LINE__<<" : Not enough memory"<<std::endl;
       exit (1);
     }
     // end of string
@@ -25,7 +24,7 @@ char *GetAllFileName(char *nom) {
     // this #def is to be set for every Win32 compiler to run
 #ifndef WIN32
     // TEMP est une macro dans system.h
-    string sTmpName =TEMP ;
+    std::string sTmpName =TEMP ;
 #else
 
     // On Win32, the %TEMP% variable _is_ variable.
@@ -33,7 +32,7 @@ char *GetAllFileName(char *nom) {
     //I find out %TEMP% by myself  Ferr << __FILE__ " : "<< __LINE__ << '\n' ;
     // , assuming C:\ is allways read/write
 
-    string  sTmpName;
+    std::string  sTmpName;
     // on cherche TEMp dans l'environnement
     char ccCommande[MAX_PATH_LEN]= "echo %TEMP% > " ;
     
@@ -44,10 +43,10 @@ char *GetAllFileName(char *nom) {
     int iTest =0;
     iTest = system (ccCommande);
     if (iTest != 0) {
-      cerr <<__FILE__<< ": Pas pu executer "<<ccCommande<<endl ;
+      std::cerr <<__FILE__<< ": Pas pu executer "<<ccCommande<<std::endl ;
       exit (20);
     };
-    ifstream fin (pcTmpName, ios::in);
+    std::ifstream fin (pcTmpName, std::ios::in);
     
     // est-ce que FLUX >> string reserve la memoire ?
     fin >> sTmpName ;
@@ -55,10 +54,10 @@ char *GetAllFileName(char *nom) {
     // Attention : XP ne renvoie rien si une variable n'est pas d�finie
     // (style posix) HA 07 2004
     if (( sTmpName[0] == '%' ) || ( sTmpName.size() == 0 )) {
-      istringstream isIn (".");
+      std::istringstream isIn (".");
       isIn >>sTmpName ;
-      clog << "No %TEMP% environmental found.\n";
-      clog << "From now on the temp dir is going to be .\\."<<endl ;
+      std::clog << "No %TEMP% environmental found.\n";
+      std::clog << "From now on the temp dir is going to be .\\."<<std::endl ;
     }
     fin.close();
     sprintf(ccCommande,"%s %s", RM, pcTmpName) ;
@@ -69,7 +68,7 @@ char *GetAllFileName(char *nom) {
 
     sTmpName.append(nom);
     
-    istringstream ssIn(sTmpName);
+    std::istringstream ssIn(sTmpName);
     ssIn >> pcTmpName ;
   }
   // sprintf(pcTmpName,"C:\\Windows\\Temp\\");

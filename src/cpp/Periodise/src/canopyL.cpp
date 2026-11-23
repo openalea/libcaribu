@@ -9,13 +9,11 @@
 
 #include <iostream>
 #include <fstream>
-using namespace std;
 #include <sstream>
 
 #include "canopyL.h"
 #include <cmath>
 #include "outils.h"
-#include <unistd.h>
 // CANOPY
 
 /************************************************************
@@ -66,7 +64,7 @@ bool fexists(const char *);
 
 const bool opak=true;
 //lectopt() : lit les proprietes optiques (fonction locale)
-Actop* lectop(ifstream &fopti, bool opac=false){
+Actop* lectop(std::ifstream &fopti, bool opac=false){
   double popt[9]={0, 0, 0, 0, 0, 0, 0, 0, 0};
   Actop *actop=NULL;
   char c;
@@ -81,7 +79,7 @@ Actop* lectop(ifstream &fopti, bool opac=false){
     break; 
   case 's':// specular (Fresnel's law + attenation(van der Bild)
     if(!opac){
-      cerr<<"speculaire pas prevu today pour non-opaques!\n";
+      std::cerr<<"speculaire pas prevu today pour non-opaques!\n";
       exit(-1);
     }
     fopti>>popt[0]; // indice de refraction n
@@ -98,7 +96,7 @@ Actop* lectop(ifstream &fopti, bool opac=false){
     break;
   case 'g':  //speculaire a lobe Gaussien
     if(!opac){
-      cerr<<"speculaire gaussien pas prevu today pour non-opaques!\n";
+      std::cerr<<"speculaire gaussien pas prevu today pour non-opaques!\n";
       exit(-1);
     }
     fopti>>popt[0]; // indice de refraction n
@@ -129,7 +127,7 @@ Actop* lectop(ifstream &fopti, bool opac=false){
     actop = new Sol(popt[0],popt[1],popt[2],popt[3],popt[4],popt[5],popt[6],popt[7],popt[8]); 
     break;
   case 'n': //neural network's regression
-    cerr<<"@!$ description des prop. opt. par reseau de neurones pas implementee\n";
+    std::cerr<<"@!$ description des prop. opt. par reseau de neurones pas implementee\n";
     exit(-1);	 
     break;
   default  :
@@ -141,12 +139,12 @@ Actop* lectop(ifstream &fopti, bool opac=false){
 
 
 void syntax_error(char * nomfic){
-  cerr<<" Canopy_io.C: Syntax Error during parcing "<<nomfic<<"\n";
+  std::cerr<<" Canopy_io.C: Syntax Error during parcing "<<nomfic<<"\n";
   exit(-1); 
 }  
 
 bool fexists(const char *filename) {
-  if (ifstream(filename)) {
+  if (std::ifstream(filename)) {
     return true;
   } else {
 	return false;
@@ -158,13 +156,13 @@ bool fexists(const char *filename) {
 
 //-**************** not_yet() *************************************
 inline void not_yet(char * type){
-  cerr<<"desole mais le type\""<<type<<"\" n'est pas encore implemente : Ligne ignoree... \n";
+  std::cerr<<"desole mais le type\""<<type<<"\" n'est pas encore implemente : Ligne ignoree... \n";
 }// not_yet()
 
 
 // char linie[500];
 // inline 
-char* endline(ifstream & fin){
+char* endline(std::ifstream & fin){
   long int k=0;
   char car;
   char *linie=new char[500];
@@ -183,37 +181,36 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
   bool rejet=false,infty=false;
   int i=0,nbp=0;
   Diffuseur* diff;
-  ifstream fopti;
+  std::ifstream fopti;
   char c, line[256];
   int nbopt=0,ii=0, No=20;
   Tabdyn<Actop*,1> tabopaque;
   Tabdyn<Actop*,2> tabtransp;
   
-  ifstream fgeom; 
+  std::ifstream fgeom; 
 
   if (ngeom == NULL) {
-    cerr << "ERREUR - Pas de nom de maquette : ";
-    cerr << "Je quitte" <<endl; 
-    cerr.flush();
+    std::cerr << "ERREUR - Pas de nom de maquette : ";
+    std::cerr << "Je quitte" <<std::endl; 
+    std::cerr.flush();
     exit (1);
-  } else {
-    if(access(ngeom,R_OK )){
-      cerr << "ERREUR - Impossible d'ouvrir la maquette ";
-      cerr <<ngeom<<endl;
-      cerr << "Je quitte" <<endl; 
-      cerr.flush();
-      exit (1);
-    }
+  } 
+  fgeom.open(ngeom,std::ios::in);
+  if(!ngeom) {
+    std::cerr << "ERREUR - Impossible d'ouvrir la maquette ";
+    std::cerr <<ngeom<<std::endl;
+    std::cerr << "Je quitte" <<std::endl; 
+    std::cerr.flush();
+    exit (1);
   }
-  // Ok
-  fgeom.open(ngeom,ios::in);
+// Ok
 
   bool nopti_is_null = (nopti == NULL);
-  bool file_exists = fexists(nopti);
+  bool file_exists = !nopti_is_null && fexists(nopti);
 
-  if (!nopti_is_null && file_exists) {
+  if (file_exists) {
 	  // lecture des proprietes optiques (fichier '.opt')
-	  fopti.open(nopti,ios::in);
+	  fopti.open(nopti,std::ios::in);
 	  do{
 		  fopti>>c; //cerr<<c;
 		  if(!fopti) break;
@@ -223,7 +220,7 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
 			  break;
 		  case 'n':
 			  fopti>>ii;
-			  cerr<<" nb especes (optiques) = "<<ii<<endl;
+        std::cerr<<" nb especes (optiques) = "<<ii<<std::endl;
 			  tabtransp.alloue(ii,2);
 			  tabopaque.alloue(ii+1);
 
@@ -231,7 +228,7 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
 			  break;
 		  case 's':
 			  if(ii==0) syntax_error(nopti);
-			  cout<<"p.o. sol lues\n";
+        std::cout<<"p.o. sol lues\n";
 			  //cerr<<"Canopy[parse_can]ficoptik : sol lu\n";
 			  tabopaque(nbopt) = lectop(fopti, opak);
 			  raus(tabopaque(nbopt)==NULL,"Canopy[parse_can] allocation tabopaque impossible!");
@@ -258,13 +255,13 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
 	  if(nbopt<ii)  syntax_error(nopti);
   } else {
 	  if (nopti_is_null) {
-		  cerr << "Attention - Pas de proprietes optiques"<<endl;
+      std::cerr << "Attention - Pas de proprietes optiques"<<std::endl;
 	  } else { // => file_exists == False
-		  cerr << "ERREUR  - Impossible d'ouvrir le fichier : ";
-		  cerr <<nopti<<endl ;
+      std::cerr << "ERREUR  - Impossible d'ouvrir le fichier : ";
+      std::cerr <<nopti<<std::endl ;
 	  }
-	  cerr << " ==> Utilisation des valeur par defaut du NIR" <<endl ;
-	  cerr.flush();
+    std::cerr << " ==> Utilisation des valeur par defaut du NIR" <<std::endl ;
+    std::cerr.flush();
 	  //exit(-1);
 	  // Chargement des proprietes par default pour 5 especes en NIR
 	  tabtransp.alloue(No,2);
@@ -300,7 +297,7 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
     fgeom>> T; 
     //cerr<<T;
     if(fgeom.eof()) {
-      cerr <<" -_-_-_-_-_  Primitives chargees\n"<<(char)7<<endl;
+      std::cerr <<" -_-_-_-_-_  Primitives chargees\n"<<(char)7<<std::endl;
       break;
     }
     valid=false;
@@ -329,7 +326,7 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
 	}
       }//if nbid >0
       if(nbid<1){
-	cerr<<"Attention : nbid<1 ==> nom = 1\n";
+        std::cerr<<"Attention : nbid<1 ==> nom = 1\n";
 	tabid.alloue(1);	
 	// tabid(0)=100000001000;
 	tabid(0)=espid+1000.;
@@ -353,7 +350,7 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
   
       assert (prim != 0);
       if(min[0]>max[0]){ //primitive rejete
-	cerr <<" *****  Primitive rejete : libelle = "<<nom<<endl;
+        std::cerr <<" *****  Primitive rejete : libelle = "<<nom<<std::endl;
 	//rejet=true; - MC09
 	delete prim;
 	prim= NULL;
@@ -378,19 +375,19 @@ void Canopy::parse_can(char *ngeom,char *nopti,reel *bornemin,reel*bornemax,bool
   }while (fgeom);
   fgeom.close();
   if(rejet)
-    cout <<"Canopy[parse_can] *************  Segment(s) rejete(s) *******\n";
-  cout << "Canopy [parse_can] nbre de primitives = "<<nbp<<endl;
+    std::cout <<"Canopy[parse_can] *************  Segment(s) rejete(s) *******\n";
+    std::cout << "Canopy [parse_can] nbre de primitives = "<<nbp<<std::endl;
   
   if(name8==NULL)
   infty=false;
   else{
     infty=true;
-    ifstream fdim(name8,ios::in);
+    std::ifstream fdim(name8,std::ios::in);
     fdim>>bornemin[0]>>bornemin[1];
     fdim>>bornemax[0]>>bornemax[1];
     fdim.close();
     for(i=0; i<3; i++)
-      cout<<"Infty: Bornemax["<<i<<"] = "<<bornemax[i]<<"  Bornemin["<<i<<"] = "<<bornemin[i]<<endl;
+      std::cout<<"Infty: Bornemax["<<i<<"] = "<<bornemax[i]<<"  Bornemin["<<i<<"] = "<<bornemin[i]<<std::endl;
   }//if !infty
   
  

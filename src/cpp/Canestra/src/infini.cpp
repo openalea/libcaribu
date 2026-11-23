@@ -5,7 +5,6 @@
  */
 
 #include <iostream> //
-using namespace std;
 
 #include <cmath>
 
@@ -101,7 +100,7 @@ void infinitise(void ***Zprim, REELLE **Zbuf,
   int i,j;
   if(verbose>1){
     myclock.Start();
-    cout<<"* infinitise(): DEBUT\n";
+    std::cout<<"* infinitise(): DEBUT\n";
   }
   //init
   Zdat0.alloue(Tx,Ty);
@@ -157,7 +156,7 @@ void infinitise(void ***Zprim, REELLE **Zbuf,
   Zbuf0.free();
   if(verbose>1){
     myclock.Stop();
-    cout<<"\n::::>  Infinitisation en "<<myclock<<endl;
+    std::cout<<"\n::::>  Infinitisation en "<<myclock<<std::endl;
     fflush(stdout);
   }
 }//infinitise()

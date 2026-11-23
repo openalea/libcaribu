@@ -466,7 +466,7 @@ void Sol::interact (Transf &param){
   }
 
   if(Rdh>1.0){    
-    cerr<<"\n\n\t#*> Violation de la loi de conservation de l'E : Rdh="<<Rdh<<endl;
+    std::cerr<<"\n\n\t#*> Violation de la loi de conservation de l'E : Rdh="<<Rdh<<std::endl;
     exit(-1);
   }
   //cout <<"Sol[interact] verif conservation . E = "<<Rdh<<endl; 

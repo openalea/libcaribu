@@ -79,7 +79,7 @@ public:
   void interact (Transf &param);    
   double  lux (Transf &param);//pipo (a modif qd temps : pb de directionalite -> catpeur
   void show()
-  {cout<<"Fresnel[show]\n";}
+  {std::cout<<"Fresnel[show]\n";}
 protected:
 inline double fresnel(double &teta, double &phi);  
 };// Fresnel
@@ -96,7 +96,7 @@ public:
   void interact (Transf &param);    
   double  lux (Transf &param); // que diffus , cf. pb Fresnel 
   void show()
-  {cout<<"Specdifu[show]\n";}  
+  {std::cout<<"Specdifu[show]\n";}  
 };// Specdifu
 
 // Neural Network Bidirectional Reflectance
@@ -107,7 +107,7 @@ public:
   NNBR()
   {}
   void show()
-  {cout<<"NNBR[show]\n";}  
+  {std::cout<<"NNBR[show]\n";}  
 };// NNBR
 #endif
 

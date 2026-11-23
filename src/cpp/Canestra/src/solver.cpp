@@ -10,7 +10,6 @@
 ***************************************************************************/
 
 #include <iostream> //.h>
-using namespace std;
 
 #include <cmath>
 #include <cstdio>

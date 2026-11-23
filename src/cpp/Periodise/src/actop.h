@@ -64,8 +64,8 @@ public:
   void interact (Transf &param);    
   double  lux (Transf &param);
   void show()
-  {cout<<"Lambert[show]\n";}
-   virtual void koi() {cout<<"\n==> Fils d'Actop, I'm  Lambert\n";}
+  {std::cout<<"Lambert[show]\n";}
+   virtual void koi() {std::cout<<"\n==> Fils d'Actop, I'm  Lambert\n";}
   //void fini();
     virtual ~Lambert(){};
 protected:
@@ -88,8 +88,8 @@ public:
   void interact (Transf &param);    
   double  lux (Transf &param);//pipo (a modif qd temps : pb de directionalite -> catpeur
   void show()
-  {cout<<"Fresnel[show]\n";}
- void koi() {cout<<"\n==> Fils d'Actop, I'm  Fresnel\n";}
+  {std::cout<<"Fresnel[show]\n";}
+ void koi() {std::cout<<"\n==> Fils d'Actop, I'm  Fresnel\n";}
     //void fini() {}
     virtual ~Fresnel(){};
 inline double fresnel(double &teta, double &phi);  
@@ -107,8 +107,8 @@ public:
   void interact (Transf &param);    
   double  lux (Transf &param); // que diffus , cf. pb Fresnel 
   void show()
-  {cout<<"Specdifu[show]\n";}
-     void koi() {cout<<"\n==> Fils d'Actop, I'm  Specdifu\n";}
+  {std::cout<<"Specdifu[show]\n";}
+     void koi() {std::cout<<"\n==> Fils d'Actop, I'm  Specdifu\n";}
   //void fini() {}
 virtual ~Specdifu(){};
 };// Specdifu
@@ -130,8 +130,8 @@ public:
   void interact (Transf &param);    
   double  lux (Transf &param);//pipo (a modif qd temps : pb de directionalite -> capteur
   void show()
-  {cout<<"Gauss[show]\n";}
-  void koi() {cout<<"\n==> Fils d'Actop, I'm  Gauss\n";}
+  {std::cout<<"Gauss[show]\n";}
+  void koi() {std::cout<<"\n==> Fils d'Actop, I'm  Gauss\n";}
     //void fini() {}
     virtual ~Gauss(){};
 };// Gauss
@@ -148,8 +148,8 @@ public:
   void interact (Transf &param);    
   double  lux (Transf &param); // que diffus , cf. pb Fresnel 
   void show()
-  {cout<<"Ross[show]\n";}  
-    void koi() {cout<<"\n==> Fils d'Actop, I'm  Ross\n";}  //void fini() {}
+  {std::cout<<"Ross[show]\n";}  
+    void koi() {std::cout<<"\n==> Fils d'Actop, I'm  Ross\n";}  //void fini() {}
 virtual ~Ross(){};
 };
 /****  RossL *****/
@@ -162,8 +162,8 @@ public:
   void interact (Transf &param);    
   double  lux (Transf &param); // que diffus , cf. pb Fresnel 
   void show()
-  {cout<<"RossL[show]\n";}  
-    void koi() {cout<<"\n==> Fils d'Actop, I'm  RossL\n";} 
+  {std::cout<<"RossL[show]\n";}  
+    void koi() {std::cout<<"\n==> Fils d'Actop, I'm  RossL\n";} 
  //void fini() {}
 virtual ~RossL(){};
 };// RossL
@@ -191,9 +191,9 @@ public:
     void interact (Transf &param);    
     double  lux (Transf &param); 
     void show()
-  {cout<<"Sol[show]\n";}  
+  {std::cout<<"Sol[show]\n";}  
     //void fini() {}
-    void koi() {cout<<"\n==> Fils d'Actop, I'm  Sol\n";}
+    void koi() {std::cout<<"\n==> Fils d'Actop, I'm  Sol\n";}
     virtual ~Sol(){};
 };// Sol
 
@@ -205,9 +205,9 @@ public:
   NNBR()
   {}
   void show()
-  {cout<<"NNBR[show]\n";}
+  {std::cout<<"NNBR[show]\n";}
   //void fini() {}
-  void koi() {cout<<"\n==> Fils d'Actop, I'm  NNBR\n";}
+  void koi() {std::cout<<"\n==> Fils d'Actop, I'm  NNBR\n";}
   virtual ~NNBR(){};
 };// NNBR
 

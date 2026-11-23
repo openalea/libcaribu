@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std ;
 #include <boost/python.hpp>
 using namespace boost::python ;
 #include <cstring>

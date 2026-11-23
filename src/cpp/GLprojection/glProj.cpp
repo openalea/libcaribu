@@ -23,7 +23,6 @@
 // Todo: recuperer le depth buffer pour infinitise: 
 // tester sur d'autres macheine (cartes graphiques ) et OS
 
-using namespace std;
 // #include <GL/glut.h>
 //Sous MacOSX
 //#include <GLUT/glut.h>
@@ -42,7 +41,6 @@ using namespace std;
 
 #include <vector>
 
-using namespace std;
 
 
 // typedef void (*PFV)(void);
@@ -629,13 +627,13 @@ void GLscene::ScreenGrabLUT() {
     printf("-> step 2\n");
 
     //version debug avec glutMainLoop 0: non !=0: oui
-    cout<<"is glut? (0/1) :"; cin>>isglut; 
+    std::cout<<"is glut? (0/1) :"; std::cin>>isglut; 
     //resX et resY : dimension de l'image pour le Zbuffer
-    cout <<"resX= "; cin>>resX; 
-    cout<<"resY= "; cin>>resY;
+    std::cout <<"resX= "; std::cin>>resX; 
+    std::cout<<"resY= "; std::cin>>resY;
     // nb de chgt de point de vue de la camera eg 10
-    cout<<"nrot_max= "; cin>>nrot_max;
-    cout<<"-------\n"; 
+    std::cout<<"nrot_max= "; std::cin>>nrot_max;
+    std::cout<<"-------\n"; 
   
     try{
       printf("-> step 3\n");

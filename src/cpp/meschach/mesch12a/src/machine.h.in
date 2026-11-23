@@ -144,16 +144,18 @@ typedef unsigned int u_int;
 /* ---------------------------------------------------
    Huge values
    --------------------------------------------------- */
-#ifndef HUGE_VAL
-#define HUGE_VAL HUGE
-#else
-#ifndef HUGE
-#define HUGE HUGE_VAL
-#endif
-#endif
+/* Include <math.h> first so HUGE_VAL comes from the system: otherwise HUGE
+   gets #defined to a numeric literal below, and a later <math.h> on MSVC/UCRT
+   breaks on its own HUGE declaration (error C2059 in corecrt_math.h). */
+#include <math.h>
 
+/* glibc/macOS define HUGE as a macro (~FLT_MAX); MSVC does not, so keep the
+   same finite value everywhere */
 #ifndef HUGE
 #define HUGE  3.40282e+38
+#endif
+
+#ifndef HUGE_VAL
 #define HUGE_VAL HUGE
 #endif
 

@@ -7,7 +7,6 @@ extern "C" {
 }
 #include <cmath>
 #include<iostream>
-using namespace std;
 #include "bool.h"
 typedef float reel;
 
@@ -44,7 +43,7 @@ public:
   //  Homogene operator * ( class Matrice4&); //multiplication par une matrice
   Homogene chgt_base(Vecteur &u,Vecteur &v,Vecteur &w);
   void show()
-  {cout <<" Homogene : "<<homo[0]<<"  "<<homo[1]<<"  "<<homo[2]<<"  "<<homo[3]<<"  "<<endl;}
+  {std::cout <<" Homogene : "<<homo[0]<<"  "<<homo[1]<<"  "<<homo[2]<<"  "<<homo[3]<<"  "<<std::endl;}
 };
 
 // POINT
@@ -289,7 +288,7 @@ Type& Matrice<Type> :: operator () (int i, int j)
 		return (M[m*i + j]);
 	else
 	{
-		cout << "ERREUR d'indice dans la matrice\n"; cout.flush();
+    std::cout << "ERREUR d'indice dans la matrice\n"; cout.flush();
 		exit (1);
 	}
 }
@@ -302,8 +301,8 @@ Matrice<Type>& Matrice<Type> :: operator =
 
 	if(n != A.n || m != A.m)
 	{
-		cout << "ERREUR - Impossible d'egaliser 2 matrices de taille differente\n";
-		cout.flush();
+    std::cout << "ERREUR - Impossible d'egaliser 2 matrices de taille differente\n";
+    std::cout.flush();
 		exit (1);
 	}
 	else
@@ -325,7 +324,7 @@ Matrice<Type>  Matrice<Type> :: operator * (Matrice<Type>& A)
 
 	if (m != A.n)
 	{
-		cout << "ERREUR-multiplication de matrices imcompatibles\n"; cout.flush();
+    std::cout << "ERREUR-multiplication de matrices imcompatibles\n"; cout.flush();
 		exit(1);
 	}
 	else

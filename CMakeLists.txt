@@ -20,6 +20,8 @@ add_subdirectory("src/cpp/Periodise/src")
 add_subdirectory("src/cpp/s2v/src")
 add_subdirectory("src/cpp/Canestra/src")
 
+target_compile_definitions(periodise PRIVATE _USE_MATH_DEFINES)
+
 install(TARGETS mcsail periodise s2v canestrad
         RUNTIME DESTINATION "${SKBUILD_SCRIPTS_DIR}")
 

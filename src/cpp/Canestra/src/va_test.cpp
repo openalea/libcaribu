@@ -1,6 +1,5 @@
 
 #include <cstdio>
-using namespace std;
 
 #include <cstdarg>
 #include <cstring>
