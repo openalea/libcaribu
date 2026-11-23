@@ -213,10 +213,16 @@ void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
 	if(transp)
 	  Cenv->ve[is+1]+=rho[1]*(cl[0]*Tenv(j,0)+cl[1]*Tenv(j,1));
       }
-      is++;
-      Cenv->ve[is]*=Eclt;
     }
-    Cenv->ve[is-1]*=Eclt;
+    // Scale the faces of this primitive (is: first face, is+1: second face if
+    // transparent). Scaling ve[is-1] after the loop, as before, was wrong for an
+    // opaque primitive: it scaled the previous face instead, and wrote ve[-1] for
+    // the first primitive (heap corruption, SIGBUS on macOS arm64).
+    Cenv->ve[is]*=Eclt;
+    if(transp) {
+      Cenv->ve[is+1]*=Eclt;
+      is++;
+    }
     is++;
   }
 
