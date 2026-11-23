@@ -28,15 +28,13 @@ mamba create -n caribu -c openalea3 -c conda-forge openalea.libcaribu
 ```bash
 git clone 'https://github.com/openalea/libcaribu.git'
 cd libcaribu
-# unix
 mamba create -n libcaribu -f ./conda/environment.yml
 mamba activate libcaribu
 pip install -e .[test] -vv --no-build-isolation
-# windows (conda required as mamba does not instantiate env vars)
-conda env create -n libcaribu -f ./conda/environment-win64.yml
-conda activate libcaribu
-pip install -e .[test] -vv --no-build-isolation
 ```
+
+On Windows, the conda compilers (`c-compiler`, `cxx-compiler`) use MSVC: Visual Studio 2022
+or its Build Tools, with the "Desktop development with C++" workload, must be installed.
 
 ## License
 
