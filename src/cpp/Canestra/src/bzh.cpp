@@ -176,7 +176,19 @@ void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
     }
     TabDiff[is]->activ_num(is);
     for (j =0; j<=Nc; j++) {
-      fread(cl,sizeof(int),2,fic);
+        if (fread(cl, sizeof cl[0], 2, fic) != 2) {
+        Ferr << "ERROR reading BF coefficients: "
+             << "i=" << i
+             << " is=" << is
+             << " j=" << j
+             << " Nc=" << Nc
+             << " ftell=" << ftell(fic)
+             << " feof=" << feof(fic)
+             << " ferror=" << ferror(fic)
+             << '\n';
+        abort();
+    }
+      //fread(cl,sizeof(float),2,fic);
       Cenv->ve[is]+=rho[0]*(cl[0]*Tenv(j,0)+cl[1]*Tenv(j,1));
       if(transp)
 	Cenv->ve[is+1]+=tau[0]*(cl[0]*Tenv(j,0)+cl[1]*Tenv(j,1));
@@ -184,15 +196,33 @@ void hd_calc_Bfar(VEC *Cenv,char *pcEnvName,Diffuseur ** TabDiff,double Eclt){
 
     if(transp) {
       for (j =0; j<=Nc; j++) {
-	fread(cl,sizeof(int),2,fic);
+          if (fread(cl, sizeof cl[0], 2, fic) != 2) {
+        Ferr << "ERROR reading BF coefficients: "
+             << "i=" << i
+             << " is=" << is
+             << " j=" << j
+             << " Nc=" << Nc
+             << " ftell=" << ftell(fic)
+             << " feof=" << feof(fic)
+             << " ferror=" << ferror(fic)
+             << '\n';
+        abort();
+    }
+	//fread(cl,sizeof(float),2,fic);
 	Cenv->ve[is]+=tau[1]*(cl[0]*Tenv(j,0)+cl[1]*Tenv(j,1));
 	if(transp)
 	  Cenv->ve[is+1]+=rho[1]*(cl[0]*Tenv(j,0)+cl[1]*Tenv(j,1));
       }
-      is++;
-      Cenv->ve[is]*=Eclt;
     }
-    Cenv->ve[is-1]*=Eclt;
+    // Scale the faces of this primitive (is: first face, is+1: second face if
+    // transparent). Scaling ve[is-1] after the loop, as before, was wrong for an
+    // opaque primitive: it scaled the previous face instead, and wrote ve[-1] for
+    // the first primitive (heap corruption, SIGBUS on macOS arm64).
+    Cenv->ve[is]*=Eclt;
+    if(transp) {
+      Cenv->ve[is+1]*=Eclt;
+      is++;
+    }
     is++;
   }
 

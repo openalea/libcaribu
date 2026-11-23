@@ -333,7 +333,7 @@ def caribu(scene_path, bands=None, direct_only=True, toric=False, d_radiosity=0,
     if sensors:
         args += ['-C', 'scene.sensor']
     if verbose:
-        args += ['-v', '3']
+        args += ['-v', '2']
     if not artifacts:
         args += ['-n']
 
